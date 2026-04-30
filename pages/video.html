@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video — Ruang Kenangan PTIK A 2023</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .video-page {
+      padding: 5rem 0 9rem;
+    }
+
+    .video-filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.3rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .video-full-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+
+    .video-card-full {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .video-card-full:hover {
+      border-color: var(--border-alt);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-green);
+    }
+
+    .video-thumb-full {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg-3);
+    }
+
+    /* ── Thumbnail: img biasa ── */
+    .video-thumb-full img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+
+    /* ── Thumbnail: video preview (featured) ── */
+    .video-thumb-full video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+      pointer-events: none;
+      /* klik tetap ke overlay */
+    }
+
+    .video-card-full:hover .video-thumb-full img,
+    .video-card-full:hover .video-thumb-full video {
+      transform: scale(1.06);
+    }
+
+    .video-play-full {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(46, 204, 113, 0.9);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #fff;
+      transition: var(--transition);
+      box-shadow: 0 4px 24px rgba(46, 204, 113, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 2;
+    }
+
+    .video-play-full:hover {
+      transform: translate(-50%, -50%) scale(1.12);
+      background: var(--green);
+    }
+
+    .video-dur-full {
+      position: absolute;
+      bottom: 0.8rem;
+      right: 0.8rem;
+      background: rgba(7, 13, 8, 0.88);
+      padding: 0.22rem 0.6rem;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text);
+      z-index: 2;
+    }
+
+    .video-sem-badge {
+      position: absolute;
+      top: 0.8rem;
+      left: 0.8rem;
+      background: rgba(46, 204, 113, 0.88);
+      padding: 0.22rem 0.7rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.05em;
+      z-index: 2;
+    }
+
+    .video-card-info {
+      padding: 1.4rem;
+    }
+
+    .video-card-info h4 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .video-card-info .meta {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      margin-bottom: 0.8rem;
+    }
+
+    .video-card-info p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.68;
+      margin-bottom: 1rem;
+    }
+
+    .video-card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .vid-like-btn,
+    .vid-share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.38rem 0.9rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.76rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+
+    .vid-like-btn:hover,
+    .vid-like-btn.liked {
+      border-color: #e74c3c;
+      color: #e74c3c;
+      background: rgba(231, 76, 60, 0.08);
+    }
+
+    .vid-share-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    /* ══════════════════════════════════════
+       VIDEO MODAL — pakai <video> bukan <img>
+       ══════════════════════════════════════ */
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 13, 8, 0.97);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .video-modal.open {
+      display: flex;
+    }
+
+    .video-modal-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--border-alt);
+      background: none;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 2;
+    }
+
+    .video-modal-close:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .video-modal-player {
+      width: 100%;
+      max-width: 860px;
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-l);
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--border-alt);
+      position: relative;
+    }
+
+    /* ── Video element di dalam modal ── */
+    #videoModalPlayer {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      /* contain agar tidak crop */
+      display: block;
+      background: #000;
+      border-radius: inherit;
+    }
+
+    /* Fallback saat video tidak bisa dimuat */
+    .video-modal-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--text-dim);
+      padding: 2rem;
+      background: var(--bg-3);
+    }
+
+    .video-modal-fallback.show {
+      display: flex;
+    }
+
+    .video-modal-fallback i {
+      font-size: 3rem;
+      color: var(--green);
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .video-modal-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .video-modal-meta {
+      font-size: 0.82rem;
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    /* Featured video */
+    .video-featured {
+      grid-column: span 2;
+    }
+
+    .video-featured .video-thumb-full {
+      aspect-ratio: 21/9;
+    }
+
+    @media (max-width: 1000px) {
+      .video-full-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .video-featured {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .video-full-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .video-featured {
+        grid-column: 1;
+      }
+
+      .video-featured .video-thumb-full {
+        aspect-ratio: 16/9;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════
+     VIDEO MODAL — menggunakan <video> HTML5
+     ══════════════════════════════════════ -->
+  <div class="video-modal" id="videoModal">
+    <button class="video-modal-close" id="videoModalClose"><i class="fas fa-times"></i></button>
+
+    <div class="video-modal-player">
+      <!-- Elemen <video> dengan controls bawaan browser -->
+      <video id="videoModalPlayer" controls preload="metadata" playsinline>
+        <!-- src diisi lewat JS saat openVideo() dipanggil -->
+        <source id="videoModalSource" src="" type="video/mp4" />
+        Browser Anda tidak mendukung pemutaran video HTML5.
+      </video>
+
+      <!-- Tampil jika file tidak ditemukan / error -->
+      <div class="video-modal-fallback" id="videoModalFallback">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>Video tidak dapat dimuat.</p>
+        <p style="font-size:0.76rem;margin-top:0.4rem;opacity:0.6;">Pastikan file video ada di folder
+          <code>assets/</code>.</p>
+      </div>
+    </div>
+
+    <div class="video-modal-title" id="videoModalTitle">Judul Video</div>
+    <div class="video-modal-meta" id="videoModalMeta">Semester · Tanggal</div>
+  </div>
+
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="searchOverlay">
+    <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-leaf">
+          <div class="logo-leaf-inner"></div>
+        </div>
+        <span>Ruang Kenangan</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+        <li><a href="video.html" class="nav-link active-nav">Video</a></li>
+        <li><a href="mahasiswa.html" class="nav-link">Mahasiswa</a></li>
+        <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+        <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+        <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="section-label" style="justify-content:center;">Rekaman Kenangan</div>
+    <h1>Video <span class="gradient-text">Kenangan</span></h1>
+    <p>Momen-momen lucu, haru, dan seru yang terekam sepanjang perjalanan kita</p>
+  </div>
+
+  <!-- VIDEO SECTION -->
+  <section class="video-page">
+    <div class="container">
+
+      <!-- Filter Bar -->
+      <div class="video-filter-bar" data-animate="fade-up">
+        <button class="filter-btn active" data-vfilter="all">Semua</button>
+        <button class="filter-btn" data-vfilter="sem1">Semester 1</button>
+        <button class="filter-btn" data-vfilter="sem2">Semester 2</button>
+        <button class="filter-btn" data-vfilter="sem3">Semester 3</button>
+        <button class="filter-btn" data-vfilter="sem4">Semester 4</button>
+        <button class="filter-btn" data-vfilter="sem5">Semester 5</button>
+        <button class="filter-btn" data-vfilter="sem6">Semester 6</button>
+      </div>
+
+      <div class="video-full-grid" id="videoGrid" data-animate="fade-up">
+
+        <!-- ══ FEATURED — pakai <video> sebagai thumbnail ══ -->
+        <div class="video-card-full video-featured" data-vsem="sem1">
+          <div class="video-thumb-full"
+            onclick="openVideo('../assets/v1.mp4','Malam Perpisahan PTIK A 2023','Semester 1 · Maret 2026')">
+            <!--
+            Thumbnail pakai <video> agar preview muncul.
+            muted + autoplay + loop = preview diam tanpa suara.
+            preload="metadata" = hanya muat frame pertama saja (hemat bandwidth).
+          -->
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="../assets/v1.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-full"><i class="fas fa-play"></i></button>
+            <span class="video-sem-badge">Semester 1</span>
+            <span class="video-dur-full">12:47</span>
+          </div>
+          <div class="video-card-info">
+            <h4>✨ Malam Perpisahan PTIK A 2023</h4>
+            <div class="meta"><i class="fas fa-calendar" style="color:var(--green);margin-right:5px;"></i>Maret 2026 ·
+              <i class="fas fa-eye" style="color:var(--green);margin:0 5px;"></i>1.2k views</div>
+            <p>Momen paling mengharukan sepanjang perjalanan kita — malam perpisahan yang penuh tawa, tangis haru, dan
+              kenangan yang akan dibawa seumur hidup.</p>
+            <div class="video-card-actions">
+              <button class="vid-like-btn" onclick="toggleVidLike(this)"><i class="fas fa-heart"></i>
+                <span>248</span></button>
+              <button class="vid-share-btn"><i class="fas fa-share"></i> Bagikan</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Semester 6 video 2 -->
+        <div class="video-card-full" data-vsem="sem3">
+          <div class="video-thumb-full"
+            onclick="openVideo('../assets/v2.mp4','Foto Bareng Terakhir','Semester 3 · Februari 2026')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="../assets/v2.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-full"><i class="fas fa-play"></i></button>
+            <span class="video-sem-badge">Semester 6</span>
+            <span class="video-dur-full">4:22</span>
+          </div>
+          <div class="video-card-info">
+            <h4>📸 Foto Bareng Terakhir</h4>
+            <div class="meta"><i class="fas fa-calendar" style="color:var(--green);margin-right:5px;"></i>Februari 2026
+              · <i class="fas fa-eye" style="color:var(--green);margin:0 5px;"></i>876 views</div>
+            <p>Sesi foto angkatan terakhir sebelum benar-benar berpisah. Semua ekspresi ada di sini.</p>
+            <div class="video-card-actions">
+              <button class="vid-like-btn" onclick="toggleVidLike(this)"><i class="fas fa-heart"></i>
+                <span>134</span></button>
+              <button class="vid-share-btn"><i class="fas fa-share"></i> Bagikan</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Semester 1 -->
+        <div class="video-card-full" data-vsem="sem1">
+          <div class="video-thumb-full"
+            onclick="openVideo('../assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="../assets/v3.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-full"><i class="fas fa-play"></i></button>
+            <span class="video-sem-badge">Semester 1</span>
+            <span class="video-dur-full">2:34</span>
+          </div>
+          <div class="video-card-info">
+            <h4>🎉 Hari Pertama Ospek</h4>
+            <div class="meta"><i class="fas fa-calendar" style="color:var(--green);margin-right:5px;"></i>September 2023
+              · <i class="fas fa-eye" style="color:var(--green);margin:0 5px;"></i>654 views</div>
+            <p>Rekaman hari pertama ospek yang menegangkan sekaligus penuh momen lucu yang tidak terduga.</p>
+            <div class="video-card-actions">
+              <button class="vid-like-btn" onclick="toggleVidLike(this)"><i class="fas fa-heart"></i>
+                <span>87</span></button>
+              <button class="vid-share-btn"><i class="fas fa-share"></i> Bagikan</button>
+            </div>
+          </div>
+        </div>
+        <!-- Semester 1 -->
+        <div class="video-card-full" data-vsem="sem1">
+          <div class="video-thumb-full"
+            onclick="openVideo('../assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="../assets/v4.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-full"><i class="fas fa-play"></i></button>
+            <span class="video-sem-badge">Semester 1</span>
+            <span class="video-dur-full">2:34</span>
+          </div>
+          <div class="video-card-info">
+            <h4>🎉 Hari Pertama Ospek</h4>
+            <div class="meta"><i class="fas fa-calendar" style="color:var(--green);margin-right:5px;"></i>September 2023
+              · <i class="fas fa-eye" style="color:var(--green);margin:0 5px;"></i>654 views</div>
+            <p>Rekaman hari pertama ospek yang menegangkan sekaligus penuh momen lucu yang tidak terduga.</p>
+            <div class="video-card-actions">
+              <button class="vid-like-btn" onclick="toggleVidLike(this)"><i class="fas fa-heart"></i>
+                <span>87</span></button>
+              <button class="vid-share-btn"><i class="fas fa-share"></i> Bagikan</button>
+            </div>
+          </div>
+        </div>
+        <!-- Semester 1 -->
+        <div class="video-card-full" data-vsem="sem1">
+          <div class="video-thumb-full"
+            onclick="openVideo('../assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="../assets/v3.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-full"><i class="fas fa-play"></i></button>
+            <span class="video-sem-badge">Semester 1</span>
+            <span class="video-dur-full">2:34</span>
+          </div>
+          <div class="video-card-info">
+            <h4>🎉 Hari Pertama Ospek</h4>
+            <div class="meta"><i class="fas fa-calendar" style="color:var(--green);margin-right:5px;"></i>September 2023
+              · <i class="fas fa-eye" style="color:var(--green);margin:0 5px;"></i>654 views</div>
+            <p>Rekaman hari pertama ospek yang menegangkan sekaligus penuh momen lucu yang tidak terduga.</p>
+            <div class="video-card-actions">
+              <button class="vid-like-btn" onclick="toggleVidLike(this)"><i class="fas fa-heart"></i>
+                <span>87</span></button>
+              <button class="vid-share-btn"><i class="fas fa-share"></i> Bagikan</button>
+            </div>
+          </div>
+        </div>
+        <!-- Semester 1 -->
+        <div class="video-card-full" data-vsem="sem1">
+          <div class="video-thumb-full"
+            onclick="openVideo('../assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="../assets/v3.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-full"><i class="fas fa-play"></i></button>
+            <span class="video-sem-badge">Semester 1</span>
+            <span class="video-dur-full">2:34</span>
+          </div>
+          <div class="video-card-info">
+            <h4>🎉 Hari Pertama Ospek</h4>
+            <div class="meta"><i class="fas fa-calendar" style="color:var(--green);margin-right:5px;"></i>September 2023
+              · <i class="fas fa-eye" style="color:var(--green);margin:0 5px;"></i>654 views</div>
+            <p>Rekaman hari pertama ospek yang menegangkan sekaligus penuh momen lucu yang tidak terduga.</p>
+            <div class="video-card-actions">
+              <button class="vid-like-btn" onclick="toggleVidLike(this)"><i class="fas fa-heart"></i>
+                <span>87</span></button>
+              <button class="vid-share-btn"><i class="fas fa-share"></i> Bagikan</button>
+            </div>
+          </div>
+        </div>
+
+        
+
+      </div><!-- /video-full-grid -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0;">
+        <p>© 2026 Ruang Kenangan PTIK A 2023 · Made with <span class="footer-heart">♥</span></p>
+        <div class="footer-legal">
+          <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+          <a href="galeri.html">Galeri</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    /* ── Filter ── */
+    const vFilterBtns = document.querySelectorAll('[data-vfilter]');
+    const vCards = document.querySelectorAll('.video-card-full');
+
+    vFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        vFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.vfilter;
+        vCards.forEach(card => {
+          card.style.display = (f === 'all' || card.dataset.vsem === f) ? '' : 'none';
+        });
+      });
+    });
+
+    /* ══════════════════════════════════════════
+       VIDEO MODAL — logika yang diperbaiki
+       ══════════════════════════════════════════ */
+    const vModal = document.getElementById('videoModal');
+    const vModalClose = document.getElementById('videoModalClose');
+    const vPlayer = document.getElementById('videoModalPlayer');
+    const vSource = document.getElementById('videoModalSource');
+    const vFallback = document.getElementById('videoModalFallback');
+
+    /**
+     * openVideo(src, title, meta)
+     * src  : path/URL ke file .mp4
+     * title: judul yang tampil di bawah modal
+     * meta : teks kecil (semester · tanggal)
+     */
+    function openVideo(src, title, meta) {
+      // Reset fallback
+      vFallback.classList.remove('show');
+
+      // Set source lalu reload — WAJIB agar browser baca src baru
+      vSource.setAttribute('src', src);
+      vPlayer.load();
+
+      // Play otomatis saat user klik button hijau (bukan autoplay saat halaman load)
+      vPlayer.addEventListener('canplay', () => vPlayer.play(), { once: true });
+
+      // Update teks
+      document.getElementById('videoModalTitle').textContent = title;
+      document.getElementById('videoModalMeta').textContent = meta;
+
+      // Buka modal
+      vModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    /* ── Tutup modal → pause video ── */
+    function closeVideoModal() {
+      vPlayer.pause();
+      vPlayer.currentTime = 0;          // reset ke awal
+      vSource.setAttribute('src', '');  // bebaskan resource
+      vPlayer.load();
+      vModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    vModalClose.addEventListener('click', closeVideoModal);
+
+    // Klik di luar player juga menutup modal
+    vModal.addEventListener('click', e => {
+      if (e.target === vModal) closeVideoModal();
+    });
+
+    // Tekan Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && vModal.classList.contains('open')) closeVideoModal();
+    });
+
+    /* ── Like toggle ── */
+    function toggleVidLike(btn) {
+      const sp = btn.querySelector('span');
+      const liked = btn.classList.toggle('liked');
+      sp.textContent = liked
+        ? parseInt(sp.textContent) + 1
+        : parseInt(sp.textContent) - 1;
+    }
+  </script>
+</body>
+
+</html>

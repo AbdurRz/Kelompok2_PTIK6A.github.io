@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timeline — Ruang Kenangan PTIK A 2023</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .timeline-full { padding: 5rem 0 9rem; }
+
+    .timeline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .timeline-card:hover {
+      border-color: var(--border-alt);
+      box-shadow: var(--shadow-green);
+    }
+    .timeline-card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .timeline-card:hover .timeline-card-img { transform: scale(1.04); }
+
+    .timeline-card-body { padding: 1.8rem; }
+    .timeline-card-sem {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.6rem;
+    }
+    .timeline-card-body h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .timeline-card-body p {
+      font-size: 0.86rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+    }
+    .timeline-card-tags {
+      margin-top: 1.2rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      padding: 0.3rem 0.8rem;
+      background: var(--green-soft);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    /* Vertical timeline */
+    .vt-wrap {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .vt-line {
+      position: absolute;
+      left: 3.5rem;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--green), rgba(46,204,113,0.1));
+    }
+    .vt-item {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+    .vt-left {
+      flex-shrink: 0;
+      width: 7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 0.4rem;
+    }
+    .vt-dot {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 0 20px rgba(46,204,113,0.25);
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .vt-sem-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      text-transform: uppercase;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .vt-right { flex: 1; }
+
+    /* 2-photo grid */
+    .media-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+    .media-thumb {
+      border-radius: var(--radius-m);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+    .media-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.4s;
+      display: block;
+    }
+    .media-thumb:hover img { transform: scale(1.05); }
+
+    @media (max-width: 600px) {
+      .vt-line { left: 1.2rem; }
+      .vt-left { width: 2.5rem; }
+      .vt-sem-label { display: none; }
+      .vt-item { gap: 1.2rem; }
+      .media-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <div class="logo-leaf"><div class="logo-leaf-inner"></div></div>
+      <span>Ruang Kenangan</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html"   class="nav-link">Home</a></li>
+      <li><a href="galeri.html"     class="nav-link">Galeri</a></li>
+      <li><a href="video.html"      class="nav-link">Video</a></li>
+      <li><a href="mahasiswa.html"  class="nav-link">Mahasiswa</a></li>
+      <li><a href="timeline.html"   class="nav-link active-nav">Timeline</a></li>
+      <li><a href="buku.html"       class="nav-link">Buku Kenangan</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+      <button class="nav-music-btn"  id="musicBtn"><i class="fas fa-music"></i></button>
+      <button class="hamburger"      id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="section-label" style="justify-content:center;">Perjalanan Kita</div>
+  <h1>Timeline <span class="gradient-text">6 Semester</span></h1>
+  <p>Cerita lengkap perjalanan PTIK A 2023 dari awal hingga akhir</p>
+</div>
+
+<!-- TIMELINE FULL -->
+<section class="timeline-full">
+  <div class="container">
+    <div class="vt-wrap">
+      <div class="vt-line"></div>
+
+      <!-- ══ SEMESTER 1 — Ospek & Perkenalan ══ -->
+      <div class="vt-item" data-animate="fade-up">
+        <div class="vt-left">
+          <div class="vt-dot">🎉</div>
+          <span class="vt-sem-label">Sem. 1</span>
+        </div>
+        <div class="vt-right">
+          <div class="timeline-card">
+            <!-- Banner: foto di Gedung Maroko, jas kuning, momen ospek -->
+            <img src="../assets/1.jpeg" alt="Ospek Semester 1" class="timeline-card-img" />
+            <div class="timeline-card-body">
+              <div class="timeline-card-sem">Semester 1 · September 2023</div>
+              <h3>🎉 Ospek & Perkenalan Pertama</h3>
+              <p>
+                Semua dimulai dari sini. Hari-hari ospek yang menegangkan sekaligus seru — foto bersama di depan Gedung Maroko menjadi kenangan pertama yang melekat. Wajah-wajah baru dari berbagai daerah bersatu dalam satu almamater kuning kebanggaan.
+              </p>
+              <p style="margin-top:0.7rem;">
+                Dari saling asing menjadi saling mengenal. Itulah ajaibnya masa orientasi: dalam hitungan hari, orang asing bisa berubah jadi sahabat terdekat.
+              </p>
+              <div class="media-grid-2">
+                <div class="media-thumb">
+                  <!-- Foto kelas pertama, seragam putih -->
+                  <img src="../assets/1_1.jpeg" alt="Kelas Pertama" loading="lazy" />
+                </div>
+                <div class="media-thumb">
+                  <!-- Foto kelas, seragam putih, lebih ramai -->
+                  <img src="../assets/1_2.jpeg" alt="Perkenalan di Kelas" loading="lazy" />
+                </div>
+              </div>
+              <div class="timeline-card-tags">
+                <span class="tag">Ospek</span>
+                <span class="tag">Perkenalan</span>
+                <span class="tag">Orientasi</span>
+                <span class="tag">2023</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SEMESTER 2 — Adaptasi ══ -->
+      <div class="vt-item" data-animate="fade-up" data-delay="100">
+        <div class="vt-left">
+          <div class="vt-dot">📚</div>
+          <span class="vt-sem-label">Sem. 2</span>
+        </div>
+        <div class="vt-right">
+          <div class="timeline-card">
+            <!-- Foto kelas penuh, seragam putih, lebih kompak -->
+            <img src="../assets/1_3.jpeg" alt="Adaptasi Semester 2" class="timeline-card-img" />
+            <div class="timeline-card-body">
+              <div class="timeline-card-sem">Semester 2 · Februari 2024</div>
+              <h3>📚 Adaptasi & Ritme Baru</h3>
+              <p>
+                Semester dua adalah masa adaptasi yang sesungguhnya. Mulai terbiasa dengan jadwal kuliah yang padat, tugas yang terus menghampiri, dan dosen-dosen dengan gaya mengajar yang beragam.
+              </p>
+              <p style="margin-top:0.7rem;">
+                Kebersamaan semakin hangat — sesi belajar bareng, makan siang di kantin sambil ngerjain tugas, sampai kelompok diskusi yang terkadang berubah jadi sesi curhat panjang.
+              </p>
+              <div class="media-grid-2">
+                <div class="media-thumb">
+                  <!-- Foto kelas dengan dosen, jaket kuning -->
+                  <img src="../assets/2_1.jpeg" alt="Belajar Bersama" loading="lazy" />
+                </div>
+                <div class="media-thumb">
+                  <!-- Foto di depan UIN Bukittinggi -->
+                  <img src="../assets/2.jpeg" alt="Kampus UIN Bukittinggi" loading="lazy" />
+                </div>
+              </div>
+              <div class="timeline-card-tags">
+                <span class="tag">Belajar</span>
+                <span class="tag">Adaptasi</span>
+                <span class="tag">Tugas Kelompok</span>
+                <span class="tag">Kelas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SEMESTER 3 — Berkembang ══ -->
+      <div class="vt-item" data-animate="fade-up" data-delay="100">
+        <div class="vt-left">
+          <div class="vt-dot">💡</div>
+          <span class="vt-sem-label">Sem. 3</span>
+        </div>
+        <div class="vt-right">
+          <div class="timeline-card">
+            <!-- Foto kelas besar bersama dosen, jaket kuning -->
+            <img src="../assets/3.jpeg" alt="Berkembang Semester 3" class="timeline-card-img" />
+            <div class="timeline-card-body">
+              <div class="timeline-card-sem">Semester 3 · September 2024</div>
+              <h3>💡 Mulai Berkembang</h3>
+              <p>
+                Semester tiga adalah era dimana semua mulai terasa lebih hidup. Angkatan semakin solid, kegiatan kampus makin ramai, dan rasa percaya diri mulai tumbuh. Foto bersama di gedung kampus jadi bukti betapa kompaknya kita.
+              </p>
+              <p style="margin-top:0.7rem;">
+                Proyek kelompok mulai kompleks, presentasi makin sering, dan skill satu sama lain mulai keliatan. Di semester ini kita mulai sadar — PTIK A bukan sekadar kelas, tapi tim.
+              </p>
+              <div class="media-grid-2">
+                <div class="media-thumb">
+                  <!-- Foto kelas, ekspresi santai, jaket kuning -->
+                  <img src="../assets/4.jpeg" alt="Kebersamaan Semester 3" loading="lazy" />
+                </div>
+                <div class="media-thumb">
+                  <!-- Foto depan gedung hijau, thumbs up -->
+                  <img src="../assets/4_2.jpeg" alt="Momen Seru" loading="lazy" />
+                </div>
+              </div>
+              <div class="timeline-card-tags">
+                <span class="tag">Berkembang</span>
+                <span class="tag">Proyek</span>
+                <span class="tag">Tim</span>
+                <span class="tag">Kompak</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SEMESTER 4 — Mulai Sulit ══ -->
+      <div class="vt-item" data-animate="fade-up" data-delay="100">
+        <div class="vt-left">
+          <div class="vt-dot">😤</div>
+          <span class="vt-sem-label">Sem. 4</span>
+        </div>
+        <div class="vt-right">
+          <div class="timeline-card">
+            <!-- Foto kelas modern, pakaian bebas rapi, tampak lebih dewasa -->
+            <img src="../assets/5.jpeg" alt="Semester 4 Mulai Sulit" class="timeline-card-img" />
+            <div class="timeline-card-body">
+              <div class="timeline-card-sem">Semester 4 · Maret 2025</div>
+              <h3>😤 Mulai Terasa Berat</h3>
+              <p>
+                Semester empat adalah titik balik. Beban akademik semakin berat, deadline makin menghimpit, dan tekanan mulai terasa nyata. Tapi justru di sini karakter kita benar-benar diuji.
+              </p>
+              <p style="margin-top:0.7rem;">
+                Saling menguatkan jadi budaya. Kalau satu teman mau menyerah, yang lain segera datang memberi semangat. Inilah yang membuat PTIK A 2023 berbeda — tidak ada yang ditinggalkan.
+              </p>
+              <div class="media-grid-2">
+                <div class="media-thumb">
+                  <!-- Foto kelas bersama dosen, seragam KKN biru -->
+                  <img src="../assets/5_2.jpeg" alt="Perjuangan Semester 4" loading="lazy" />
+                </div>
+                <div class="media-thumb">
+                  <!-- Foto depan gedung Imam Bonjol -->
+                  <img src="../assets/5_3.jpeg" alt="Kebersamaan" loading="lazy" />
+                </div>
+              </div>
+              <div class="timeline-card-tags">
+                <span class="tag">Perjuangan</span>
+                <span class="tag">Deadline</span>
+                <span class="tag">Saling Dukung</span>
+                <span class="tag">Bertahan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SEMESTER 5 — Foto Baru ══ -->
+      <div class="vt-item" data-animate="fade-up" data-delay="100">
+        <div class="vt-left">
+          <div class="vt-dot">📸</div>
+          <span class="vt-sem-label">Sem. 5</span>
+        </div>
+        <div class="vt-right">
+          <div class="timeline-card">
+            <!-- Foto depan gedung hijau, pakaian bebas rapi, gaya lebih santai -->
+            <img src="../assets/6.jpeg" alt="Semester 5" class="timeline-card-img" />
+            <div class="timeline-card-body">
+              <div class="timeline-card-sem">Semester 5 · September 2025</div>
+              <h3>📸 Kenangan yang Semakin Indah</h3>
+              <p>
+                Memasuki semester lima, wajah-wajah PTIK A sudah jauh lebih dewasa. Seragam bebas rapi, senyum yang lebih percaya diri, dan foto bersama yang terasa lebih bermakna dari sebelumnya.
+              </p>
+              <p style="margin-top:0.7rem;">
+                Di semester ini kita mulai merasakan bahwa waktu bersama tidak akan lama lagi. Setiap momen terasa lebih berharga, dan kamera selalu siap mengabadikan tiap detiknya.
+              </p>
+              <div class="media-grid-2">
+                <div class="media-thumb">
+                  <img src="../assets/1.jpeg" alt="Momen Semester 5" loading="lazy" />
+                </div>
+                <div class="media-thumb">
+                  <img src="../assets/3.jpeg" alt="Bersama di Semester 5" loading="lazy" />
+                </div>
+              </div>
+              <div class="timeline-card-tags">
+                <span class="tag">Kenangan</span>
+                <span class="tag">Foto Baru</span>
+                <span class="tag">Makin Dewasa</span>
+                <span class="tag">2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SEMESTER 6 — KKN ══ -->
+      <div class="vt-item" data-animate="fade-up" data-delay="100">
+        <div class="vt-left">
+          <div class="vt-dot">🏕️</div>
+          <span class="vt-sem-label">Sem. 6</span>
+        </div>
+        <div class="vt-right">
+          <div class="timeline-card">
+            <!-- Foto seragam KKN biru navy di depan gedung modern -->
+            <img src="../assets/4_2.jpeg" alt="KKN Semester 6" class="timeline-card-img" />
+            <div class="timeline-card-body">
+              <div class="timeline-card-sem">Semester 6 · 2026</div>
+              <h3>🏕️ KKN & Perpisahan yang Manis</h3>
+              <p>
+                Puncak perjalanan enam semester — Kuliah Kerja Nyata (KKN) membawa kami terjun langsung ke masyarakat. Seragam biru navy menjadi saksi bisu perjuangan terakhir di bangku kuliah.
+              </p>
+              <p style="margin-top:0.7rem;">
+                Berpencar ke berbagai lokasi KKN, tapi hati tetap satu. Setelah KKN usai, malam perpisahan digelar — tangis dan tawa berpadu menjadi kenangan yang tak akan pernah pudar. Sampai jumpa di puncak kesuksesan masing-masing!
+              </p>
+              <div class="media-grid-2">
+                <div class="media-thumb">
+                  <!-- Foto KKN, seragam biru, suasana ceria -->
+                  <img src="../assets/5_2.jpeg" alt="KKN Bersama" loading="lazy" />
+                </div>
+                <div class="media-thumb">
+                  <!-- Foto perpisahan depan gedung -->
+                  <img src="../assets/5_3.jpeg" alt="Malam Perpisahan" loading="lazy" />
+                </div>
+              </div>
+              <div class="timeline-card-tags">
+                <span class="tag">KKN</span>
+                <span class="tag">Pengabdian</span>
+                <span class="tag">Perpisahan</span>
+                <span class="tag">Kenangan Abadi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2026 Ruang Kenangan PTIK A 2023 · Made with <span class="footer-heart">♥</span></p>
+      <div class="footer-legal">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="mahasiswa.html">Mahasiswa</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

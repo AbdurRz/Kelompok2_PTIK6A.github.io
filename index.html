@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruang Kenangan PTIK A 2023</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Timeline preview item tambahan ── */
+    .timeline-item .timeline-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: var(--radius-m);
+      margin-top: 0.9rem;
+      border: 1px solid var(--border);
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══ SEARCH OVERLAY ═══ -->
+  <div class="search-overlay" id="searchOverlay">
+    <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--text-faint);">Tekan Esc untuk tutup</p>
+    </div>
+  </div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-leaf">
+          <div class="logo-leaf-inner"></div>
+        </div>
+        <span>Ruang Kenangan</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active-nav">Home</a></li>
+        <li><a href="pages/galeri.html" class="nav-link">Galeri</a></li>
+        <li><a href="pages/video.html" class="nav-link">Video</a></li>
+        <li><a href="pages/mahasiswa.html" class="nav-link">Mahasiswa</a></li>
+        <li><a href="pages/timeline.html" class="nav-link">Timeline</a></li>
+        <li><a href="pages/buku.html" class="nav-link">Buku Kenangan</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchBtn" title="Cari">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="nav-music-btn" id="musicBtn" title="Putar Musik">
+          <i class="fas fa-music"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="hero-bg-overlay"></div>
+      <div class="hero-grid-bg"></div>
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+    </div>
+
+    <div class="hero-container">
+      <div class="hero-content" data-animate="fade-up">
+        <div class="hero-badge">
+          <div class="badge-pulse"></div>
+          ANGKATAN 2023
+        </div>
+        <h1 class="hero-title">
+          Ruang<br />
+          <span class="line-2">Kenangan</span><br />
+          PTIK A 2023
+        </h1>
+        <p class="hero-sub">
+          Setiap tawa, perjuangan, dan cerita tersimpan di sini. Perjalanan kita dari semester pertama hingga perpisahan
+          — diabadikan selamanya.
+        </p>
+        <div class="hero-actions">
+          <a href="pages/galeri.html" class="btn-primary">
+            <i class="fas fa-images"></i>
+            Jelajahi Kenangan
+          </a>
+          <button class="btn-random" id="randomBtn">
+            🎲 Putar Kenangan
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong>35</strong>
+            <span>Mahasiswa</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <strong>500+</strong>
+            <span>Foto</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <strong>6</strong>
+            <span>Semester</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" data-animate="fade-left">
+        <div class="hero-img-frame">
+          <img src="assets/1.1.jpeg" alt="Angkatan PTIK A 2023" />
+          <div class="hero-img-overlay"></div>
+        </div>
+        <div class="hero-float-card card-1">
+          <div class="float-icon green"><i class="fas fa-graduation-cap"></i></div>
+          <div>
+            <strong style="font-size:0.82rem;color:var(--text);display:block;">PTIK A 2023</strong>
+            <span style="font-size:0.72rem;color:var(--text-faint);">UIN Bukittinggi</span>
+          </div>
+        </div>
+        <div class="hero-float-card card-2">
+          <div class="float-icon gold"><i class="fas fa-star"></i></div>
+          <div>
+            <strong style="font-size:0.82rem;color:var(--text);display:block;">Semester 1–6</strong>
+            <span style="font-size:0.72rem;color:var(--text-faint);">Perjalanan Indah</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Random memory display -->
+    <div style="position:relative;z-index:2;padding:0 1.5rem 2rem;max-width:700px;margin:0 auto;display:none;"
+      id="randomDisplayHome">
+      <div class="random-img-frame show" id="randomFrame">
+        <img src="" alt="Random Memory" id="randomImg" />
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══ MARQUEE ═══ -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Galeri Kenangan</span><span class="marquee-dot">◆</span>
+        <span>Video Kenangan</span><span class="marquee-dot">◆</span>
+        <span>Profil Mahasiswa</span><span class="marquee-dot">◆</span>
+        <span>Buku Kenangan</span><span class="marquee-dot">◆</span>
+        <span>Timeline Perjalanan</span><span class="marquee-dot">◆</span>
+        <span>Random Memory</span><span class="marquee-dot">◆</span>
+        <span>Musik Kenangan</span><span class="marquee-dot">◆</span>
+        <span>Galeri Kenangan</span><span class="marquee-dot">◆</span>
+        <span>Video Kenangan</span><span class="marquee-dot">◆</span>
+        <span>Profil Mahasiswa</span><span class="marquee-dot">◆</span>
+        <span>Buku Kenangan</span><span class="marquee-dot">◆</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TENTANG ═══ -->
+  <section class="about" id="tentang">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-stack" data-animate="fade-right">
+          <img src="assets/1.1.jpeg" alt="Foto Kelas" class="about-img-main" />
+          <img src="assets/1.2.jpeg" alt="Momen Bersama" class="about-img-accent" />
+          <div class="about-badge">
+            <span class="about-badge-num">2023</span>
+            <span class="about-badge-label">Angkatan</span>
+          </div>
+        </div>
+
+        <div class="about-content" data-animate="fade-left">
+          <div class="section-label">Tentang Kami</div>
+          <h2 class="section-title">Kisah Perjalanan<br /><span class="gradient-text">PTIK A 2023</span></h2>
+          <p class="about-text">
+            Kami adalah Angkatan 2023 Kelas A Program Studi Pendidikan Teknik Informatika dan Komputer, Universitas
+            Islam Negeri Syekh Muhammad Djamil Djambek Bukittinggi. Bersama-sama kami menjalani 6 semester penuh suka
+            dan duka.
+          </p>
+          <p class="about-text">
+            Dari ospek yang menegangkan, kelas yang kadang membosankan (tapi tetap seru!), PKL, hingga momen perpisahan
+            yang mengharukan — semua terukir indah di sini, di Ruang Kenangan PTIK A 2023.
+          </p>
+          <div class="about-features">
+            <div class="about-feature">
+              <div class="about-feature-icon"><i class="fas fa-images"></i></div>
+              <div>
+                <strong>Galeri & Video Kenangan</strong>
+                <p>Ratusan foto dan video dari setiap momen berharga selama 6 semester.</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon"><i class="fas fa-users"></i></div>
+              <div>
+                <strong>35 Mahasiswa, Satu Keluarga</strong>
+                <p>Dari berbagai daerah, bersatu dalam satu kelas penuh kenangan.</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon"><i class="fas fa-book-heart"></i></div>
+              <div>
+                <strong>Buku Kenangan Digital</strong>
+                <p>Pesan dan kesan dari setiap mahasiswa yang akan selalu diingat.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FITUR ═══ -->
+  <section class="features" id="fitur">
+    <div class="container">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Eksplorasi</div>
+        <h2 class="section-title">Apa yang Ada<br /><span class="gradient-text">di Dalamnya?</span></h2>
+        <p class="section-sub">Temukan semua kenangan indah dari berbagai sudut perjalanan PTIK A 2023</p>
+      </div>
+
+      <div class="features-grid">
+        <a href="pages/galeri.html" class="feature-card" data-animate="fade-up" data-delay="0">
+          <div class="feature-icon-wrap"><i class="fas fa-images"></i></div>
+          <h3>Galeri Kenangan</h3>
+          <p>Foto-foto terbaik per semester dan kategori — ospek, kelas, event, dan lainnya. Mode grid & slideshow.</p>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </a>
+
+        <a href="pages/video.html" class="feature-card" data-animate="fade-up" data-delay="100">
+          <div class="feature-icon-wrap"><i class="fas fa-film"></i></div>
+          <h3>Video Kenangan</h3>
+          <p>Momen lucu, vlog kelas, dan video kenangan yang bikin senyum-senyum sendiri.</p>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </a>
+
+        <a href="pages/mahasiswa.html" class="feature-card" data-animate="fade-up" data-delay="200">
+          <div class="feature-icon-wrap"><i class="fas fa-users"></i></div>
+          <h3>Profil Mahasiswa</h3>
+          <p>Kenalan sama semua teman sekelas — nama, NIM, foto, dan kesan pesan mereka.</p>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </a>
+
+        <a href="pages/buku.html" class="feature-card" data-animate="fade-up" data-delay="0">
+          <div class="feature-icon-wrap"><i class="fas fa-book-open"></i></div>
+          <h3>Buku Kenangan Digital</h3>
+          <p>Semua pesan dan kenangan dari setiap mahasiswa yang bikin baper setiap dibaca.</p>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </a>
+
+        <a href="pages/timeline.html" class="feature-card" data-animate="fade-up" data-delay="100">
+          <div class="feature-icon-wrap"><i class="fas fa-timeline"></i></div>
+          <h3>Timeline Perjalanan</h3>
+          <p>Perjalanan 6 semester yang terasa seperti cerita — bukan sekadar arsip biasa.</p>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </a>
+
+        <a href="#awards" class="feature-card" data-animate="fade-up" data-delay="200">
+          <div class="feature-icon-wrap"><i class="fas fa-trophy"></i></div>
+          <h3>Julukan di Kelas A 23</h3>
+          <p>Julukan lucu-lucuan khas PTIK A — siapa yang paling sering telat? Siapa yang paling rajin?</p>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ GALLERY PREVIEW ═══ -->
+  <section class="gallery-preview" id="galeri">
+    <div class="container">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Momen Terbaik</div>
+        <h2 class="section-title">Sekilas <span class="gradient-text">Galeri</span></h2>
+        <p class="section-sub">Sepintas momen-momen tak terlupakan bersama teman-teman PTIK A</p>
+      </div>
+
+      <div class="gallery-masonry" data-animate="fade-up">
+        <div class="gallery-item">
+          <img src="assets/1.jpeg" alt="Ospek 2023" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Ospek 2023<span>Semester 1</span></div>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/2.jpeg" alt="Kelas Bersama" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kelas Bersama<span>Semester 2</span></div>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/3.jpeg" alt="Nongkrong Bareng" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Nongkrong Bareng<span>Kehidupan Kampus</span></div>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/4.jpeg" alt="Seminar & Event" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Event Kampus<span>Semester 3</span></div>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/5.jpeg" alt="Wisuda" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Persiapan Wisuda<span>Semester 6</span></div>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/6.jpeg" alt="PKL" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">PKL & Magang<span>Semester 4</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-cta" data-animate="fade-up">
+        <a href="pages/galeri.html" class="btn-outline">
+          <i class="fas fa-images"></i>
+          Lihat Semua Foto
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VIDEO KENANGAN ═══ -->
+  <!-- ═══ VIDEO KENANGAN ═══ -->
+  <!-- VIDEO MODAL — sama persis dengan video.html -->
+  <div class="video-modal" id="videoModalHome" style="
+    position:fixed;inset:0;background:rgba(7,13,8,0.97);z-index:5000;
+    display:none;align-items:center;justify-content:center;
+    flex-direction:column;gap:1.5rem;padding:2rem;">
+    <button id="videoModalHomeClose" style="
+      position:fixed;top:1.5rem;right:1.5rem;width:46px;height:46px;
+      border-radius:50%;border:1px solid rgba(46,204,113,0.2);background:none;
+      color:#edf5ee;cursor:pointer;font-size:1.1rem;display:flex;
+      align-items:center;justify-content:center;transition:all 0.32s;">
+      <i class="fas fa-times"></i>
+    </button>
+    <div style="width:100%;max-width:860px;aspect-ratio:16/9;border-radius:22px;
+      overflow:hidden;background:#000;border:1px solid rgba(46,204,113,0.2);position:relative;">
+      <video id="videoPlayerHome" controls preload="metadata" playsinline
+        style="width:100%;height:100%;object-fit:contain;display:block;background:#000;">
+        <source id="videoSourceHome" src="" type="video/mp4" />
+        Browser Anda tidak mendukung pemutaran video HTML5.
+      </video>
+      <div id="videoFallbackHome" style="
+        position:absolute;inset:0;display:none;flex-direction:column;
+        align-items:center;justify-content:center;text-align:center;
+        color:rgba(237,245,238,0.58);padding:2rem;background:#111a12;">
+        <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#2ecc71;margin-bottom:1rem;display:block;"></i>
+        <p>Video tidak dapat dimuat. Pastikan file ada di folder <code>assets/</code>.</p>
+      </div>
+    </div>
+    <div id="videoTitleHome" style="font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:#edf5ee;text-align:center;"></div>
+    <div id="videoMetaHome" style="font-size:0.82rem;color:rgba(237,245,238,0.3);text-align:center;"></div>
+  </div>
+
+  <section class="video-section" id="video">
+    <div class="container">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Video</div>
+        <h2 class="section-title">Video <span class="gradient-text">Kenangan</span></h2>
+        <p class="section-sub">Rekaman momen-momen lucu dan emosional yang bikin kangen</p>
+      </div>
+
+      <div class="video-slider" data-animate="fade-up">
+
+        <!-- Video 1 -->
+        <div class="video-card">
+          <div class="video-thumb" style="cursor:pointer;"
+            onclick="openVideoHome('assets/v1.mp4','Malam Perpisahan PTIK A 2023','Semester 6 · Maret 2026')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="assets/v1.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-btn"><i class="fas fa-play"></i></button>
+            <span class="video-duration">12:47</span>
+          </div>
+          <div class="video-info">
+            <h4>✨ Malam Perpisahan PTIK A 2023</h4>
+            <span>Semester 6 · Maret 2026</span>
+          </div>
+        </div>
+
+        <!-- Video 2 -->
+        <div class="video-card">
+          <div class="video-thumb" style="cursor:pointer;"
+            onclick="openVideoHome('assets/v2.mp4','Foto Bareng Terakhir','Semester 6 · Februari 2026')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="assets/v2.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-btn"><i class="fas fa-play"></i></button>
+            <span class="video-duration">4:22</span>
+          </div>
+          <div class="video-info">
+            <h4>📸 Foto Bareng Terakhir</h4>
+            <span>Semester 6 · Februari 2026</span>
+          </div>
+        </div>
+
+        <!-- Video 3 -->
+        <div class="video-card">
+          <div class="video-thumb" style="cursor:pointer;"
+            onclick="openVideoHome('assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="assets/v3.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-btn"><i class="fas fa-play"></i></button>
+            <span class="video-duration">2:34</span>
+          </div>
+          <div class="video-info">
+            <h4>🎉 Hari Pertama Ospek</h4>
+            <span>Semester 1 · September 2023</span>
+          </div>
+        </div>
+
+        <!-- Video 4 -->
+        <div class="video-card">
+          <div class="video-thumb" style="cursor:pointer;"
+            onclick="openVideoHome('assets/v4.mp4','Momen Lucu di Kelas','Semester 3 · September 2024')">
+            <video muted loop playsinline preload="metadata"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+              <source src="assets/v4.mp4" type="video/mp4" />
+            </video>
+            <button class="video-play-btn"><i class="fas fa-play"></i></button>
+            <span class="video-duration">3:20</span>
+          </div>
+          <div class="video-info">
+            <h4>😄 Momen Lucu di Kelas</h4>
+            <span>Semester 3 · September 2024</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:2.5rem;" data-animate="fade-up">
+        <a href="pages/video.html" class="btn-outline">
+          <i class="fas fa-film"></i> Lihat Semua Video
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* ── Video modal untuk index.html ── */
+    const vModalHome  = document.getElementById('videoModalHome');
+    const vPlayerHome = document.getElementById('videoPlayerHome');
+    const vSourceHome = document.getElementById('videoSourceHome');
+
+    function openVideoHome(src, title, meta) {
+      document.getElementById('videoFallbackHome').style.display = 'none';
+      vSourceHome.setAttribute('src', src);
+      vPlayerHome.load();
+      vPlayerHome.addEventListener('canplay', () => vPlayerHome.play(), { once: true });
+      vPlayerHome.onerror = () => {
+        document.getElementById('videoFallbackHome').style.display = 'flex';
+      };
+      document.getElementById('videoTitleHome').textContent = title;
+      document.getElementById('videoMetaHome').textContent  = meta;
+      vModalHome.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoHome() {
+      vPlayerHome.pause();
+      vPlayerHome.currentTime = 0;
+      vSourceHome.setAttribute('src', '');
+      vPlayerHome.load();
+      vModalHome.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('videoModalHomeClose').addEventListener('click', closeVideoHome);
+    vModalHome.addEventListener('click', e => { if (e.target === vModalHome) closeVideoHome(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && vModalHome.style.display === 'flex') closeVideoHome();
+    });
+  </script>
+
+  <!-- ═══ TIMELINE PREVIEW ═══ -->
+  <section class="timeline" id="timeline">
+    <div class="container">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Perjalanan</div>
+        <h2 class="section-title">6 Semester <span class="gradient-text">Penuh Cerita</span></h2>
+        <p class="section-sub">Setiap semester punya warna dan ceritanya masing-masing</p>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
+
+        <!-- Sem 1 -->
+        <div class="timeline-item" data-animate="fade-up">
+          <div class="timeline-content">
+            <div class="timeline-sem">Semester 1</div>
+            <h3>🎉 Ospek & Perkenalan</h3>
+            <p>Hari-hari menegangkan ospek, foto bersama di Gedung Maroko, dan perkenalan pertama dengan teman baru dari berbagai penjuru Sumatera.</p>
+            <img src="assets/1.jpeg" alt="Ospek Semester 1" class="timeline-img" loading="lazy" />
+          </div>
+          <div class="timeline-dot">
+            <div class="timeline-dot-inner">🎉</div>
+          </div>
+          <div></div>
+        </div>
+
+        <!-- Sem 2 -->
+        <div class="timeline-item" data-animate="fade-up" data-delay="100">
+          <div></div>
+          <div class="timeline-dot">
+            <div class="timeline-dot-inner">📚</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-sem">Semester 2</div>
+            <h3>📚 Adaptasi & Belajar</h3>
+            <p>Mulai terbiasa dengan ritme kuliah, tugas yang menantang, dan kebersamaan yang semakin hangat di dalam kelas.</p>
+            <img src="assets/1_3.jpeg" alt="Adaptasi Semester 2" class="timeline-img" loading="lazy" />
+          </div>
+        </div>
+
+        <!-- Sem 3 -->
+        <div class="timeline-item" data-animate="fade-up" data-delay="200">
+          <div class="timeline-content">
+            <div class="timeline-sem">Semester 3</div>
+            <h3>💡 Mulai Berkembang!</h3>
+            <p>Proyek kelompok, seminar, dan kegiatan kampus makin padat. Angkatan semakin solid dan percaya diri.</p>
+            <img src="assets/3.jpeg" alt="Berkembang Semester 3" class="timeline-img" loading="lazy" />
+          </div>
+          <div class="timeline-dot">
+            <div class="timeline-dot-inner">💡</div>
+          </div>
+          <div></div>
+        </div>
+
+        <!-- Sem 4 -->
+        <div class="timeline-item" data-animate="fade-up" data-delay="300">
+          <div></div>
+          <div class="timeline-dot">
+            <div class="timeline-dot-inner">😤</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-sem">Semester 4</div>
+            <h3>😤 Mulai Terasa Berat</h3>
+            <p>Beban akademik semakin berat, deadline menghimpit, tapi saling menguatkan jadi budaya yang membuat kita tetap bertahan.</p>
+            <img src="assets/5.jpeg" alt="Semester 4" class="timeline-img" loading="lazy" />
+          </div>
+        </div>
+
+        <!-- Sem 5 -->
+        <div class="timeline-item" data-animate="fade-up" data-delay="400">
+          <div class="timeline-content">
+            <div class="timeline-sem">Semester 5</div>
+            <h3>📸 Kenangan Semakin Indah</h3>
+            <p>Wajah-wajah yang semakin dewasa, momen yang semakin berharga, dan kamera yang selalu siap mengabadikan tiap detiknya.</p>
+            <img src="assets/6.jpeg" alt="Semester 5" class="timeline-img" loading="lazy" />
+          </div>
+          <div class="timeline-dot">
+            <div class="timeline-dot-inner">📸</div>
+          </div>
+          <div></div>
+        </div>
+
+        <!-- Sem 6 -->
+        <div class="timeline-item" data-animate="fade-up" data-delay="500">
+          <div></div>
+          <div class="timeline-dot">
+            <div class="timeline-dot-inner">🏕️</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-sem">Semester 6</div>
+            <h3>🏕️ KKN & Perpisahan Manis</h3>
+            <p>Seragam biru KKN, pengabdian ke masyarakat, dan akhirnya malam perpisahan yang penuh tawa sekaligus air mata haru.</p>
+            <img src="assets/4_2.jpeg" alt="KKN Semester 6" class="timeline-img" loading="lazy" />
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:3.5rem;" data-animate="fade-up">
+        <a href="pages/timeline.html" class="btn-outline">
+          <i class="fas fa-timeline"></i> Lihat Timeline Lengkap
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ AWARDS PREVIEW ═══ -->
+  <section class="awards" id="awards">
+    <div class="awards-bg"></div>
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Julukan Kelas</div>
+        <h2 class="section-title">Angkatan <span class="gold-text"> 2023</span></h2>
+        <p class="section-sub">Julukan khas PTIK A — lucu tapi bermakna!</p>
+      </div>
+
+      <div class="awards-grid">
+        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+          <img src="/assets/13.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+          <h4>Salsabila Nazura</h4>
+          <span class="nim">NIM 2523037</span>
+          <button class="btn-profile">Lihat Profil</button>
+        </div>
+        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+          <img src="/assets/14.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+          <h4>Muhammad Abdur Rozaq Damanik</h4>
+          <span class="nim">NIM 2523019</span>
+          <button class="btn-profile">Lihat Profil</button>
+        </div>
+        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+          <img src="/assets/24.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+          <h4>Arifin Heldian Putra</h4>
+          <span class="nim">NIM 2523008</span>
+          <button class="btn-profile">Lihat Profil</button>
+        </div>
+        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+          <img src="/assets/26.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+          <h4>Azka Khalillah Umah</h4>
+          <span class="nim">NIM 2523010</span>
+          <button class="btn-profile">Lihat Profil</button>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;" data-animate="fade-up">
+        <a href="pages/mahasiswa.html" class="btn-outline">
+          <i class="fas fa-trophy"></i> Lihat Semua Julukan
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ STATISTIK ═══ -->
+  <section class="statistik" id="statistik">
+    <div class="container">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Angka Bicara</div>
+        <h2 class="section-title">Statistik <span class="gradient-text">Angkatan</span></h2>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card" data-animate="fade-up" data-delay="0">
+          <span class="stat-icon">👨‍🎓</span>
+          <span class="stat-number" data-target="27">0</span>
+          <span class="stat-label">Mahasiswa</span>
+        </div>
+        <div class="stat-card" data-animate="fade-up" data-delay="100">
+          <span class="stat-icon">📸</span>
+          <span class="stat-number" data-target="500" data-suffix="+">0</span>
+          <span class="stat-label">Foto Kenangan</span>
+        </div>
+        <div class="stat-card" data-animate="fade-up" data-delay="200">
+          <span class="stat-icon">🎬</span>
+          <span class="stat-number" data-target="30">0</span>
+          <span class="stat-label">Video</span>
+        </div>
+        <div class="stat-card" data-animate="fade-up" data-delay="300">
+          <span class="stat-icon">🗺️</span>
+          <span class="stat-number" data-target="4">0</span>
+          <span class="stat-label">Daerah Asal</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONI / KESAN PESAN ═══ -->
+  <section class="testimoni" id="kesan">
+    <div class="container">
+      <div class="section-header" data-animate="fade-up">
+        <div class="section-label">Kesan & Pesan</div>
+        <h2 class="section-title">Kata-kata dari <span class="gradient-text">Teman Kita</span></h2>
+        <p class="section-sub">Kenangan yang tersimpan dalam kata-kata tulus dari hati</p>
+      </div>
+
+      <div class="testi-slider" data-animate="fade-up">
+        <div class="testi-card featured">
+          <p class="testi-quote">Tiga tahun bersama kalian adalah pengalaman terbaik hidupku. Semoga pertemanan ini tidak berakhir di sini. Sukses untuk kita semua!</p>
+          <div class="testi-author">
+            <img src="../assets/14.png" alt="Mahasiswa" />
+            <div>
+              <strong>AbdurRz</strong>
+              <span>NIM 2523019</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <p class="testi-quote">Kelas ini mengajarkan ku banyak hal — bukan hanya tentang teknologi, tapi tentang arti persahabatan sejati. Terima kasih semuanya!</p>
+          <div class="testi-author">
+            <img src="../assets/13.png" alt="Mahasiswa" />
+            <div>
+              <strong>Zura</strong>
+              <span>NIM 2523037</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <p class="testi-quote">Inget banget waktu ospek kita semua panik. Sekarang udah mau lulus. Cepat banget ya. Semoga rezeki kita semua lancar!</p>
+          <div class="testi-author">
+            <img src="../assets/26.png" alt="Mahasiswa" />
+            <div>
+              <strong>Azka</strong>
+              <span>NIM 2523010</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <p class="testi-quote">Dari orang asing jadi sahabat sejati. PTIK A 2023 — nama yang akan selalu kuingat sampai tua. Kalian luar biasa!</p>
+          <div class="testi-author">
+            <img src="../assets/24.png" alt="Mahasiswa" />
+            <div>
+              <strong>Arifin</strong>
+              <span>NIM 2523008</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <p class="testi-quote">Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk seluruh keluarga besar PTIK A 2023!</p>
+          <div class="testi-author">
+            <img src="../assets/25.png" alt="Mahasiswa" />
+            <div>
+              <strong>Fariz</strong>
+              <span>NIM 2523021</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RANDOM MEMORY SECTION ═══ -->
+  <section class="random-section">
+    <div class="container">
+      <div class="section-label" style="justify-content:center;">Kejutan</div>
+      <h2 class="section-title" style="text-align:center;" data-animate="fade-up">
+        Putar <span class="gradient-text">Kenangan Acak</span>
+      </h2>
+      <p style="text-align:center;color:var(--text-dim);margin-top:0.8rem;font-size:0.95rem;" data-animate="fade-up">
+        Klik tombol di bawah untuk memunculkan momen random dari perjalanan kita
+      </p>
+      <div style="text-align:center;" data-animate="fade-up">
+        <button class="btn-random-big" id="randomBtnBig">
+          🎲 Putar Kenangan
+        </button>
+      </div>
+      <div class="random-display" data-animate="fade-up">
+        <div class="random-img-frame" id="randomFrame">
+          <img src="" alt="Kenangan Random" id="randomImg" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" style="margin-bottom:1.2rem;display:inline-flex;">
+            <div class="logo-leaf">
+              <div class="logo-leaf-inner"></div>
+            </div>
+            <span>Ruang Kenangan</span>
+          </a>
+          <p>Portal kenangan digital Angkatan 2023 Kelas A Program Studi PTIK — UIN Syekh Muhammad Djamil Djambek Bukittinggi.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/ptik23a" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/628887301230" class="social-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.youtube.com/@ptik23a" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.facebook.com/ptik23a" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Navigasi</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pages/galeri.html">Galeri</a></li>
+            <li><a href="pages/video.html">Video</a></li>
+            <li><a href="pages/mahasiswa.html">Mahasiswa</a></li>
+            <li><a href="pages/timeline.html">Timeline</a></li>
+            <li><a href="pages/buku.html">Buku Kenangan</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Fitur</h5>
+          <ul>
+            <li><a href="pages/galeri.html">Galeri Kenangan</a></li>
+            <li><a href="pages/buku.html">Buku Kenangan</a></li>
+            <li><a href="#statistik">Statistik Angkatan</a></li>
+            <li><a href="#kesan">Kesan & Pesan</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Info</h5>
+          <ul class="footer-contact">
+            <li><i class="fas fa-university"></i> UIN Syekh M. Djamil Djambek Bukittinggi</li>
+            <li><i class="fas fa-graduation-cap"></i> Prodi PTIK — Angkatan 2023</li>
+            <li><i class="fas fa-map-marker-alt"></i> Bukittinggi, Sumatera Barat</li>
+            <li><i class="fab fa-instagram"></i> @ptika2023</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Ruang Kenangan Kelompok 2 PTIK A 2023 · Dibuat dengan <span class="footer-heart">♥</span> untuk kenangan abadi</p>
+        <div class="footer-legal">
+          <a href="#">Tentang</a>
+          <a href="#">Kontak</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('randomBtn')?.addEventListener('click', function () {
+      document.getElementById('randomDisplayHome').style.display = 'block';
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buku Kenangan — Ruang Kenangan PTIK A 2023</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .buku-page { padding: 5rem 0 9rem; }
+
+    /* Tambah Pesan Form */
+    .add-pesan-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      margin-bottom: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .add-pesan-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grad-green);
+    }
+
+    .add-pesan-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .add-pesan-section p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 1.8rem;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-m);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 0.9rem 1.1rem;
+      outline: none;
+      transition: var(--transition);
+      caret-color: var(--green);
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(46,204,113,0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 130px;
+      line-height: 1.7;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      margin-top: 0.3rem;
+    }
+
+    /* Buku Cards Grid */
+    .buku-page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+
+    .buku-page-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      padding: 2rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .buku-page-card:hover {
+      border-color: var(--border-alt);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-green);
+    }
+
+    .buku-page-card.featured-buku {
+      border-color: rgba(46,204,113,0.25);
+      background: rgba(46,204,113,0.04);
+    }
+
+    .buku-page-card.featured-buku::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grad-green);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .buku-quote-icon {
+      font-size: 2.5rem;
+      line-height: 1;
+      color: var(--green);
+      opacity: 0.25;
+      font-family: Georgia, serif;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .buku-page-card blockquote {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.82;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      opacity: 0.92;
+      padding-left: 1rem;
+      border-left: 2px solid var(--green);
+    }
+
+    .buku-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .buku-author-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .buku-author-info img {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border-alt);
+    }
+
+    .buku-author-info strong {
+      font-size: 0.85rem;
+      font-family: var(--font-display);
+      color: var(--text);
+      display: block;
+    }
+
+    .buku-author-info span {
+      font-size: 0.72rem;
+      color: var(--green);
+    }
+
+    .buku-like-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-faint);
+      font-size: 0.76rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+
+    .buku-like-btn:hover, .buku-like-btn.liked {
+      border-color: #e74c3c;
+      color: #e74c3c;
+      background: rgba(231,76,60,0.07);
+    }
+
+    /* Toast notification */
+    .toast-notif {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      padding: 0.85rem 1.8rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 9000;
+      box-shadow: var(--shadow-m);
+      transition: transform 0.4s ease;
+    }
+
+    .toast-notif.show { transform: translateX(-50%) translateY(0); }
+    .toast-notif i { color: var(--green); }
+
+    @media (max-width: 900px) {
+      .buku-page-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 580px) {
+      .buku-page-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast-notif" id="toastNotif">
+  <i class="fas fa-check-circle"></i>
+  <span id="toastMsg">Pesan berhasil ditambahkan!</span>
+</div>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <div class="logo-leaf"><div class="logo-leaf-inner"></div></div>
+      <span>Ruang Kenangan</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+      <li><a href="video.html" class="nav-link">Video</a></li>
+      <li><a href="mahasiswa.html" class="nav-link">Mahasiswa</a></li>
+      <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+      <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+      <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="section-label" style="justify-content:center;">Dari Hati ke Hati</div>
+  <h1>Buku <span class="gradient-text">Kenangan Digital</span></h1>
+  <p>Pesan dan kesan tulus dari setiap anggota keluarga PTIK A 2023</p>
+</div>
+
+<!-- BUKU PAGE -->
+<section class="buku-page">
+  <div class="container">
+
+    <!-- Form Tambah Pesan -->
+    <div class="add-pesan-section" data-animate="fade-up">
+      <h3>✍️ Tinggalkan Pesanmu</h3>
+      <p>Tulis kesan, pesan, atau kenangan indah bersama PTIK A 2023. Pesanmu akan tersimpan selamanya di sini.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-input" id="inputNama" placeholder="Nama kamu..." maxlength="60" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">NIM</label>
+          <input type="text" class="form-input" id="inputNIM" placeholder="25230xx" maxlength="20" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Pesan & Kesanmu</label>
+        <textarea class="form-textarea" id="inputPesan" placeholder="Tuliskan kenangan, pesan, atau ungkapan hatimu di sini..." maxlength="500" oninput="updateCharCount(this)"></textarea>
+        <div class="char-count"><span id="charCount">0</span>/500</div>
+      </div>
+
+      <button class="btn-primary" onclick="submitPesan()">
+        <i class="fas fa-paper-plane"></i> Kirim Pesan
+      </button>
+    </div>
+
+    <!-- Grid Pesan -->
+    <div class="buku-page-grid" id="bukuGrid" data-animate="fade-up">
+
+      <div class="buku-page-card featured-buku">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Tiga tahun bersama kalian adalah pengalaman terbaik hidupku. Dari yang awalnya tidak kenal satu sama lain, kini sudah seperti keluarga sendiri. Semoga pertemanan ini tidak berakhir di sini dan kita semua sukses di jalan masing-masing. Selalu ingat satu sama lain ya!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/14.png" alt="" />
+            <div><strong>AbdurRz</strong><span>NIM 2523019</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>42</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Kelas ini mengajarkan ku banyak hal — bukan hanya tentang teknologi, tapi tentang arti persahabatan sejati. Terima kasih untuk semua momen indah yang tidak akan pernah kulupakan!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/13.png" alt="" />
+            <div><strong>Zura</strong><span>NIM 2523037</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>38</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Inget banget waktu ospek kita semua panik dan nggak tau mau ngapain. Sekarang udah mau lulus. Cepat banget ya waktunya. Semoga rezeki kita semua lancar dan selalu dalam lindungan Allah!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/26.png" alt="" />
+            <div><strong>Azka</strong><span>NIM 2523010</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>31</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Dari orang asing jadi sahabat sejati. PTIK A 2023 — nama yang akan selalu kuingat sampai tua nanti. Kalian adalah bagian dari hidup yang paling berharga yang pernah kumiliki!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/25.png" alt="" />
+            <div><strong>Fariz </strong><span>NIM 2523021</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>55</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk seluruh keluarga besar PTIK A 2023. Sampai jumpa di puncak kesuksesan masing-masing!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/12.png" alt="" />
+            <div><strong>Rani </strong><span>NIM 2523011</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>29</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Yang paling kukangenin adalah ngobrol santai di kantin sambil nunggu kelas dimulai. Obrolan receh yang ternyata bermakna banget. Kapan kita bisa ngulang momen-momen kecil itu lagi?</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/19.png" alt="" />
+            <div><strong>Aan</strong><span>NIM 2523006</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>47</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Terima kasih sudah menjadi teman belajar, teman curhat, dan teman tertawa sekaligus. PTIK A 2023 bukan cuma kelas, tapi rumah kedua yang selalu kurindu setelah ini berakhir.</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/18.png" alt="" />
+            <div><strong>Ahmad Syarif</strong><span>NIM 2312345006</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>62</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Senang banget bisa belajar bersama orang-orang luar biasa seperti kalian. Semoga ilmu yang kita dapat selama kuliah bisa bermanfaat untuk banyak orang. Aamiin ya Allah!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/9.png" alt="" />
+            <div><strong>Syarifah </strong><span>NIM 2523007</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>34</span></button>
+        </div>
+      </div>
+
+      <div class="buku-page-card">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Kalau ketemu nanti jangan sok tidak kenal ya! Haha. Kita sudah punya sejarah 6 semester yang tidak akan bisa dihapus. PTIK A 2023 — satu rasa, satu cerita, selamanya!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="../assets/11.png" alt="" />
+            <div><strong>Nur Adilah</strong><span>NIM 2523003</span></div>
+          </div>
+          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>71</span></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2026 Ruang Kenangan PTIK A 2023 · Made with <span class="footer-heart">♥</span></p>
+      <div class="footer-legal">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="mahasiswa.html">Mahasiswa</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  function updateCharCount(el) {
+    document.getElementById('charCount').textContent = el.value.length;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toastNotif');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function submitPesan() {
+    const nama = document.getElementById('inputNama').value.trim();
+    const nim = document.getElementById('inputNIM').value.trim();
+    const pesan = document.getElementById('inputPesan').value.trim();
+
+    if (!nama || !pesan) {
+      showToast('⚠️ Mohon isi nama dan pesan terlebih dahulu!');
+      return;
+    }
+
+    // Build new card
+    const grid = document.getElementById('bukuGrid');
+    const card = document.createElement('div');
+    card.className = 'buku-page-card';
+    card.innerHTML = `
+      <span class="buku-quote-icon">"</span>
+      <blockquote>${pesan}</blockquote>
+      <div class="buku-footer">
+        <div class="buku-author-info">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--green-soft);border:2px solid var(--border-alt);display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:700;font-size:1rem;">${nama.charAt(0).toUpperCase()}</div>
+          <div><strong>${nama}</strong><span>${nim || 'PTIK A 2023'}</span></div>
+        </div>
+        <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>0</span></button>
+      </div>
+    `;
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    grid.prepend(card);
+
+    requestAnimationFrame(() => {
+      card.style.transition = 'all 0.5s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    });
+
+    // Reset form
+    document.getElementById('inputNama').value = '';
+    document.getElementById('inputNIM').value = '';
+    document.getElementById('inputPesan').value = '';
+    document.getElementById('charCount').textContent = '0';
+
+    showToast('✅ Pesanmu berhasil ditambahkan!');
+  }
+
+  function toggleBukuLike(btn) {
+    const sp = btn.querySelector('span');
+    const liked = btn.classList.toggle('liked');
+    sp.textContent = liked ? parseInt(sp.textContent) + 1 : parseInt(sp.textContent) - 1;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galeri — Ruang Kenangan PTIK A 2023</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.3rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .gallery-full {
+      padding: 5rem 0 8rem;
+    }
+
+    /* ── Grid seragam 4 kolom ── */
+    .gallery-uniform-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 1100px) {
+      .gallery-uniform-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .gallery-uniform-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .gallery-uniform-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      border-radius: var(--radius-m);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      /* Ukuran seragam */
+      aspect-ratio: 4/3;
+      background: var(--bg-3);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 13, 8, 0.9) 0%, rgba(7, 13, 8, 0.2) 60%, transparent);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.06);
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-caption {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .gallery-caption span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--green);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Slideshow Modal */
+    .slideshow-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 13, 8, 0.98);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .slideshow-modal.open {
+      display: flex;
+    }
+
+    .slideshow-img {
+      max-width: 85vw;
+      max-height: 78vh;
+      border-radius: var(--radius-m);
+      object-fit: contain;
+      border: 1px solid var(--border-alt);
+    }
+
+    .slideshow-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: 1px solid var(--border-alt);
+      color: var(--text);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .slideshow-close:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .slideshow-caption {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .slideshow-caption span {
+      color: var(--green);
+      font-size: 0.8rem;
+      display: block;
+    }
+
+    /* Sem badge di pojok foto */
+    .sem-badge {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.6rem;
+      background: rgba(46, 204, 113, 0.88);
+      padding: 0.18rem 0.6rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.05em;
+      z-index: 2;
+    }
+
+    /* Jumlah foto counter */
+    .gallery-count {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 0.82rem;
+      color: var(--text-faint);
+    }
+
+    .gallery-count strong {
+      color: var(--green);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Slideshow Modal -->
+  <div class="slideshow-modal" id="slideshowModal">
+    <button class="slideshow-close" id="slideshowClose"><i class="fas fa-times"></i></button>
+    <img src="" alt="" class="slideshow-img" id="slideshowImg" />
+    <div class="slideshow-caption">
+      <strong id="slideshowTitle"></strong>
+      <span id="slideshowSem"></span>
+    </div>
+  </div>
+
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="searchOverlay">
+    <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-leaf">
+          <div class="logo-leaf-inner"></div>
+        </div>
+        <span>Ruang Kenangan</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="galeri.html" class="nav-link active-nav">Galeri</a></li>
+        <li><a href="video.html" class="nav-link">Video</a></li>
+        <li><a href="mahasiswa.html" class="nav-link">Mahasiswa</a></li>
+        <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+        <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+        <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="section-label" style="justify-content:center;">Koleksi Foto</div>
+    <h1>Galeri <span class="gradient-text">Kenangan</span></h1>
+    <p>Semua momen terbaik dari 6 semester perjalanan PTIK A 2023</p>
+  </div>
+
+  <!-- GALLERY -->
+  <section class="gallery-full">
+    <div class="container">
+
+      <!-- Filter Semester -->
+      <div class="filter-bar" data-animate="fade-up">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="semester1">Semester 1</button>
+        <button class="filter-btn" data-filter="semester2">Semester 2</button>
+        <button class="filter-btn" data-filter="semester3">Semester 3</button>
+        <button class="filter-btn" data-filter="semester4">Semester 4</button>
+        <button class="filter-btn" data-filter="semester5">Semester 5</button>
+        <button class="filter-btn" data-filter="semester6">Semester 6</button>
+      </div>
+
+      <!-- Filter Kategori -->
+      <div class="filter-bar" data-animate="fade-up">
+        <button class="filter-btn active" data-cat="all">Semua Kategori</button>
+        <button class="filter-btn" data-cat="kelas">Kelas</button>
+        <button class="filter-btn" data-cat="event">Event</button>
+        <button class="filter-btn" data-cat="nongkrong">Nongkrong</button>
+      </div>
+
+      <div class="gallery-count" id="galleryCount">
+        Menampilkan <strong id="visibleCount">0</strong> foto
+      </div>
+
+      <div class="gallery-uniform-grid" id="galleryGrid" data-animate="fade-up">
+
+        <!-- ══ SEMESTER 1 ══ -->
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/1.jpeg" alt="Hari Pertama" loading="lazy" data-title="Hari Pertama PTIK A"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Hari Pertama PTIK A<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/1.1.jpeg" alt="Kelas Bersama" loading="lazy" data-title="Kelas Bersama"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kelas Bersama<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/1.2.jpeg" alt="Orientasi Kampus" loading="lazy" data-title="Orientasi Kampus"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Orientasi Kampus<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/1.3.jpeg" alt="Kebersamaan Kelas" loading="lazy" data-title="Kebersamaan Kelas"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kebersamaan Kelas<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1.jpeg" alt="Momen Ospek" loading="lazy" data-title="Momen Ospek"
+            data-sem-label="Semester 1 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Momen Ospek<span>Semester 1 · Event</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1.1.jpeg" alt="Foto Angkatan" loading="lazy" data-title="Foto Angkatan Ospek"
+            data-sem-label="Semester 1 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Foto Angkatan Ospek<span>Semester 1 · Event</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1.3.jpeg" alt="Kegiatan Ospek" loading="lazy" data-title="Kegiatan Ospek"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kegiatan Ospek<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1.4.jpeg" alt="Sesi Ospek" loading="lazy" data-title="Sesi Ospek"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Sesi Ospek<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1.5.jpeg" alt="Ospek Hari Terakhir" loading="lazy" data-title="Ospek Hari Terakhir"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Ospek Hari Terakhir<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1.6.jpeg" alt="Selesai Ospek" loading="lazy" data-title="Selesai Ospek"
+            data-sem-label="Semester 1 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Selesai Ospek<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/sem1,2.jpeg" alt="Kenangan Awal" loading="lazy" data-title="Kenangan Awal Bersama"
+            data-sem-label="Semester 1-2 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kenangan Awal Bersama<span>Semester 1 · Kelas</span></div>
+          </div>
+        </div>
+
+        <!-- ══ SEMESTER 2 ══ -->
+        <div class="gallery-item" data-sem="semester2" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 2</span>
+          <img src="../assets/2.jpeg" alt="Diskusi Kelas" loading="lazy" data-title="Diskusi Kelas"
+            data-sem-label="Semester 2 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Diskusi Kelas<span>Semester 2 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester2" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 2</span>
+          <img src="../assets/2.1.jpeg" alt="Suasana Kelas" loading="lazy" data-title="Suasana Kelas Semester 2"
+            data-sem-label="Semester 2 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Suasana Kelas<span>Semester 2 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester2" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 2</span>
+          <img src="../assets/sem2.jpeg" alt="Belajar Bersama" loading="lazy" data-title="Belajar Bersama"
+            data-sem-label="Semester 2 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Belajar Bersama<span>Semester 2 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester2" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 2</span>
+          <img src="../assets/sem2.1.jpeg" alt="Kegiatan Kelas" loading="lazy" data-title="Kegiatan Kelas"
+            data-sem-label="Semester 2 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kegiatan Kelas<span>Semester 2 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester2" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 2</span>
+          <img src="../assets/sem2.2.jpeg" alt="Event Semester 2" loading="lazy" data-title="Event Semester 2"
+            data-sem-label="Semester 2 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Event Semester 2<span>Semester 2 · Event</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester2" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 2</span>
+          <img src="../assets/sem2.3.jpeg" alt="Kebersamaan Sem 2" loading="lazy" data-title="Kebersamaan Semester 2"
+            data-sem-label="Semester 2 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kebersamaan Semester 2<span>Semester 2 · Event</span></div>
+          </div>
+        </div>
+
+        <!-- ══ SEMESTER 3 ══ -->
+        <div class="gallery-item" data-sem="semester3" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/3.jpeg" alt="Semester 3" loading="lazy" data-title="Proyek Kelompok"
+            data-sem-label="Semester 3 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Proyek Kelompok<span>Semester 3 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.jpeg" alt="Suasana Sem 3" loading="lazy" data-title="Suasana Semester 3"
+            data-sem-label="Semester 3 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Suasana Semester 3<span>Semester 3 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.1.jpeg" alt="Kelas Sem 3" loading="lazy" data-title="Presentasi Proyek"
+            data-sem-label="Semester 3 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Presentasi Proyek<span>Semester 3 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.2.jpeg" alt="Diskusi Kelompok" loading="lazy" data-title="Diskusi Kelompok"
+            data-sem-label="Semester 3 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Diskusi Kelompok<span>Semester 3 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.3.jpeg" alt="Event Sem 3" loading="lazy" data-title="Seminar Teknologi"
+            data-sem-label="Semester 3 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Seminar Teknologi<span>Semester 3 · Event</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.4.jpeg" alt="Kegiatan Sem 3" loading="lazy" data-title="Kegiatan Kampus"
+            data-sem-label="Semester 3 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kegiatan Kampus<span>Semester 3 · Event</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.5.jpeg" alt="Momen Sem 3" loading="lazy" data-title="Momen Semester 3"
+            data-sem-label="Semester 3 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Momen Semester 3<span>Semester 3 · Event</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="nongkrong" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.6.jpeg" alt="Nongkrong Sem 3" loading="lazy" data-title="Nongkrong Bareng"
+            data-sem-label="Semester 3 — Nongkrong" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Nongkrong Bareng<span>Semester 3 · Nongkrong</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester3" data-cat="nongkrong" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 3</span>
+          <img src="../assets/sem3.7.jpeg" alt="Santai Bareng" loading="lazy" data-title="Santai Bareng"
+            data-sem-label="Semester 3 — Nongkrong" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Santai Bareng<span>Semester 3 · Nongkrong</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester6" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 6</span>
+          <img src="../assets/event.jpeg" alt="Event Angkatan" loading="lazy" data-title="Foto Angkatan"
+            data-sem-label="Semester 6 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Foto Angkatan<span>Semester 6 · Event</span></div>
+          </div>
+        </div>
+
+        <!-- ══ SEMESTER 4 ══ -->
+        <div class="gallery-item" data-sem="semester4" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 4</span>
+          <img src="../assets/4.jpeg" alt="PKL" loading="lazy" data-title="Praktek Kerja Lapangan"
+            data-sem-label="Semester 4 — PKL" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Praktek Kerja Lapangan<span>Semester 4 · PKL</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester4" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 4</span>
+          <img src="../assets/4.2.jpeg" alt="Makan Bersama" loading="lazy" data-title="Makan Siang Bersama"
+            data-sem-label="Semester 4 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Makan Siang Bersama<span>Semester 4 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester4" data-cat="nongkrong" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 4</span>
+          <img src="../assets/liburan.jpeg" alt="Liburan Bareng" loading="lazy" data-title="Liburan Bareng"
+            data-sem-label="Semester 4 — Nongkrong" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Liburan Bareng<span>Semester 4 · Nongkrong</span></div>
+          </div>
+        </div>
+
+        <!-- ══ SEMESTER 5 ══ -->
+        <div class="gallery-item" data-sem="semester5" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 5</span>
+          <img src="../assets/5.jpeg" alt="Bimbingan" loading="lazy" data-title="Sesi Bimbingan"
+            data-sem-label="Semester 5 — Akademik" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Sesi Bimbingan<span>Semester 5 · Akademik</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester5" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 5</span>
+          <img src="../assets/5.2.jpeg" alt="Kegiatan Sem 5" loading="lazy" data-title="Kegiatan Semester 5"
+            data-sem-label="Semester 5 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Kegiatan Semester 5<span>Semester 5 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester5" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 5</span>
+          <img src="../assets/5.3.jpeg" alt="Momen Sem 5" loading="lazy" data-title="Momen Semester 5"
+            data-sem-label="Semester 5 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Momen Semester 5<span>Semester 5 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester6" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 6</span>
+          <img src="../assets/ps1.jpeg" alt="Pesta Semester" loading="lazy" data-title="Foto Bersama Sem 6"
+            data-sem-label="Semester 6 — Event" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Foto Bersama<span>Semester 6 · Event</span></div>
+          </div>
+        </div>
+
+        <!-- ══ SEMESTER 6 ══ -->
+        <div class="gallery-item" data-sem="semester6" data-cat="kelas" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 6</span>
+          <img src="../assets/6.jpeg" alt="Malam Perpisahan" loading="lazy" data-title="Malam Perpisahan"
+            data-sem-label="Semester 6 — Kelas" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Malam Perpisahan<span>Semester 6 · Kelas</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/trl.jpeg" alt="TRL" loading="lazy" data-title="TRL Semester 1"
+            data-sem-label="Semester 1 — TRL" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">TRL Semester 1<span>Semester 1 · TRL</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/trl.1.jpeg" alt="Foto KKN" loading="lazy" data-title="Foto KKN Bersama"
+            data-sem-label="Semester 1 — TRL" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">Foto TRL Bersama<span>Semester 1 · TRL</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-sem="semester1" data-cat="event" onclick="openSlideshow(this)">
+          <span class="sem-badge">Sem 1</span>
+          <img src="../assets/trl.2.jpeg" alt="KKN Pengabdian" loading="lazy" data-title="KKN Pengabdian Masyarakat"
+            data-sem-label="Semester 1 — TRL" />
+          <div class="gallery-overlay">
+            <div class="gallery-caption">TRL Pengabdian<span>Semester 1 · TRL</span></div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-uniform-grid -->
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0;">
+        <p>© 2026 Ruang Kenangan PTIK A 2023 · Made with <span class="footer-heart">♥</span></p>
+        <div class="footer-legal">
+          <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+          <a href="mahasiswa.html">Mahasiswa</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    const filterBtns = document.querySelectorAll('[data-filter]');
+    const catBtns = document.querySelectorAll('[data-cat]');
+    const items = document.querySelectorAll('.gallery-item');
+    const countEl = document.getElementById('visibleCount');
+
+    let currentFilter = 'all';
+    let currentCat = 'all';
+
+    function updateCount() {
+      const visible = [...items].filter(i => i.style.display !== 'none').length;
+      countEl.textContent = visible;
+    }
+
+    function applyFilter() {
+      items.forEach(item => {
+        const semMatch = currentFilter === 'all' || item.dataset.sem === currentFilter;
+        const catMatch = currentCat === 'all' || item.dataset.cat === currentCat;
+        item.style.display = (semMatch && catMatch) ? '' : 'none';
+      });
+      updateCount();
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        applyFilter();
+      });
+    });
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCat = btn.dataset.cat;
+        applyFilter();
+      });
+    });
+
+    // Init count
+    updateCount();
+
+    // Slideshow modal
+    const modal = document.getElementById('slideshowModal');
+    const slideshowImg = document.getElementById('slideshowImg');
+    const slideshowTitle = document.getElementById('slideshowTitle');
+    const slideshowSem = document.getElementById('slideshowSem');
+
+    function openSlideshow(item) {
+      const img = item.querySelector('img');
+      slideshowImg.src = img.src;
+      slideshowTitle.textContent = img.dataset.title || '';
+      slideshowSem.textContent = img.dataset.semLabel || '';
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    document.getElementById('slideshowClose').addEventListener('click', () => {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+
+    modal.addEventListener('click', e => {
+      if (e.target === modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+
+</html>
