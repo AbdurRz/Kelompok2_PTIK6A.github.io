@@ -541,5 +541,120 @@
     sp.textContent = liked ? parseInt(sp.textContent) + 1 : parseInt(sp.textContent) - 1;
   }
 </script>
+
+<!-- Firebase Firestore Integration -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDDY-R2C_Ks-45vp2Q1bxKz87yT0_8OY5k",
+    authDomain: "ruang-kenangan-8638b.firebaseapp.com",
+    projectId: "ruang-kenangan-8638b",
+    storageBucket: "ruang-kenangan-8638b.firebasestorage.app",
+    messagingSenderId: "47147103849",
+    appId: "1:47147103849:web:936b46f34f86b9de6614f8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  const col = collection(db, "komentar");
+
+  const commentForm       = document.getElementById("commentForm");
+  const commentList       = document.getElementById("userCommentList");
+  const commentCountBadge = document.getElementById("commentCountBadge");
+  const commentText       = document.getElementById("commentText");
+  const charCount         = document.getElementById("commentCharCount");
+
+  // Realtime listener — semua orang lihat komentar yang sama
+  const q = query(col, orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    commentList.innerHTML = "";
+    if (commentCountBadge) commentCountBadge.textContent = snapshot.size;
+
+    snapshot.forEach((docSnap) => {
+      const c = docSnap.data();
+      const initials = (c.name || "?").split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
+      const time = c.createdAt?.toDate
+        ? c.createdAt.toDate().toLocaleDateString("id-ID", { day:"numeric", month:"short", year:"numeric" })
+        : "Baru saja";
+
+      const card = document.createElement("div");
+      card.className = "user-comment-card";
+      card.innerHTML = `
+        <button class="user-comment-delete" data-id="${docSnap.id}" title="Hapus"><i class="fas fa-times"></i></button>
+        <div class="user-comment-header">
+          <div class="user-comment-meta">
+            <div class="user-comment-avatar">${initials}</div>
+            <div>
+              <div class="user-comment-name">${c.name}</div>
+              <div class="user-comment-nim">${c.nim || ""}</div>
+            </div>
+          </div>
+          <div class="user-comment-time">${time}</div>
+        </div>
+        <p class="user-comment-text">"${c.text}"</p>
+      `;
+      commentList.appendChild(card);
+    });
+
+    commentList.querySelectorAll(".user-comment-delete").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (confirm("Hapus komentar ini?")) {
+          await deleteDoc(doc(db, "komentar", btn.dataset.id));
+          showToastFb("Komentar dihapus");
+        }
+      });
+    });
+  });
+
+  // Submit ke Firestore
+  commentForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("commentName")?.value.trim();
+    const nim  = document.getElementById("commentNIM")?.value.trim();
+    const text = commentText?.value.trim();
+
+    if (!name || !text) { showToastFb("Isi nama dan pesan dulu ya!"); return; }
+
+    const btn = commentForm.querySelector(".comment-submit-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+
+    try {
+      await addDoc(col, { name, nim: nim || "", text, createdAt: serverTimestamp() });
+      commentForm.reset();
+      if (charCount) charCount.textContent = "0/300";
+      showToastFb("Pesan berhasil dikirim dan tersimpan!");
+    } catch (err) {
+      console.error(err);
+      showToastFb("Gagal mengirim, coba lagi.");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Komentar';
+    }
+  });
+
+  commentText?.addEventListener("input", () => {
+    const len = commentText.value.length;
+    if (charCount) charCount.textContent = `${len}/300`;
+    if (len > 300) commentText.value = commentText.value.slice(0, 300);
+  });
+
+  function showToastFb(msg) {
+    let toast = document.getElementById("rkToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "rkToast";
+      toast.className = "toast-notification";
+      toast.innerHTML = '<i class="fas fa-check-circle"></i><span></span>';
+      document.body.appendChild(toast);
+    }
+    toast.querySelector("span").textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2800);
+  }
+</script>
+
 </body>
 </html>
