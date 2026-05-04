@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuis — Ruang Kenangan PTIK A 2023</title>
+  <script>
+  (function(){
+    var t = localStorage.getItem("rk-theme") || "dark";
+    if(t === "light") document.documentElement.setAttribute("data-theme","light");
+  })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .kuis-page {
+      min-height: 100vh;
+      padding: calc(var(--nav-h) + 3rem) 0 6rem;
+    }
+
+    /* ─── HERO ─── */
+    .kuis-hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .kuis-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .kuis-hero p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ─── PROGRESS ─── */
+    .kuis-progress-wrap {
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .kuis-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--bg-3);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin-bottom: 0.6rem;
+    }
+
+    .kuis-progress-fill {
+      height: 100%;
+      background: var(--grad-green);
+      border-radius: var(--radius-pill);
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .kuis-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+
+    /* ─── CARD ─── */
+    .kuis-card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .kuis-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad-green);
+    }
+
+    .kuis-nomor {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    .kuis-pertanyaan {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 2rem;
+    }
+
+    /* ─── OPTIONS ─── */
+    .kuis-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .kuis-option {
+      background: var(--bg-3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-l);
+      padding: 1rem 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .kuis-option:hover:not(.disabled) {
+      border-color: var(--green);
+      background: var(--green-soft);
+      transform: translateY(-2px);
+    }
+
+    .kuis-option.correct {
+      border-color: #2ecc71;
+      background: rgba(46,204,113,0.15);
+      color: #2ecc71;
+    }
+
+    .kuis-option.wrong {
+      border-color: #e74c3c;
+      background: rgba(231,76,60,0.1);
+      color: #e74c3c;
+    }
+
+    .kuis-option.disabled { cursor: not-allowed; }
+
+    .kuis-option-letter {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .kuis-option.correct .kuis-option-letter { background: #2ecc71; color: #fff; border-color: transparent; }
+    .kuis-option.wrong   .kuis-option-letter { background: #e74c3c; color: #fff; border-color: transparent; }
+
+    /* ─── FEEDBACK ─── */
+    .kuis-feedback {
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      border-radius: var(--radius-m);
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .kuis-feedback.show { display: flex; }
+
+    .kuis-feedback.correct-fb {
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.3);
+      color: #2ecc71;
+    }
+
+    .kuis-feedback.wrong-fb {
+      background: rgba(231,76,60,0.08);
+      border: 1px solid rgba(231,76,60,0.25);
+      color: #e74c3c;
+    }
+
+    /* ─── NEXT BUTTON ─── */
+    .kuis-next-btn {
+      display: none;
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--grad-green);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-green);
+    }
+
+    .kuis-next-btn.show { display: block; }
+    .kuis-next-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(46,204,113,0.35); }
+
+    /* ─── SCORE CARD ─── */
+    .kuis-result {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+      display: none;
+    }
+
+    .kuis-result.show { display: block; }
+
+    .kuis-score-circle {
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) 0%, var(--bg-3) 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      position: relative;
+      box-shadow: 0 0 40px rgba(46,204,113,0.2);
+    }
+
+    .kuis-score-inner {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kuis-score-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1;
+    }
+
+    .kuis-score-total {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+
+    .kuis-result h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .kuis-result p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      max-width: 380px;
+      margin: 0 auto 2rem;
+      line-height: 1.75;
+    }
+
+    .kuis-result-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── LABEL SKOR ─── */
+    .kuis-rating {
+      display: inline-block;
+      padding: 0.35rem 1.1rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .rating-perfect { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+    .rating-good    { background: rgba(212,168,67,0.15);  color: #d4a843; border: 1px solid rgba(212,168,67,0.3); }
+    .rating-ok      { background: rgba(231,76,60,0.1);    color: #e74c3c; border: 1px solid rgba(231,76,60,0.25); }
+
+    /* ─── START SCREEN ─── */
+    .kuis-start {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .kuis-start-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-xl);
+      padding: 3rem 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .kuis-start-icon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      border: 1px solid var(--border-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--green);
+      margin: 0 auto 1.5rem;
+    }
+
+    .kuis-start-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .kuis-start-card p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+
+    .kuis-info-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .kuis-info-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .kuis-info-chip i { color: var(--green); }
+
+    @media (max-width: 600px) {
+      .kuis-options { grid-template-columns: 1fr; }
+      .kuis-card { padding: 1.8rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <div class="logo-leaf"><div class="logo-leaf-inner"></div></div>
+      <span>Ruang Kenangan</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+      <li><a href="video.html" class="nav-link">Video</a></li>
+      <li><a href="mahasiswa.html" class="nav-link">Mahasiswa</a></li>
+      <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+      <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+      <li><a href="peta.html" class="nav-link">Peta</a></li>
+      <li><a href="kuis.html" class="nav-link">Kuis</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+      <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+      <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<section class="kuis-page">
+  <div class="container">
+    <div class="kuis-hero" data-animate="fade-up">
+      <div class="section-label" style="justify-content:center;"><i class="fas fa-gamepad"></i> Mini Kuis</div>
+      <h1>Seberapa Kenal Kamu<br><span class="gradient-text">PTIK A 2023?</span></h1>
+      <p>Uji pengetahuanmu tentang teman-teman sekelas. Siap?</p>
+    </div>
+
+    <!-- START SCREEN -->
+    <div class="kuis-start" id="kuisStart">
+      <div class="kuis-start-card">
+        <div class="kuis-start-icon"><i class="fas fa-brain"></i></div>
+        <h2>Kuis Kenal Teman</h2>
+        <p>10 pertanyaan seru tentang teman-teman PTIK A 2023. Dari asal daerah, julukan, sampai momen kelas yang paling berkesan.</p>
+        <div class="kuis-info-row">
+          <div class="kuis-info-chip"><i class="fas fa-question-circle"></i> 10 Pertanyaan</div>
+          <div class="kuis-info-chip"><i class="fas fa-random"></i> Acak</div>
+          <div class="kuis-info-chip"><i class="fas fa-trophy"></i> Ada Skornya</div>
+        </div>
+        <button class="btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:1rem;" onclick="mulaiKuis()">
+          <i class="fas fa-play"></i> Mulai Kuis
+        </button>
+      </div>
+      <a href="mahasiswa.html" class="btn-ghost" style="display:inline-flex;">
+        <i class="fas fa-users"></i> Lihat Profil Mahasiswa Dulu
+      </a>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="kuisScreen" style="display:none;">
+      <div class="kuis-progress-wrap">
+        <div class="kuis-progress-bar">
+          <div class="kuis-progress-fill" id="progressFill"></div>
+        </div>
+        <div class="kuis-progress-label">
+          <span id="progressLabel">Soal 1 dari 10</span>
+          <span id="scoreLabel">Skor: 0</span>
+        </div>
+      </div>
+
+      <div class="kuis-card" id="kuisCard">
+        <div class="kuis-nomor" id="kuisNomor">Pertanyaan 1</div>
+        <div class="kuis-pertanyaan" id="kuisPertanyaan"></div>
+        <div class="kuis-options" id="kuisOptions"></div>
+        <div class="kuis-feedback" id="kuisFeedback"></div>
+        <button class="kuis-next-btn" id="nextBtn" onclick="nextSoal()">
+          Lanjut <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div class="kuis-result" id="kuisResult">
+      <div class="kuis-score-circle" id="scoreCircle">
+        <div class="kuis-score-inner">
+          <span class="kuis-score-num" id="finalScore">0</span>
+          <span class="kuis-score-total" id="finalTotal">/10</span>
+        </div>
+      </div>
+      <div class="kuis-rating" id="ratingBadge"></div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultDesc"></p>
+      <div class="kuis-result-actions">
+        <button class="btn-primary" onclick="ulangKuis()">
+          <i class="fas fa-redo"></i> Main Lagi
+        </button>
+        <a href="mahasiswa.html" class="btn-ghost">
+          <i class="fas fa-users"></i> Kenalan Lebih Dalam
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2026 Ruang Kenangan PTIK A 2023 · Made with <span class="footer-heart">♥</span></p>
+      <div class="footer-legal">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="mahasiswa.html">Mahasiswa</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+// ─── BANK SOAL ───
+const bankSoal = [
+  {
+    pertanyaan: "Siapa mahasiswa PTIK A 2023 yang berasal dari Nias?",
+    jawaban: "Ilham Ginting",
+    opsi: ["Ilham Ginting", "Arifin Heldian Putra", "Thoriq Aziz El Gifran", "Ahmad Syarif"],
+    info: "Ilham Ginting datang dari Nias, Sumatera Utara!"
+  },
+  {
+    pertanyaan: "Mahasiswa mana yang mendapat julukan 'Raja Rosting'?",
+    jawaban: "Ilham Ginting",
+    opsi: ["Thoriq Aziz El Gifran", "Ilham Ginting", "Arifin Heldian Putra", "Muhammad Alfarizi"],
+    info: "Ilham Ginting dikenal sebagai Raja Rosting di PTIK A 2023!"
+  },
+  {
+    pertanyaan: "Siapa yang mendapat julukan 'Si paling galak'?",
+    jawaban: "Nur Adilah",
+    opsi: ["Fauziah", "Nur Adilah", "Syarifah Hayati", "Dhina Mardiani Syahputri"],
+    info: "Nur Adilah yang dikenal dengan julukan Si Paling Galak!"
+  },
+  {
+    pertanyaan: "Siapa yang berasal dari Bukittinggi, kota tempat kampus UIN berada?",
+    jawaban: "Azka Khalillah Umah",
+    opsi: ["Azka Khalillah Umah", "Rani Harianti", "Ahmed Alfarazi", "Muhammad Alfarizi"],
+    info: "Azka Khalillah Umah adalah putra/putri asli Bukittinggi!"
+  },
+  {
+    pertanyaan: "Dari provinsi mana mahasiswa paling banyak berasal?",
+    jawaban: "Sumatera Barat",
+    opsi: ["Riau", "Sumatera Utara", "Sumatera Barat", "Jambi"],
+    info: "Sebagian besar mahasiswa PTIK A 2023 berasal dari Sumatera Barat!"
+  },
+  {
+    pertanyaan: "Siapa yang berasal dari Pematangsiantar?",
+    jawaban: "Muhammad Abdur Rozaq Damanik",
+    opsi: ["Vinny Ananda Ankasha M.", "Muhammad Chairul Faiz", "Muhammad Abdur Rozaq Damanik", "Rezky Richardo Fernando"],
+    info: "Muhammad Abdur Rozaq Damanik datang dari Pematangsiantar, Sumatera Utara!"
+  },
+  {
+    pertanyaan: "Kota manakah yang paling jauh dari Bukittinggi di antara asal daerah mahasiswa PTIK A?",
+    jawaban: "Nias",
+    opsi: ["Tembilahan", "Kisaran", "Nias", "Pematangsiantar"],
+    info: "Nias adalah kota yang paling jauh dari Bukittinggi di antara asal daerah mahasiswa PTIK A 2023!"
+  },
+  {
+    pertanyaan: "Berapa jumlah mahasiswa PTIK A 2023?",
+    jawaban: "27",
+    opsi: ["25", "27", "30", "35"],
+    info: "PTIK A 2023 terdiri dari 27 mahasiswa yang luar biasa!"
+  },
+  {
+    pertanyaan: "Siapa yang berasal dari Kampar?",
+    jawaban: "Salsabila Nazura",
+    opsi: ["Nur Rahma Dhini", "Salsabila Nazura", "Suci Ananda Putri", "Dhina Mardiani Syahputri"],
+    info: "Salsabila Nazura berasal dari Kampar, Riau!"
+  },
+  {
+    pertanyaan: "Mahasiswa mana yang berasal dari Tembilahan?",
+    jawaban: "Muhammad Arbinnahar Fikli",
+    opsi: ["Asnuldi Zaitul M. Fikri", "Muhammad Arbinnahar Fikli", "Muhammad Aji Samsudin", "Ahmed Alfarazi"],
+    info: "Muhammad Arbinnahar Fikli datang dari Tembilahan, Riau!"
+  },
+  {
+    pertanyaan: "Siapa yang berasal dari Payakumbuh?",
+    jawaban: "Ahmed Alfarazi",
+    opsi: ["Azka Khalillah Umah", "Tantri Latifah Hanum", "Ahmed Alfarazi", "Muhammad Alfarizi"],
+    info: "Ahmed Alfarazi berasal dari Payakumbuh, Sumatera Barat!"
+  },
+  {
+    pertanyaan: "Siapa yang mendapat julukan 'Putri Wibu'?",
+    jawaban: "Dhina Mardiani Syahputri",
+    opsi: ["Rani Harianti", "Syarifah Hayati", "Dhina Mardiani Syahputri", "Fauziah"],
+    info: "Dhina Mardiani Syahputri dikenal dengan julukan Putri Wibu!"
+  },
+  {
+    pertanyaan: "Berapa banyak kota asal yang diwakili mahasiswa PTIK A 2023?",
+    jawaban: "Lebih dari 15 kota",
+    opsi: ["Kurang dari 10 kota", "10-15 kota", "Lebih dari 15 kota", "Tepat 20 kota"],
+    info: "Ada lebih dari 15 kota asal yang diwakili mahasiswa PTIK A 2023!"
+  },
+  {
+    pertanyaan: "Siapa yang berasal dari Muara Bungo, Jambi?",
+    jawaban: "Arifin Heldian Putra",
+    opsi: ["Arifin Heldian Putra", "Thoriq Aziz El Gifran", "Ahmad Ali Ramlan", "Muhammad Alfarizi"],
+    info: "Arifin Heldian Putra jauh-jauh datang dari Muara Bungo, Jambi!"
+  },
+  {
+    pertanyaan: "Siapa yang berasal dari Pasaman Barat?",
+    jawaban: "Rani Harianti & Ahmad Syarif",
+    opsi: ["Rani Harianti & Ahmad Syarif", "Suci & Fikri", "Azka & Fariz", "Dini & Suci"],
+    info: "Rani Harianti dan Ahmad Syarif sama-sama berasal dari Pasaman Barat!"
+  },
+];
+
+// ─── STATE ───
+let soalAktif = [];
+let indexSoal = 0;
+let skor = 0;
+let sudahJawab = false;
+
+function acakArray(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function mulaiKuis() {
+  soalAktif = acakArray(bankSoal).slice(0, 10);
+  indexSoal = 0;
+  skor = 0;
+  sudahJawab = false;
+
+  document.getElementById('kuisStart').style.display = 'none';
+  document.getElementById('kuisResult').classList.remove('show');
+  document.getElementById('kuisScreen').style.display = 'block';
+
+  tampilSoal();
+}
+
+function tampilSoal() {
+  const soal = soalAktif[indexSoal];
+  const total = soalAktif.length;
+
+  // Progress
+  const pct = (indexSoal / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Soal ${indexSoal + 1} dari ${total}`;
+  document.getElementById('scoreLabel').textContent = `Skor: ${skor}`;
+  document.getElementById('kuisNomor').textContent = `Pertanyaan ${indexSoal + 1}`;
+  document.getElementById('kuisPertanyaan').textContent = soal.pertanyaan;
+
+  // Reset
+  document.getElementById('kuisFeedback').className = 'kuis-feedback';
+  document.getElementById('nextBtn').className = 'kuis-next-btn';
+  sudahJawab = false;
+
+  // Opsi
+  const opsiAcak = acakArray(soal.opsi);
+  const huruf = ['A', 'B', 'C', 'D'];
+  const container = document.getElementById('kuisOptions');
+  container.innerHTML = '';
+
+  opsiAcak.forEach((opsi, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'kuis-option';
+    btn.innerHTML = `<div class="kuis-option-letter">${huruf[i]}</div><span>${opsi}</span>`;
+    btn.addEventListener('click', () => pilihJawaban(opsi, soal.jawaban, soal.info, opsiAcak));
+    container.appendChild(btn);
+  });
+
+  // Animasi masuk
+  const card = document.getElementById('kuisCard');
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(20px)';
+  requestAnimationFrame(() => {
+    card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+  });
+}
+
+function pilihJawaban(dipilih, benar, info, opsiAcak) {
+  if (sudahJawab) return;
+  sudahJawab = true;
+
+  const opsiEls = document.querySelectorAll('.kuis-option');
+  const isBenar = dipilih === benar;
+
+  if (isBenar) skor++;
+  document.getElementById('scoreLabel').textContent = `Skor: ${skor}`;
+
+  opsiEls.forEach((el, i) => {
+    el.classList.add('disabled');
+    const teks = el.querySelector('span').textContent;
+    if (teks === benar) el.classList.add('correct');
+    else if (teks === dipilih && !isBenar) el.classList.add('wrong');
+  });
+
+  // Feedback
+  const fb = document.getElementById('kuisFeedback');
+  fb.className = 'kuis-feedback show ' + (isBenar ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = `
+    <i class="fas ${isBenar ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+    <span>${isBenar ? 'Benar! ' : 'Salah. '}${info}</span>
+  `;
+
+  document.getElementById('nextBtn').className = 'kuis-next-btn show';
+  document.getElementById('nextBtn').textContent = indexSoal + 1 < soalAktif.length
+    ? '➡ Lanjut'
+    : '🏁 Lihat Hasil';
+}
+
+function nextSoal() {
+  indexSoal++;
+  if (indexSoal < soalAktif.length) {
+    tampilSoal();
+  } else {
+    tampilHasil();
+  }
+}
+
+function tampilHasil() {
+  document.getElementById('kuisScreen').style.display = 'none';
+
+  const total = soalAktif.length;
+  const pct = Math.round((skor / total) * 100);
+
+  document.getElementById('finalScore').textContent = skor;
+  document.getElementById('finalTotal').textContent = '/' + total;
+
+  // Animate circle
+  const circle = document.getElementById('scoreCircle');
+  circle.style.background = `conic-gradient(var(--green) ${pct * 3.6}deg, var(--bg-3) 0deg)`;
+
+  // Rating
+  const badge = document.getElementById('ratingBadge');
+  const title = document.getElementById('resultTitle');
+  const desc  = document.getElementById('resultDesc');
+
+  if (skor === total) {
+    badge.className = 'kuis-rating rating-perfect';
+    badge.textContent = '🏆 Sempurna!';
+    title.textContent = 'Kamu Kenal Banget!';
+    desc.textContent = 'Luar biasa! Kamu benar-benar mengenal semua teman-teman PTIK A 2023 dengan baik. Salah satu yang terbaik!';
+  } else if (skor >= total * 0.7) {
+    badge.className = 'kuis-rating rating-good';
+    badge.textContent = '⭐ Bagus!';
+    title.textContent = 'Lumayan Kenal!';
+    desc.textContent = `Skor kamu ${skor} dari ${total}. Kamu cukup mengenal teman-teman sekelas. Tapi masih ada yang perlu lebih dikenal!`;
+  } else {
+    badge.className = 'kuis-rating rating-ok';
+    badge.textContent = '📚 Perlu Belajar';
+    title.textContent = 'Masih Perlu Kenalan!';
+    desc.textContent = `Skor kamu ${skor} dari ${total}. Yuk, kenalan lebih dalam sama teman-teman PTIK A 2023 sebelum main lagi!`;
+  }
+
+  document.getElementById('kuisResult').classList.add('show');
+}
+
+function ulangKuis() {
+  document.getElementById('kuisResult').classList.remove('show');
+  mulaiKuis();
+}
+
+// Scroll animate
+const animEls = document.querySelectorAll('[data-animate]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), parseInt(e.target.dataset.delay || 0));
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+animEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

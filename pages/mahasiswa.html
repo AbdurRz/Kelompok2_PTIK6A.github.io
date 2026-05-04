@@ -19,16 +19,46 @@
 
 <!-- Profile Modal -->
 <div class="modal-overlay" id="profileModal">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:520px;">
     <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
     <img src="" alt="" class="modal-avatar" id="modalAvatar" />
     <h3 id="modalName">Nama Mahasiswa</h3>
     <div class="modal-nim" id="modalNIM">NIM</div>
-    <p class="modal-pesan" id="modalPesan">Pesan kenangan...</p>
+
+    <!-- Info biodata -->
+    <div style="display:flex;flex-direction:column;gap:0.5rem;margin:1.2rem 0;text-align:left;">
+      <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:var(--bg-3);border-radius:var(--radius-m);border:1px solid var(--border);">
+        <i class="fas fa-map-marker-alt" style="color:var(--green);width:16px;text-align:center;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.1rem;">Asal Daerah</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text);" id="modalAsal">-</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:var(--bg-3);border-radius:var(--radius-m);border:1px solid var(--border);">
+        <i class="fas fa-graduation-cap" style="color:var(--green);width:16px;text-align:center;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.1rem;">Program Studi</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text);">PTIK A — UIN Bukittinggi</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:var(--bg-3);border-radius:var(--radius-m);border:1px solid var(--border);">
+        <i class="fas fa-calendar" style="color:var(--green);width:16px;text-align:center;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.1rem;">Angkatan</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text);">2023</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-3);border-radius:var(--radius-m);padding:1rem 1.2rem;border:1px solid var(--border);border-left:3px solid var(--green);margin-bottom:1.2rem;">
+      <div style="font-size:0.7rem;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem;font-weight:700;">Pesan Kenangan</div>
+      <p class="modal-pesan" id="modalPesan" style="margin:0;font-style:italic;font-size:0.88rem;line-height:1.75;">Pesan kenangan...</p>
+    </div>
+
     <div class="modal-social">
-      <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
-      <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+      <a href="#" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="#" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
     </div>
   </div>
 </div>
@@ -55,6 +85,8 @@
       <li><a href="mahasiswa.html" class="nav-link active-nav">Mahasiswa</a></li>
       <li><a href="timeline.html" class="nav-link">Timeline</a></li>
       <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+      <li><a href="peta.html" class="nav-link">Peta</a></li>
+      <li><a href="kuis.html" class="nav-link">Kuis</a></li>
     </ul>
     <div class="nav-right">
       <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
@@ -84,10 +116,10 @@
     <div class="mahasiswa-grid" id="mahasiswaGrid" data-animate="fade-up">
 
       <!-- 27 Mahasiswa Dummy Data -->
-      <div class="mahasiswa-card" data-pesan="Tiga tahun bersama kalian adalah pengalaman terbaik hidup saya. Semoga kita selalu dalam lindungan Allah. Sukses dunia akhirat!">
+      <div class="mahasiswa-card" data-asal="Padangsidempuan, Sumut" data-pesan="Tiga tahun bersama kalian adalah pengalaman terbaik hidup saya. Semoga kita selalu dalam lindungan Allah. Sukses dunia akhirat!">
         <img src="/assets/4.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Nur Aisah Siregar</h4>
-        <span class="nim">NIM 2523001</span>
+        <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523001</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -95,7 +127,7 @@
       <div class="mahasiswa-card" data-pesan="Kelas ini mengajarkan ku banyak hal tentang arti persahabatan sejati. Terima kasih untuk semua momen indah!">
         <img src="/assets/20.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Ilham Ginting</h4>
-        <span class="nim">NIM 2523002</span>
+        <span class="nim" data-asal="Nias, Sumut">NIM 2523002</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -103,7 +135,7 @@
       <div class="mahasiswa-card" data-pesan="Inget banget waktu ospek kita semua panik. Sekarang udah mau lulus. Cepet banget! Semoga rezeki kita lancar ya!">
         <img src="/assets/11.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Nur Adilah</h4>
-        <span class="nim">NIM 2523003</span>
+        <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523003</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -111,7 +143,7 @@
       <div class="mahasiswa-card" data-pesan="Dari orang asing jadi sahabat sejati. PTIK A 2023 akan selalu di hati. Sukses selalu untuk kita semua!">
         <img src="/assets/6.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Dhina Mardiani Syahputri</h4>
-        <span class="nim">NIM 2523004</span>
+        <span class="nim" data-asal="Pekanbaru, Riau">NIM 2523004</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -119,7 +151,7 @@
       <div class="mahasiswa-card" data-pesan="Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk semua!">
         <img src="/assets/10.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Fauziah</h4>
-        <span class="nim">NIM 2523005</span>
+        <span class="nim" data-asal="Matur, Agam, Sumbar">NIM 2523005</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -127,7 +159,7 @@
       <div class="mahasiswa-card" data-pesan="Terima kasih PTIK A 2023 sudah menjadi bagian dari perjalanan hidupku yang paling berharga!">
         <img src="/assets/19.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Ahmad Ali Ramlan</h4>
-        <span class="nim">NIM 2523006</span>
+        <span class="nim" data-asal="Mandailing Natal, Sumut">NIM 2523006</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -135,7 +167,7 @@
       <div class="mahasiswa-card" data-pesan="Kenangan bersama kalian tidak akan pernah bisa tergantikan. Semoga kita dipertemukan kembali dalam keadaan yang lebih baik!">
         <img src="/assets/9.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Syarifah Hayati</h4>
-        <span class="nim">NIM 2523007</span>
+        <span class="nim" data-asal="Duri, Riau">NIM 2523007</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -143,7 +175,7 @@
       <div class="mahasiswa-card" data-pesan="Selalu ketawa kalau inget momen-momen konyol di kelas. Haha! Semoga sukses semua!">
         <img src="/assets/24.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Arifin Heldian Putra</h4>
-        <span class="nim">NIM 2523008</span>
+        <span class="nim" data-asal="Muara Bungo, Jambi">NIM 2523008</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -151,7 +183,7 @@
       <div class="mahasiswa-card" data-pesan="Perjalanan 6 semester penuh suka duka, tapi semuanya indah karena ada kalian. Terima kasih!">
         <img src="/assets/22.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Thoriq Aziz El Gifran</h4>
-        <span class="nim">NIM 2523009</span>
+        <span class="nim" data-asal="Matur, Agam, Sumbar">NIM 2523009</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -159,7 +191,7 @@
       <div class="mahasiswa-card" data-pesan="PTIK A 2023 — nama yang akan selalu aku sebut dengan bangga. Terima kasih sudah menjadi keluargaku!">
         <img src="/assets/26.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Azka Khalillah Umah</h4>
-        <span class="nim">NIM 2523010</span>
+        <span class="nim" data-asal="Bukittinggi, Sumbar">NIM 2523010</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -167,7 +199,7 @@
       <div class="mahasiswa-card" data-pesan="Senang bisa belajar bersama orang-orang hebat seperti kalian. Semoga ilmu kita bermanfaat untuk umat!">
         <img src="/assets/rani.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Rani Harianti</h4>
-        <span class="nim">NIM 2523011</span>
+        <span class="nim" data-asal="Pasaman Barat, Sumbar">NIM 2523011</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
@@ -175,112 +207,112 @@
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/1.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Vinny Ananda Ankasha Manurung</h4>
-        <span class="nim">NIM 2523012</span>
+        <span class="nim" data-asal="Mandoge, Sumut">NIM 2523012</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/23.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Asnuldi Zaitul Muftahul Fikri</h4>
-        <span class="nim">NIM 2523015</span>
+        <span class="nim" data-asal="Padang Pariaman, Sumbar">NIM 2523015</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/15.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Aji Samsudin</h4>
-        <span class="nim">NIM 2523017</span>
+        <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523017</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/8.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Suci Ananda Putri</h4>
-        <span class="nim">NIM 2523018</span>
+        <span class="nim" data-asal="Padang Pariaman, Sumbar">NIM 2523018</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/14.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Abdur Rozaq Damanik</h4>
-        <span class="nim">NIM 2523019</span>
+        <span class="nim" data-asal="Pematangsiantar, Sumut">NIM 2523019</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/16.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Chairul Faiz</h4>
-        <span class="nim">NIM 2523020</span>
+        <span class="nim" data-asal="Kisaran, Sumut">NIM 2523020</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/25.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Alfarizi</h4>
-        <span class="nim">NIM 2523021</span>
+        <span class="nim" data-asal="Bukittinggi, Sumbar">NIM 2523021</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/18.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Ahmad Syarif</h4>
-        <span class="nim">NIM 2523022</span>
+        <span class="nim" data-asal="Pasaman Barat, Sumbar">NIM 2523022</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/7.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Dini Indah Permatasari</h4>
-        <span class="nim">NIM 2523025</span>
+        <span class="nim" data-asal="Agam, Sumbar">NIM 2523025</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/dini.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Nur Rahma Dhini</h4>
-        <span class="nim">NIM 2523026</span>
+        <span class="nim" data-asal="Duri, Riau">NIM 2523026</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/3.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Nurul Maymunisyah Harahap</h4>
-        <span class="nim">NIM 2523027</span>
+        <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523027</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/5.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Tantri Latifah Hanum</h4>
-        <span class="nim">NIM 2523029</span>
+        <span class="nim" data-asal="Pasaman Timur, Sumbar">NIM 2523029</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/17.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Rezky Richardo Fernando</h4>
-        <span class="nim">NIM 2523032</span>
+        <span class="nim" data-asal="Bukittinggi, Sumbar">NIM 2523032</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/27.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Arbinnahar Fikli</h4>
-        <span class="nim">NIM 2523034</span>
+        <span class="nim" data-asal="Tembilahan, Riau">NIM 2523034</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/21.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Ahmed Alfarazi</h4>
-        <span class="nim">NIM 2523035</span>
+        <span class="nim" data-asal="Payakumbuh, Sumbar">NIM 2523035</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/13.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Salsabila Nazura</h4>
-        <span class="nim">NIM 2523037</span>
+        <span class="nim" data-asal="Kampar, Riau">NIM 2523037</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>

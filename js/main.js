@@ -200,10 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = btn.closest('.mahasiswa-card');
       if (!card || !modal) return;
 
-      modal.querySelector('#modalAvatar').src = card.querySelector('.mahasiswa-avatar')?.src || '';
-      modal.querySelector('#modalName').textContent = card.querySelector('h4')?.textContent || '';
-      modal.querySelector('#modalNIM').textContent = card.querySelector('.nim')?.textContent || '';
-      modal.querySelector('#modalPesan').textContent = card.dataset.pesan || 'Terima kasih atas kenangan indah bersama teman-teman PTIK A 2023. Semoga sukses selalu!';
+     const nimEl = card.querySelector('.nim');
+modal.querySelector('#modalAvatar').src = card.querySelector('.mahasiswa-avatar')?.src || '';
+modal.querySelector('#modalName').textContent = card.querySelector('h4')?.textContent || '';
+modal.querySelector('#modalNIM').textContent = nimEl?.textContent || '';
+modal.querySelector('#modalPesan').textContent = card.dataset.pesan || 'Terima kasih atas kenangan indah bersama teman-teman PTIK A 2023. Semoga sukses selalu!';
+const modalAsal = modal.querySelector('#modalAsal');
+if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
 
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';

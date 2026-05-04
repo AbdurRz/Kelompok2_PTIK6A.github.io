@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peta Asal Daerah — Ruang Kenangan PTIK A 2023</title>
+  <script>
+  (function(){
+    var t = localStorage.getItem("rk-theme") || "dark";
+    if(t === "light") document.documentElement.setAttribute("data-theme","light");
+  })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .peta-page { padding: 5rem 0 8rem; }
+
+    .peta-hero {
+      text-align: center;
+      padding: calc(var(--nav-h) + 3rem) 0 3rem;
+      background: linear-gradient(180deg, rgba(46,204,113,0.06) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .peta-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .peta-hero p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ─── MAP ─── */
+    #mapContainer {
+      width: 100%;
+      height: 520px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-alt);
+      box-shadow: var(--shadow-l);
+      margin: 3rem 0 2.5rem;
+      position: relative;
+    }
+
+    #map { width: 100%; height: 100%; }
+
+    .leaflet-popup-content-wrapper {
+      background: #0f1810 !important;
+      border: 1px solid rgba(46,204,113,0.3) !important;
+      border-radius: 14px !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
+      padding: 0 !important;
+    }
+
+    .leaflet-popup-tip { background: #0f1810 !important; }
+    .leaflet-popup-close-button { color: rgba(237,245,238,0.4) !important; top: 8px !important; right: 8px !important; }
+    .leaflet-popup-close-button:hover { color: #2ecc71 !important; }
+
+    .popup-inner {
+      padding: 1rem 1.2rem 1.1rem;
+      min-width: 180px;
+    }
+
+    .popup-city {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #2ecc71;
+      margin-bottom: 0.5rem;
+    }
+
+    .popup-student {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(46,204,113,0.08);
+    }
+
+    .popup-student:last-child { border-bottom: none; }
+
+    .popup-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2ecc71, #1a8a4a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .popup-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #edf5ee;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ─── STATS ROW ─── */
+    .peta-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+
+    .peta-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .peta-stat:hover {
+      border-color: var(--border-alt);
+      transform: translateY(-3px);
+    }
+
+    .peta-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--green);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .peta-stat-label {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── DAFTAR KOTA ─── */
+    .kota-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .kota-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      padding: 1.2rem 1.4rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kota-card:hover, .kota-card.active {
+      border-color: var(--green);
+      background: var(--green-soft);
+      transform: translateY(-2px);
+    }
+
+    .kota-left { display: flex; align-items: center; gap: 0.8rem; }
+
+    .kota-icon {
+      width: 38px; height: 38px;
+      border-radius: var(--radius-m);
+      background: var(--green-soft);
+      border: 1px solid var(--border-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      font-size: 0.9rem;
+    }
+
+    .kota-name {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      display: block;
+    }
+
+    .kota-count {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+    }
+
+    .kota-badge {
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 700;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-alt);
+      flex-shrink: 0;
+    }
+
+    /* Custom marker */
+    .custom-marker {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #2ecc71, #1a8a4a);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: 0 4px 16px rgba(46,204,113,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .custom-marker-inner {
+      transform: rotate(45deg);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .custom-marker.multi {
+      background: linear-gradient(135deg, #d4a843, #a07820);
+      box-shadow: 0 4px 16px rgba(212,168,67,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .peta-stats { grid-template-columns: repeat(2, 1fr); }
+      .kota-grid { grid-template-columns: repeat(2, 1fr); }
+      #mapContainer { height: 380px; }
+    }
+
+    @media (max-width: 480px) {
+      .kota-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Cari nama, momen..." autocomplete="off" />
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+    <img src="" alt="" class="modal-avatar" id="modalAvatar" />
+    <h3 id="modalName"></h3>
+    <div class="modal-nim" id="modalNIM"></div>
+    <p class="modal-pesan" id="modalPesan"></p>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <div class="logo-leaf"><div class="logo-leaf-inner"></div></div>
+      <span>Ruang Kenangan</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+      <li><a href="video.html" class="nav-link">Video</a></li>
+      <li><a href="mahasiswa.html" class="nav-link">Mahasiswa</a></li>
+      <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+      <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+      <li><a href="peta.html" class="nav-link">Peta</a></li>
+      <li><a href="kuis.html" class="nav-link">Kuis</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+      <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+      <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="peta-hero">
+  <div class="section-label" style="justify-content:center;"><i class="fas fa-map-marker-alt"></i> Persebaran</div>
+  <h1>Peta <span class="gradient-text">Asal Daerah</span></h1>
+  <p>27 mahasiswa dari berbagai penjuru Sumatera, bersatu dalam satu kelas</p>
+</div>
+
+<section class="peta-page">
+  <div class="container">
+
+    <!-- Stats -->
+    <div class="peta-stats" data-animate="fade-up">
+      <div class="peta-stat">
+        <span class="peta-stat-num">27</span>
+        <span class="peta-stat-label">Mahasiswa</span>
+      </div>
+      <div class="peta-stat">
+        <span class="peta-stat-num" id="statKota">0</span>
+        <span class="peta-stat-label">Kota Asal</span>
+      </div>
+      <div class="peta-stat">
+        <span class="peta-stat-num" id="statProvinsi">0</span>
+        <span class="peta-stat-label">Provinsi</span>
+      </div>
+      <div class="peta-stat">
+        <span class="peta-stat-num" id="statJauh">?</span>
+        <span class="peta-stat-label">Kota Terjauh</span>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div id="mapContainer" data-animate="fade-up">
+      <div id="map"></div>
+    </div>
+
+    <!-- Daftar Kota -->
+    <div class="section-header" data-animate="fade-up" style="margin-bottom:2rem;">
+      <div class="section-label" style="justify-content:center;">Asal Daerah</div>
+      <h2 class="section-title">Dari Mana <span class="gradient-text">Mereka Berasal?</span></h2>
+    </div>
+
+    <div class="kota-grid" id="kotaGrid" data-animate="fade-up"></div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2026 Ruang Kenangan PTIK A 2023 · Made with <span class="footer-heart">♥</span></p>
+      <div class="footer-legal">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="mahasiswa.html">Mahasiswa</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../js/main.js"></script>
+<script>
+// ─── DATA MAHASISWA ───
+const mahasiswa = [
+  { name: "Ilham Ginting",                nim: "2523002", kota: "Nias",              lat: 1.1833,  lng: 97.6167, img: "/assets/20.png" },
+  { name: "Nur Aisah Siregar",            nim: "2523001", kota: "Padangsidempuan",   lat: 1.3893,  lng: 99.2726, img: "/assets/4.png"  },
+  { name: "Nur Adilah",                   nim: "2523003", kota: "Padangsidempuan",   lat: 1.3893,  lng: 99.2726, img: "/assets/11.png" },
+  { name: "Dhina Mardiani Syahputri",     nim: "2523004", kota: "Pekanbaru",         lat: 0.5071,  lng: 101.4478,img: "/assets/6.png"  },
+  { name: "Fauziah",                      nim: "2523005", kota: "Matur, Agam",       lat: -0.1667, lng: 100.1167,img: "/assets/10.png" },
+  { name: "Ahmad Ali Ramlan",             nim: "2523006", kota: "Mandailing Natal",  lat: 0.8667,  lng: 99.6167, img: "/assets/19.png" },
+  { name: "Syarifah Hayati",              nim: "2523007", kota: "Duri",              lat: 1.4761,  lng: 101.2333,img: "/assets/9.png"  },
+  { name: "Arifin Heldian Putra",         nim: "2523008", kota: "Muara Bungo",       lat: -1.5333, lng: 102.1167,img: "/assets/24.png" },
+  { name: "Thoriq Aziz El Gifran",        nim: "2523009", kota: "Matur, Agam",       lat: -0.1767, lng: 100.1267,img: "/assets/22.png" },
+  { name: "Azka Khalillah Umah",          nim: "2523010", kota: "Bukittinggi",       lat: -0.3044, lng: 100.3692,img: "/assets/26.png" },
+  { name: "Rani Harianti",                nim: "2523011", kota: "Pasaman Barat",     lat: 0.0833,  lng: 99.7500, img: "/assets/rani.png"},
+  { name: "Vinny Ananda Ankasha M.",      nim: "2523012", kota: "Mandoge",           lat: 2.9000,  lng: 99.3000, img: "/assets/1.png"  },
+  { name: "Asnuldi Zaitul M. Fikri",      nim: "2523015", kota: "Padang Pariaman",   lat: -0.7333, lng: 100.1167,img: "/assets/23.png" },
+  { name: "Muhammad Aji Samsudin",        nim: "2523017", kota: "Padangsidempuan",   lat: 1.3993,  lng: 99.2826, img: "/assets/15.png" },
+  { name: "Suci Ananda Putri",            nim: "2523018", kota: "Padang Pariaman",   lat: -0.7433, lng: 100.1267,img: "/assets/8.png"  },
+  { name: "Muhammad Abdur Rozaq D.",      nim: "2523019", kota: "Pematangsiantar",   lat: 2.9595,  lng: 99.0687, img: "/assets/14.png" },
+  { name: "Muhammad Chairul Faiz",        nim: "2523020", kota: "Kisaran",           lat: 2.9833,  lng: 99.6167, img: "/assets/16.png" },
+  { name: "Muhammad Alfarizi",            nim: "2523021", kota: "Bukittinggi",       lat: -0.3144, lng: 100.3792,img: "/assets/25.png" },
+  { name: "Ahmad Syarif",                 nim: "2523022", kota: "Pasaman Barat",     lat: 0.0933,  lng: 99.7600, img: "/assets/18.png" },
+  { name: "Dini Indah Permatasari",       nim: "2523025", kota: "Agam",             lat: -0.1833, lng: 100.2500,img: "/assets/7.png"  },
+  { name: "Nur Rahma Dhini",              nim: "2523026", kota: "Duri",              lat: 1.4861,  lng: 101.2433,img: "/assets/dini.png"},
+  { name: "Nurul Maymunisyah Harahap",    nim: "2523027", kota: "Padangsidempuan",   lat: 1.3793,  lng: 99.2626, img: "/assets/3.png"  },
+  { name: "Tantri Latifah Hanum",         nim: "2523029", kota: "Pasaman Timur",     lat: 0.4333,  lng: 100.0500,img: "/assets/5.png"  },
+  { name: "Rezky Richardo Fernando",      nim: "2523032", kota: "Bukittinggi",       lat: -0.2944, lng: 100.3592,img: "/assets/17.png" },
+  { name: "Muhammad Arbinnahar Fikli",    nim: "2523034", kota: "Tembilahan",        lat: -0.3500, lng: 103.1667,img: "/assets/27.png" },
+  { name: "Ahmed Alfarazi",               nim: "2523035", kota: "Payakumbuh",        lat: -0.2167, lng: 100.6333,img: "/assets/21.png" },
+  { name: "Salsabila Nazura",             nim: "2523037", kota: "Kampar",            lat: 0.3000,  lng: 101.1500,img: "/assets/13.png" },
+];
+
+// ─── GROUP BY KOTA ───
+const byKota = {};
+mahasiswa.forEach(m => {
+  if (!byKota[m.kota]) byKota[m.kota] = { list: [], lat: m.lat, lng: m.lng };
+  byKota[m.kota].list.push(m);
+});
+
+// ─── STATS ───
+const kotaList = Object.keys(byKota);
+document.getElementById('statKota').textContent = kotaList.length;
+
+const provinsiSet = new Set();
+mahasiswa.forEach(m => {
+  // rough provinsi mapping
+  const sumbar = ['Bukittinggi','Padang Pariaman','Pasaman Barat','Pasaman Timur','Agam','Payakumbuh','Matur, Agam'];
+  const sumut  = ['Padangsidempuan','Mandailing Natal','Pematangsiantar','Nias','Kisaran','Mandoge'];
+  const riau   = ['Pekanbaru','Duri','Kampar','Tembilahan'];
+  const jambi  = ['Muara Bungo'];
+  
+  if (sumbar.includes(m.kota)) provinsiSet.add('Sumatera Barat');
+  else if (sumut.includes(m.kota)) provinsiSet.add('Sumatera Utara');
+  else if (riau.includes(m.kota)) provinsiSet.add('Riau');
+  else if (jambi.includes(m.kota)) provinsiSet.add('Jambi');
+  
+});
+document.getElementById('statProvinsi').textContent = provinsiSet.size;
+document.getElementById('statJauh').textContent = 'Nias';
+
+// ─── INIT MAP ───
+const map = L.map('map', {
+  center: [0.5, 100.5],
+  zoom: 6,
+  zoomControl: true,
+  scrollWheelZoom: true,
+});
+
+// Dark tile
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+// ─── MARKERS ───
+let markers = {};
+
+Object.entries(byKota).forEach(([kota, data]) => {
+  const count = data.list.length;
+  const isMulti = count > 1;
+
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="custom-marker ${isMulti ? 'multi' : ''}" style="width:${28 + count*4}px;height:${28 + count*4}px;">
+             <div class="custom-marker-inner">${count}</div>
+           </div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+  });
+
+  const popupHtml = `
+    <div class="popup-inner">
+      <div class="popup-city"><i class="fas fa-map-marker-alt"></i> ${kota}</div>
+      ${data.list.map(s => `
+        <div class="popup-student">
+          <div class="popup-avatar">${s.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+          <div class="popup-name">${s.name}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  const marker = L.marker([data.lat, data.lng], { icon })
+    .addTo(map)
+    .bindPopup(popupHtml, { maxWidth: 240, minWidth: 180 });
+
+  markers[kota] = marker;
+});
+
+// ─── KOTA GRID ───
+const kotaGrid = document.getElementById('kotaGrid');
+const icons = { 'Bukittinggi':'fa-university', 'Padangsidempuan':'fa-mosque', 'Duri':'fa-oil-can', 'Lawang':'fa-train', default:'fa-map-marker-alt' };
+
+// Sort by count desc
+const sortedKota = Object.entries(byKota).sort((a,b) => b[1].list.length - a[1].list.length);
+
+sortedKota.forEach(([kota, data]) => {
+  const ic = icons[kota] || icons.default;
+  const card = document.createElement('div');
+  card.className = 'kota-card';
+  card.innerHTML = `
+    <div class="kota-left">
+      <div class="kota-icon"><i class="fas ${ic}"></i></div>
+      <div>
+        <span class="kota-name">${kota}</span>
+        <span class="kota-count">${data.list.length} mahasiswa</span>
+      </div>
+    </div>
+    <div class="kota-badge">${data.list.length}</div>
+  `;
+
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.kota-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    const m = markers[kota];
+    map.setView([data.lat, data.lng], 9, { animate: true });
+    m.openPopup();
+  });
+
+  kotaGrid.appendChild(card);
+});
+
+// ─── ANIMATE SCROLL ───
+const animEls = document.querySelectorAll('[data-animate]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const d = e.target.dataset.delay || 0;
+      setTimeout(() => e.target.classList.add('visible'), parseInt(d));
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+animEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
