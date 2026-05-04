@@ -545,7 +545,7 @@
 <!-- Firebase Firestore Integration -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDDY-R2C_Ks-45vp2Q1bxKz87yT0_8OY5k",
@@ -567,7 +567,7 @@
   const charCount         = document.getElementById("commentCharCount");
 
   // Realtime listener — semua orang lihat komentar yang sama
-  const q = query(col, orderBy("createdAt", "desc"));
+  const q = query(col);
   onSnapshot(q, (snapshot) => {
     commentList.innerHTML = "";
     if (commentCountBadge) commentCountBadge.textContent = snapshot.size;
