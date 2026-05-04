@@ -10,11 +10,11 @@
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <script>
-  (function(){
-    var t = localStorage.getItem("rk-theme") || "dark";
-    if(t === "light") document.documentElement.setAttribute("data-theme","light");
-  })();
-</script>
+    (function () {
+      var t = localStorage.getItem("rk-theme") || "dark";
+      if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
@@ -116,7 +116,7 @@
         </div>
         <div class="hero-stats">
           <div class="hero-stat">
-            <strong>27</strong>  
+            <strong>27</strong>
             <span>Mahasiswa</span>
           </div>
           <div class="hero-stat-divider"></div>
@@ -377,11 +377,13 @@
         position:absolute;inset:0;display:none;flex-direction:column;
         align-items:center;justify-content:center;text-align:center;
         color:rgba(237,245,238,0.58);padding:2rem;background:#111a12;">
-        <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#2ecc71;margin-bottom:1rem;display:block;"></i>
+        <i class="fas fa-exclamation-triangle"
+          style="font-size:3rem;color:#2ecc71;margin-bottom:1rem;display:block;"></i>
         <p>Video tidak dapat dimuat. Pastikan file ada di folder <code>assets/</code>.</p>
       </div>
     </div>
-    <div id="videoTitleHome" style="font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:#edf5ee;text-align:center;"></div>
+    <div id="videoTitleHome"
+      style="font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:#edf5ee;text-align:center;"></div>
     <div id="videoMetaHome" style="font-size:0.82rem;color:rgba(237,245,238,0.3);text-align:center;"></div>
   </div>
 
@@ -475,7 +477,7 @@
 
   <script>
     /* ── Video modal untuk index.html ── */
-    const vModalHome  = document.getElementById('videoModalHome');
+    const vModalHome = document.getElementById('videoModalHome');
     const vPlayerHome = document.getElementById('videoPlayerHome');
     const vSourceHome = document.getElementById('videoSourceHome');
 
@@ -488,7 +490,7 @@
         document.getElementById('videoFallbackHome').style.display = 'flex';
       };
       document.getElementById('videoTitleHome').textContent = title;
-      document.getElementById('videoMetaHome').textContent  = meta;
+      document.getElementById('videoMetaHome').textContent = meta;
       vModalHome.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
@@ -526,7 +528,8 @@
           <div class="timeline-content">
             <div class="timeline-sem">Semester 1</div>
             <h3>🎉 Ospek & Perkenalan</h3>
-            <p>Hari-hari menegangkan ospek, foto bersama di Gedung Maroko, dan perkenalan pertama dengan teman baru dari berbagai penjuru Sumatera.</p>
+            <p>Hari-hari menegangkan ospek, foto bersama di Gedung Maroko, dan perkenalan pertama dengan teman baru dari
+              berbagai penjuru Sumatera.</p>
             <img src="assets/1.jpeg" alt="Ospek Semester 1" class="timeline-img" loading="lazy" />
           </div>
           <div class="timeline-dot">
@@ -544,7 +547,8 @@
           <div class="timeline-content">
             <div class="timeline-sem">Semester 2</div>
             <h3>📚 Adaptasi & Belajar</h3>
-            <p>Mulai terbiasa dengan ritme kuliah, tugas yang menantang, dan kebersamaan yang semakin hangat di dalam kelas.</p>
+            <p>Mulai terbiasa dengan ritme kuliah, tugas yang menantang, dan kebersamaan yang semakin hangat di dalam
+              kelas.</p>
             <img src="assets/sem2.jpeg" alt="Adaptasi Semester 2" class="timeline-img" loading="lazy" />
           </div>
         </div>
@@ -572,7 +576,8 @@
           <div class="timeline-content">
             <div class="timeline-sem">Semester 4</div>
             <h3>😤 Mulai Terasa Berat</h3>
-            <p>Beban akademik semakin berat, deadline menghimpit, tapi saling menguatkan jadi budaya yang membuat kita tetap bertahan.</p>
+            <p>Beban akademik semakin berat, deadline menghimpit, tapi saling menguatkan jadi budaya yang membuat kita
+              tetap bertahan.</p>
             <img src="assets/liburan.jpeg" alt="Semester 4" class="timeline-img" loading="lazy" />
           </div>
         </div>
@@ -582,7 +587,8 @@
           <div class="timeline-content">
             <div class="timeline-sem">Semester 5</div>
             <h3>📸 Kenangan Semakin Indah</h3>
-            <p>Wajah-wajah yang semakin dewasa, momen yang semakin berharga, dan kamera yang selalu siap mengabadikan tiap detiknya.</p>
+            <p>Wajah-wajah yang semakin dewasa, momen yang semakin berharga, dan kamera yang selalu siap mengabadikan
+              tiap detiknya.</p>
             <img src="assets/5.jpeg" alt="Semester 5" class="timeline-img" loading="lazy" />
           </div>
           <div class="timeline-dot">
@@ -600,7 +606,8 @@
           <div class="timeline-content">
             <div class="timeline-sem">Semester 6</div>
             <h3>🏕️ KKN & Perpisahan Manis</h3>
-            <p>Seragam biru KKN, pengabdian ke masyarakat, dan akhirnya malam perpisahan yang penuh tawa sekaligus air mata haru.</p>
+            <p>Seragam biru KKN, pengabdian ke masyarakat, dan akhirnya malam perpisahan yang penuh tawa sekaligus air
+              mata haru.</p>
             <img src="assets/event.jpeg" alt="KKN Semester 6" class="timeline-img" loading="lazy" />
           </div>
         </div>
@@ -626,29 +633,29 @@
       </div>
 
       <div class="awards-grid">
-        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+        <div class="mahasiswa-card"
+          data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
           <img src="/assets/13.png" alt="Mahasiswa" class="mahasiswa-avatar" />
           <h4>Salsabila Nazura</h4>
           <span class="nim">NIM 2523037</span>
-          <button class="btn-profile">Lihat Profil</button>
         </div>
-        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+        <div class="mahasiswa-card"
+          data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
           <img src="/assets/14.png" alt="Mahasiswa" class="mahasiswa-avatar" />
           <h4>Muhammad Abdur Rozaq Damanik</h4>
           <span class="nim">NIM 2523019</span>
-          <button class="btn-profile">Lihat Profil</button>
         </div>
-        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+        <div class="mahasiswa-card"
+          data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
           <img src="/assets/24.png" alt="Mahasiswa" class="mahasiswa-avatar" />
           <h4>Arifin Heldian Putra</h4>
           <span class="nim">NIM 2523008</span>
-          <button class="btn-profile">Lihat Profil</button>
         </div>
-        <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
+        <div class="mahasiswa-card"
+          data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
           <img src="/assets/26.png" alt="Mahasiswa" class="mahasiswa-avatar" />
           <h4>Azka Khalillah Umah</h4>
           <span class="nim">NIM 2523010</span>
-          <button class="btn-profile">Lihat Profil</button>
         </div>
       </div>
 
@@ -704,9 +711,11 @@
 
       <!-- Komentar dari Firebase ditampilkan di sini -->
       <div class="testi-slider" id="testiSlider" data-animate="fade-up">
-        <div class="testi-card featured" style="min-width:280px;display:flex;align-items:center;justify-content:center;">
+        <div class="testi-card featured"
+          style="min-width:280px;display:flex;align-items:center;justify-content:center;">
           <p style="color:var(--text-faint);font-size:0.88rem;text-align:center;">
-            <i class="fas fa-spinner fa-spin" style="color:var(--green);display:block;font-size:1.5rem;margin-bottom:0.8rem;"></i>
+            <i class="fas fa-spinner fa-spin"
+              style="color:var(--green);display:block;font-size:1.5rem;margin-bottom:0.8rem;"></i>
             Memuat pesan...
           </p>
         </div>
@@ -757,12 +766,17 @@
             </div>
             <span>Ruang Kenangan</span>
           </a>
-          <p>Portal kenangan digital Angkatan 2023 Kelas A Program Studi PTIK — UIN Syekh Muhammad Djamil Djambek Bukittinggi.</p>
+          <p>Portal kenangan digital Angkatan 2023 Kelas A Program Studi PTIK — UIN Syekh Muhammad Djamil Djambek
+            Bukittinggi.</p>
           <div class="social-links">
-            <a href="https://www.instagram.com/ptik23a" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/628887301230" class="social-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://www.youtube.com/@ptik23a" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.facebook.com/ptik23a" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/ptik23a" class="social-link" aria-label="Instagram"><i
+                class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/628887301230" class="social-link" aria-label="WhatsApp"><i
+                class="fab fa-whatsapp"></i></a>
+            <a href="https://www.youtube.com/@ptik23a" class="social-link" aria-label="YouTube"><i
+                class="fab fa-youtube"></i></a>
+            <a href="https://www.facebook.com/ptik23a" class="social-link" aria-label="Facebook"><i
+                class="fab fa-facebook-f"></i></a>
           </div>
         </div>
 
@@ -800,7 +814,8 @@
       </div>
 
       <div class="footer-bottom">
-        <p>© 2026 Ruang Kenangan Kelompok 2 PTIK A 2023 · Dibuat dengan <span class="footer-heart">♥</span> untuk kenangan abadi</p>
+        <p>© 2026 Ruang Kenangan Kelompok 2 PTIK A 2023 · Dibuat dengan <span class="footer-heart">♥</span> untuk
+          kenangan abadi</p>
         <div class="footer-legal">
           <a href="#">Tentang</a>
           <a href="#">Kontak</a>

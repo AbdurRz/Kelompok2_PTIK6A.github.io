@@ -219,13 +219,18 @@ ul  { list-style: none; }
   z-index: 1000;
   height: var(--nav-h);
   transition: var(--transition);
+  /* Reset semua Bootstrap navbar style */
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
 }
 
 .navbar.scrolled {
-  background: rgba(7,13,8,0.9);
+  background: rgba(7,13,8,0.9) !important;
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border) !important;
 }
 
 .nav-container {
@@ -272,12 +277,23 @@ ul  { list-style: none; }
   transform: rotate(45deg);
 }
 
+/* ─── NAV LINKS — Desktop ─── */
 .nav-links {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 0.2rem;
   flex: 1;
   justify-content: center;
+  /* Reset Bootstrap */
+  flex-direction: row !important;
+  position: static !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transform: none !important;
+  visibility: visible !important;
+  pointer-events: all !important;
 }
 
 .nav-link {
@@ -288,6 +304,7 @@ ul  { list-style: none; }
   padding: 0.4rem 0.75rem;
   border-radius: var(--radius-s);
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link:hover { color: var(--green); }
@@ -1879,36 +1896,80 @@ ul  { list-style: none; }
   .buku-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ═══════════════════════════════════════
+   MOBILE NAVBAR FIX — Override Bootstrap
+   ═══════════════════════════════════════ */
 @media (max-width: 768px) {
-  .hamburger { display: flex; }
 
+  /* Tampilkan hamburger */
+  .hamburger {
+    display: flex !important;
+  }
+
+  /* Nav links — tersembunyi di atas viewport */
   .nav-links {
-    position: fixed;
-    top: var(--nav-h); left: 0; right: 0;
-    background: rgba(7,13,8,0.97);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    padding: 1.5rem 0 2rem;
-    transform: translateY(-110%);
-    transition: transform 0.38s ease;
-    z-index: 999;
+    display: flex !important;
+    position: fixed !important;
+    top: var(--nav-h) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    padding: 1.5rem 0 2rem !important;
+    margin: 0 !important;
+    background: rgba(7,13,8,0.97) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border-bottom: 1px solid var(--border) !important;
+    z-index: 999 !important;
+    /* Sembunyikan dengan transform — lebih smooth dari display:none */
+    transform: translateY(-110%) !important;
+    transition: transform 0.38s cubic-bezier(0.4,0,0.2,1) !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    /* Hapus flex:1 dari desktop */
+    flex: none !important;
   }
 
-  .nav-links.open { transform: translateY(0); }
+  /* Saat menu dibuka */
+  .nav-links.open {
+    transform: translateY(0) !important;
+    visibility: visible !important;
+    pointer-events: all !important;
+  }
 
+  /* Style tiap link di mobile */
   .nav-link {
-    display: block;
-    padding: 0.9rem 2rem;
-    font-size: 1rem;
-    width: 100%;
-    text-align: center;
-    border-radius: 0;
+    display: block !important;
+    width: 100% !important;
+    padding: 0.9rem 2rem !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+    border-radius: 0 !important;
+    color: var(--text-dim) !important;
   }
 
+  .nav-link:hover,
+  .nav-link.active-nav {
+    color: var(--green) !important;
+    background: rgba(46,204,113,0.06) !important;
+  }
+
+  /* Dot indicator tidak perlu di mobile */
+  .nav-link.active-nav::after {
+    display: none !important;
+  }
+
+  /* Sembunyikan search & music di mobile supaya tidak sesak */
+  .nav-search-btn,
+  .nav-music-btn {
+    display: none !important;
+  }
+
+  /* Layout lainnya */
   .hero-container { grid-template-columns: 1fr; }
   .hero-visual { display: none; }
   .hero-title { font-size: clamp(2.5rem, 10vw, 3.5rem); }
@@ -1977,12 +2038,22 @@ ul  { list-style: none; }
 [data-theme="light"] body { background: var(--bg); }
 
 [data-theme="light"] .navbar {
-  background: rgba(244, 247, 244, 0.9);
-  border-bottom: 1px solid var(--border);
+  background: rgba(244, 247, 244, 0.9) !important;
+  border-bottom: 1px solid var(--border) !important;
 }
 
 [data-theme="light"] .navbar.scrolled {
-  background: rgba(237, 242, 237, 0.97);
+  background: rgba(237, 242, 237, 0.97) !important;
+}
+
+[data-theme="light"] .nav-links {
+  background: transparent !important;
+}
+
+[data-theme="light"] @media (max-width: 768px) {
+  .nav-links {
+    background: rgba(237,242,237,0.97) !important;
+  }
 }
 
 [data-theme="light"] .hero {
@@ -2032,6 +2103,11 @@ ul  { list-style: none; }
 
 [data-theme="light"] .awards {
   background: var(--bg-3);
+}
+
+/* Light mode nav links mobile */
+[data-theme="light"] .nav-links {
+  background: transparent !important;
 }
 
 /* ─── THEME TOGGLE BUTTON ─── */
@@ -2427,61 +2503,7 @@ ul  { list-style: none; }
   }
 }
 
-/* ─── FIX: Tombol cetak mahasiswa ─── */
-.mahasiswa-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.mahasiswa-card .mahasiswa-avatar {
-  width: 100%;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-  object-position: top center;
-  flex-shrink: 0;
-}
-
-.mahasiswa-card h4,
-.mahasiswa-card .nim,
-.mahasiswa-card .btn-profile,
-.mahasiswa-card .btn-print-profile {
-  position: static !important;
-  display: block;
-  width: auto;
-  visibility: visible !important;
-  opacity: 1 !important;
-  z-index: auto;
-}
-
-.mahasiswa-card h4 {
-  padding: 0.9rem 0.8rem 0.2rem;
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.mahasiswa-card .nim {
-  padding: 0 0.8rem 0.8rem;
-  font-size: 0.72rem;
-  color: var(--text-faint);
-}
-
-.mahasiswa-card .btn-profile,
-.mahasiswa-card .btn-print-profile {
-  margin: 0 0.8rem 0.5rem;
-  width: calc(100% - 1.6rem);
-  text-align: center;
-}
-
-.mahasiswa-card .btn-print-profile {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 1rem;
-}
-
-/* ─── FIX FINAL: layout kartu mahasiswa ─── */
+/* ─── FIX: layout kartu mahasiswa ─── */
 .mahasiswa-card {
   display: flex !important;
   flex-direction: column !important;
@@ -2521,10 +2543,21 @@ ul  { list-style: none; }
 
 .mahasiswa-card > .btn-profile {
   margin: 0 0.8rem 0.4rem !important;
-  display: block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--text-dim) !important;
+  background: transparent !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  font-family: var(--font-display) !important;
   visibility: visible !important;
   opacity: 1 !important;
   position: static !important;
+}
+
+.mahasiswa-card > .btn-profile:hover {
+  color: var(--green) !important;
 }
 
 .mahasiswa-card > .btn-print-profile {
@@ -2536,20 +2569,4 @@ ul  { list-style: none; }
   visibility: visible !important;
   opacity: 1 !important;
   position: static !important;
-}
-
-/* ─── FIX: teks Lihat Profil hilang ─── */
-.mahasiswa-card > .btn-profile {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: var(--text-dim) !important;
-  background: transparent !important;
-  font-size: 0.78rem !important;
-  font-weight: 600 !important;
-  font-family: var(--font-display) !important;
-}
-
-.mahasiswa-card > .btn-profile:hover {
-  color: var(--green) !important;
 }

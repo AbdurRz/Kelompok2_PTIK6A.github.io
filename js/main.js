@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════
-   RUANG KENANGAN — Main Script
+   RUANG KENANGAN — Main Script (Fixed)
    ═══════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,22 +16,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ─── HAMBURGER ─── */
   const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  hamburger?.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks?.classList.toggle('open');
+  const navLinks  = document.getElementById('navLinks');
+
+  function openMenu() {
+    hamburger?.classList.add('active');
+    navLinks?.classList.add('open');
+    document.body.style.overflow = 'hidden'; // cegah scroll saat menu buka
+  }
+
+  function closeMenu() {
+    hamburger?.classList.remove('active');
+    navLinks?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function toggleMenu() {
+    if (navLinks?.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  hamburger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
   });
 
-  // Close menu when link clicked
+  // Tutup saat klik nav link
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-      hamburger?.classList.remove('active');
-      navLinks?.classList.remove('open');
+      closeMenu();
     });
   });
 
+  // Tutup saat klik di luar navbar
+  document.addEventListener('click', (e) => {
+    if (
+      navLinks?.classList.contains('open') &&
+      !navLinks.contains(e.target) &&
+      !hamburger?.contains(e.target)
+    ) {
+      closeMenu();
+    }
+  });
+
+  // Tutup saat tekan Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+      closeSearch();
+    }
+  });
+
   /* ─── ACTIVE NAV LINK (same page only) ─── */
-  const sections = document.querySelectorAll('section[id]');
+  const sections    = document.querySelectorAll('section[id]');
   const allNavLinks = document.querySelectorAll('.nav-link');
 
   function setActiveNav() {
@@ -53,10 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', setActiveNav);
 
   /* ─── SEARCH OVERLAY ─── */
-  const searchBtn = document.getElementById('searchBtn');
+  const searchBtn     = document.getElementById('searchBtn');
   const searchOverlay = document.getElementById('searchOverlay');
-  const searchClose = document.getElementById('searchClose');
-  const searchInput = document.getElementById('searchInput');
+  const searchClose   = document.getElementById('searchClose');
+  const searchInput   = document.getElementById('searchInput');
 
   searchBtn?.addEventListener('click', () => {
     searchOverlay?.classList.add('open');
@@ -72,14 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     searchOverlay?.classList.remove('open');
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSearch();
-  });
-
   /* ─── MUSIC TOGGLE ─── */
   const musicBtn = document.getElementById('musicBtn');
   let musicPlaying = false;
-  let audio = null;
 
   musicBtn?.addEventListener('click', () => {
     musicPlaying = !musicPlaying;
@@ -87,13 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
       musicBtn.classList.add('playing');
       musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
       musicBtn.title = 'Matikan Musik';
-      // Audio would be loaded here if a real file exists
-      // audio = new Audio('assets/music.mp3'); audio.loop = true; audio.play();
     } else {
       musicBtn.classList.remove('playing');
       musicBtn.innerHTML = '<i class="fas fa-music"></i>';
       musicBtn.title = 'Putar Musik';
-      // audio?.pause();
     }
   });
 
@@ -116,9 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ─── COUNTER ANIMATION ─── */
   function animateCounter(el, target, suffix = '') {
     let start = 0;
-    const dur = 2000;
+    const dur  = 2000;
     const step = 16;
-    const inc = target / (dur / step);
+    const inc  = target / (dur / step);
     const timer = setInterval(() => {
       start += inc;
       if (start >= target) {
@@ -133,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const el = entry.target;
+        const el  = entry.target;
         const val = parseInt(el.dataset.target);
         const suf = el.dataset.suffix || '';
         animateCounter(el, val, suf);
@@ -147,17 +178,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ─── RANDOM MEMORY BUTTON ─── */
-  const randomBtn = document.getElementById('randomBtn');
+  const randomBtn    = document.getElementById('randomBtn');
   const randomBtnBig = document.getElementById('randomBtnBig');
-  const randomFrame = document.getElementById('randomFrame');
-  const randomImg = document.getElementById('randomImg');
+  const randomFrame  = document.getElementById('randomFrame');
+  const randomImg    = document.getElementById('randomImg');
 
   const memories = [
-    '/assets/1.3.jpeg',
-    '/assets/2.jpeg',
-    '/assets/3.jpeg',
-    '/assets/4.jpeg',
-    '/assets/5.jpeg',
+    'assets/1.jpeg',
+    'assets/2.jpeg',
+    'assets/3.jpeg',
+    'assets/4.jpeg',
+    'assets/5.jpeg',
+    'assets/6.jpeg',
   ];
 
   function showRandom() {
@@ -167,20 +199,17 @@ document.addEventListener('DOMContentLoaded', () => {
       randomFrame.classList.add('show');
       randomFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    // Small wiggle animation on button
-    const btn = randomBtn || randomBtnBig;
-    if (btn) {
-      btn.style.transform = 'scale(0.95)';
-      setTimeout(() => { btn.style.transform = ''; }, 200);
-    }
+    // Tampilkan container di hero jika ada
+    const displayHome = document.getElementById('randomDisplayHome');
+    if (displayHome) displayHome.style.display = 'block';
   }
 
   randomBtn?.addEventListener('click', showRandom);
   randomBtnBig?.addEventListener('click', showRandom);
 
-  /* ─── MAHASISWA SEARCH (for mahasiswa page) ─── */
+  /* ─── MAHASISWA SEARCH ─── */
   const studentSearch = document.getElementById('studentSearch');
-  const studentCards = document.querySelectorAll('.mahasiswa-card');
+  const studentCards  = document.querySelectorAll('.mahasiswa-card');
 
   studentSearch?.addEventListener('input', () => {
     const q = studentSearch.value.toLowerCase();
@@ -192,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ─── MODAL PROFIL ─── */
-  const modal = document.getElementById('profileModal');
+  const modal      = document.getElementById('profileModal');
   const modalClose = document.getElementById('modalClose');
 
   document.querySelectorAll('.btn-profile').forEach(btn => {
@@ -200,13 +229,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = btn.closest('.mahasiswa-card');
       if (!card || !modal) return;
 
-     const nimEl = card.querySelector('.nim');
-modal.querySelector('#modalAvatar').src = card.querySelector('.mahasiswa-avatar')?.src || '';
-modal.querySelector('#modalName').textContent = card.querySelector('h4')?.textContent || '';
-modal.querySelector('#modalNIM').textContent = nimEl?.textContent || '';
-modal.querySelector('#modalPesan').textContent = card.dataset.pesan || 'Terima kasih atas kenangan indah bersama teman-teman PTIK A 2023. Semoga sukses selalu!';
-const modalAsal = modal.querySelector('#modalAsal');
-if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
+      const nimEl = card.querySelector('.nim');
+      modal.querySelector('#modalAvatar').src = card.querySelector('.mahasiswa-avatar')?.src || '';
+      modal.querySelector('#modalName').textContent = card.querySelector('h4')?.textContent || '';
+      modal.querySelector('#modalNIM').textContent  = nimEl?.textContent || '';
+      modal.querySelector('#modalPesan').textContent = card.dataset.pesan || 'Terima kasih atas kenangan indah bersama teman-teman PTIK A 2023. Semoga sukses selalu!';
+
+      const modalAsal = modal.querySelector('#modalAsal');
+      if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
 
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -242,17 +272,8 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
     }, 200);
   }
 
-  /* ─── VIDEO PLAY BUTTONS ─── */
-  document.querySelectorAll('.video-play-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Simulate play — would open modal or iframe in real version
-      btn.innerHTML = '<i class="fas fa-pause"></i>';
-      setTimeout(() => { btn.innerHTML = '<i class="fas fa-play"></i>'; }, 2000);
-    });
-  });
-
-  /* ─── FITUR 1: DARK / LIGHT MODE TOGGLE ─── */
-  const themeBtn = document.getElementById('themeBtn');
+  /* ─── DARK / LIGHT MODE TOGGLE ─── */
+  const themeBtn   = document.getElementById('themeBtn');
   const savedTheme = localStorage.getItem('rk-theme') || 'dark';
 
   function applyTheme(theme) {
@@ -275,7 +296,7 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
     applyTheme(current === 'dark' ? 'light' : 'dark');
   });
 
-  /* ─── FITUR 2: DOWNLOAD FOTO GALERI ─── */
+  /* ─── DOWNLOAD FOTO GALERI ─── */
   document.querySelectorAll('.gallery-download-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.preventDefault();
@@ -283,7 +304,7 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
       const src = btn.dataset.src;
       if (!src) return;
       try {
-        const res = await fetch(src);
+        const res  = await fetch(src);
         const blob = await res.blob();
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement('a');
@@ -293,14 +314,13 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
         URL.revokeObjectURL(url);
         showToast('Foto berhasil diunduh!');
       } catch {
-        // Fallback: open in new tab
         window.open(src, '_blank');
         showToast('Foto dibuka di tab baru');
       }
     });
   });
 
-  /* ─── FITUR 4: CETAK PROFIL MAHASISWA ─── */
+  /* ─── CETAK PROFIL MAHASISWA ─── */
   document.querySelectorAll('.btn-print-profile').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -312,7 +332,6 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
       const pesan  = card.dataset.pesan || '';
       const imgSrc = card.querySelector('.mahasiswa-avatar')?.src || '';
 
-      // Build print window
       const win = window.open('', '_blank', 'width=480,height=640');
       win.document.write(`<!DOCTYPE html>
 <html>
@@ -321,65 +340,15 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
   <title>Profil — ${name}</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-    .card {
-      width: 320px;
-      border: 2px solid #1a8a4a;
-      border-radius: 18px;
-      padding: 2.2rem 2rem 1.8rem;
-      text-align: center;
-      page-break-inside: avoid;
-    }
-    .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: top;
-      border: 3px solid #1a8a4a;
-      margin: 0 auto 1.2rem;
-      display: block;
-    }
-    h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0d1f10;
-      margin-bottom: 0.3rem;
-    }
-    .nim {
-      font-size: 0.82rem;
-      color: #1a8a4a;
-      font-weight: 600;
-      margin-bottom: 1.2rem;
-    }
-    .divider {
-      border: none;
-      border-top: 1px solid #ddd;
-      margin: 1rem 0;
-    }
-    .pesan {
-      font-size: 0.88rem;
-      color: #444;
-      font-style: italic;
-      line-height: 1.75;
-    }
-    .watermark {
-      margin-top: 1.5rem;
-      font-size: 0.68rem;
-      color: #aaa;
-      letter-spacing: 0.04em;
-    }
-    @media print {
-      body { padding: 0; }
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #fff; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 2rem; }
+    .card { width: 320px; border: 2px solid #1a8a4a; border-radius: 18px; padding: 2.2rem 2rem 1.8rem; text-align: center; page-break-inside: avoid; }
+    .avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; object-position: top; border: 3px solid #1a8a4a; margin: 0 auto 1.2rem; display: block; }
+    h2 { font-size: 1.15rem; font-weight: 700; color: #0d1f10; margin-bottom: 0.3rem; }
+    .nim { font-size: 0.82rem; color: #1a8a4a; font-weight: 600; margin-bottom: 1.2rem; }
+    .divider { border: none; border-top: 1px solid #ddd; margin: 1rem 0; }
+    .pesan { font-size: 0.88rem; color: #444; font-style: italic; line-height: 1.75; }
+    .watermark { margin-top: 1.5rem; font-size: 0.68rem; color: #aaa; letter-spacing: 0.04em; }
+    @media print { body { padding: 0; } }
   </style>
 </head>
 <body>
@@ -391,12 +360,7 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
     <p class="pesan">"${pesan}"</p>
     <p class="watermark">Ruang Kenangan PTIK A 2023 &middot; UIN Bukittinggi</p>
   </div>
-  <script>
-    window.onload = function() {
-      window.print();
-      setTimeout(function() { window.close(); }, 500);
-    };
-  </script>
+  <script>window.onload=function(){window.print();setTimeout(function(){window.close();},500);};<\/script>
 </body>
 </html>`);
       win.document.close();
@@ -418,14 +382,14 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
     setTimeout(() => toast.classList.remove('show'), 2800);
   }
 
-  /* ─── FITUR 4: KOMENTAR BUKU KENANGAN ─── */
+  /* ─── KOMENTAR BUKU KENANGAN ─── */
   const commentForm = document.getElementById('commentForm');
   if (commentForm) {
-    const STORAGE_KEY = 'rk-comments-v1';
-    const commentList = document.getElementById('userCommentList');
-    const commentCountBadge = document.getElementById('commentCountBadge');
-    const commentText = document.getElementById('commentText');
-    const charCount = document.getElementById('commentCharCount');
+    const STORAGE_KEY         = 'rk-comments-v1';
+    const commentList         = document.getElementById('userCommentList');
+    const commentCountBadge   = document.getElementById('commentCountBadge');
+    const commentText         = document.getElementById('commentText');
+    const charCount           = document.getElementById('commentCharCount');
 
     function loadComments() {
       try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
@@ -463,10 +427,9 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
         commentList.appendChild(card);
       });
 
-      // Delete handler
       commentList.querySelectorAll('.user-comment-delete').forEach(btn => {
         btn.addEventListener('click', () => {
-          const i = parseInt(btn.dataset.idx);
+          const i   = parseInt(btn.dataset.idx);
           const arr = loadComments();
           arr.splice(i, 1);
           saveComments(arr);
@@ -476,7 +439,6 @@ if (modalAsal) modalAsal.textContent = nimEl?.dataset.asal || 'Sumatera Barat';
       });
     }
 
-    // Char counter
     commentText?.addEventListener('input', () => {
       const len = commentText.value.length;
       if (charCount) charCount.textContent = `${len}/300`;
