@@ -6,6 +6,12 @@
   <title>Mahasiswa — Ruang Kenangan PTIK A 2023</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+  (function(){
+    var t = localStorage.getItem("rk-theme") || "dark";
+    if(t === "light") document.documentElement.setAttribute("data-theme","light");
+  })();
+</script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
 </head>
@@ -53,6 +59,7 @@
     <div class="nav-right">
       <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
       <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+        <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -82,6 +89,7 @@
         <h4>Nur Aisah Siregar</h4>
         <span class="nim">NIM 2523001</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Kelas ini mengajarkan ku banyak hal tentang arti persahabatan sejati. Terima kasih untuk semua momen indah!">
@@ -89,6 +97,7 @@
         <h4>Ilham Ginting</h4>
         <span class="nim">NIM 2523002</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Inget banget waktu ospek kita semua panik. Sekarang udah mau lulus. Cepet banget! Semoga rezeki kita lancar ya!">
@@ -96,6 +105,7 @@
         <h4>Nur Adilah</h4>
         <span class="nim">NIM 2523003</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Dari orang asing jadi sahabat sejati. PTIK A 2023 akan selalu di hati. Sukses selalu untuk kita semua!">
@@ -103,6 +113,7 @@
         <h4>Dhina Mardiani Syahputri</h4>
         <span class="nim">NIM 2523004</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk semua!">
@@ -110,6 +121,7 @@
         <h4>Fauziah</h4>
         <span class="nim">NIM 2523005</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Terima kasih PTIK A 2023 sudah menjadi bagian dari perjalanan hidupku yang paling berharga!">
@@ -117,6 +129,7 @@
         <h4>Ahmad Ali Ramlan</h4>
         <span class="nim">NIM 2523006</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Kenangan bersama kalian tidak akan pernah bisa tergantikan. Semoga kita dipertemukan kembali dalam keadaan yang lebih baik!">
@@ -124,6 +137,7 @@
         <h4>Syarifah Hayati</h4>
         <span class="nim">NIM 2523007</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Selalu ketawa kalau inget momen-momen konyol di kelas. Haha! Semoga sukses semua!">
@@ -131,6 +145,7 @@
         <h4>Arifin Heldian Putra</h4>
         <span class="nim">NIM 2523008</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Perjalanan 6 semester penuh suka duka, tapi semuanya indah karena ada kalian. Terima kasih!">
@@ -138,6 +153,7 @@
         <h4>Thoriq Aziz El Gifran</h4>
         <span class="nim">NIM 2523009</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="PTIK A 2023 — nama yang akan selalu aku sebut dengan bangga. Terima kasih sudah menjadi keluargaku!">
@@ -145,6 +161,7 @@
         <h4>Azka Khalillah Umah</h4>
         <span class="nim">NIM 2523010</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Senang bisa belajar bersama orang-orang hebat seperti kalian. Semoga ilmu kita bermanfaat untuk umat!">
@@ -152,6 +169,7 @@
         <h4>Rani Harianti</h4>
         <span class="nim">NIM 2523011</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
@@ -159,96 +177,112 @@
         <h4>Vinny Ananda Ankasha Manurung</h4>
         <span class="nim">NIM 2523012</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/23.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Asnuldi Zaitul Muftahul Fikri</h4>
         <span class="nim">NIM 2523015</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/15.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Aji Samsudin</h4>
         <span class="nim">NIM 2523017</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/8.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Suci Ananda Putri</h4>
         <span class="nim">NIM 2523018</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/14.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Abdur Rozaq Damanik</h4>
         <span class="nim">NIM 2523019</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/16.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Chairul Faiz</h4>
         <span class="nim">NIM 2523020</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/25.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Alfarizi</h4>
         <span class="nim">NIM 2523021</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/18.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Ahmad Syarif</h4>
         <span class="nim">NIM 2523022</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/7.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Dini Indah Permatasari</h4>
         <span class="nim">NIM 2523025</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/dini.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Nur Rahma Dhini</h4>
         <span class="nim">NIM 2523026</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/3.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Nurul Maymunisyah Harahap</h4>
         <span class="nim">NIM 2523027</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/5.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Tantri Latifah Hanum</h4>
         <span class="nim">NIM 2523029</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/17.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Rezky Richardo Fernando</h4>
         <span class="nim">NIM 2523032</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/27.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Muhammad Arbinnahar Fikli</h4>
         <span class="nim">NIM 2523034</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/21.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Ahmed Alfarazi</h4>
         <span class="nim">NIM 2523035</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
       <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
         <img src="/assets/13.png" alt="Mahasiswa" class="mahasiswa-avatar" />
         <h4>Salsabila Nazura</h4>
         <span class="nim">NIM 2523037</span>
         <button class="btn-profile">Lihat Profil</button>
+        <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
     </div>

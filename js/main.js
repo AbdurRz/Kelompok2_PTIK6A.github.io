@@ -248,4 +248,262 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ─── FITUR 1: DARK / LIGHT MODE TOGGLE ─── */
+  const themeBtn = document.getElementById('themeBtn');
+  const savedTheme = localStorage.getItem('rk-theme') || 'dark';
+
+  function applyTheme(theme) {
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      if (themeBtn) themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+      if (themeBtn) themeBtn.title = 'Mode Gelap';
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      if (themeBtn) themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+      if (themeBtn) themeBtn.title = 'Mode Terang';
+    }
+    localStorage.setItem('rk-theme', theme);
+  }
+
+  applyTheme(savedTheme);
+
+  themeBtn?.addEventListener('click', () => {
+    const current = localStorage.getItem('rk-theme') || 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ─── FITUR 2: DOWNLOAD FOTO GALERI ─── */
+  document.querySelectorAll('.gallery-download-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const src = btn.dataset.src;
+      if (!src) return;
+      try {
+        const res = await fetch(src);
+        const blob = await res.blob();
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href     = url;
+        a.download = src.split('/').pop() || 'foto-kenangan.jpg';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Foto berhasil diunduh!');
+      } catch {
+        // Fallback: open in new tab
+        window.open(src, '_blank');
+        showToast('Foto dibuka di tab baru');
+      }
+    });
+  });
+
+  /* ─── FITUR 4: CETAK PROFIL MAHASISWA ─── */
+  document.querySelectorAll('.btn-print-profile').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.mahasiswa-card');
+      if (!card) return;
+
+      const name   = card.querySelector('h4')?.textContent || '';
+      const nim    = card.querySelector('.nim')?.textContent || '';
+      const pesan  = card.dataset.pesan || '';
+      const imgSrc = card.querySelector('.mahasiswa-avatar')?.src || '';
+
+      // Build print window
+      const win = window.open('', '_blank', 'width=480,height=640');
+      win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Profil — ${name}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .card {
+      width: 320px;
+      border: 2px solid #1a8a4a;
+      border-radius: 18px;
+      padding: 2.2rem 2rem 1.8rem;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      border: 3px solid #1a8a4a;
+      margin: 0 auto 1.2rem;
+      display: block;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0d1f10;
+      margin-bottom: 0.3rem;
+    }
+    .nim {
+      font-size: 0.82rem;
+      color: #1a8a4a;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 1rem 0;
+    }
+    .pesan {
+      font-size: 0.88rem;
+      color: #444;
+      font-style: italic;
+      line-height: 1.75;
+    }
+    .watermark {
+      margin-top: 1.5rem;
+      font-size: 0.68rem;
+      color: #aaa;
+      letter-spacing: 0.04em;
+    }
+    @media print {
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="${imgSrc}" class="avatar" alt="${name}" />
+    <h2>${name}</h2>
+    <p class="nim">${nim}</p>
+    <hr class="divider" />
+    <p class="pesan">"${pesan}"</p>
+    <p class="watermark">Ruang Kenangan PTIK A 2023 &middot; UIN Bukittinggi</p>
+  </div>
+  <script>
+    window.onload = function() {
+      window.print();
+      setTimeout(function() { window.close(); }, 500);
+    };
+  </script>
+</body>
+</html>`);
+      win.document.close();
+    });
+  });
+
+  /* ─── TOAST HELPER ─── */
+  function showToast(msg) {
+    let toast = document.getElementById('rkToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'rkToast';
+      toast.className = 'toast-notification';
+      toast.innerHTML = '<i class="fas fa-check-circle"></i><span></span>';
+      document.body.appendChild(toast);
+    }
+    toast.querySelector('span').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  /* ─── FITUR 4: KOMENTAR BUKU KENANGAN ─── */
+  const commentForm = document.getElementById('commentForm');
+  if (commentForm) {
+    const STORAGE_KEY = 'rk-comments-v1';
+    const commentList = document.getElementById('userCommentList');
+    const commentCountBadge = document.getElementById('commentCountBadge');
+    const commentText = document.getElementById('commentText');
+    const charCount = document.getElementById('commentCharCount');
+
+    function loadComments() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch { return []; }
+    }
+
+    function saveComments(arr) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function renderComments() {
+      const comments = loadComments();
+      if (!commentList) return;
+      commentList.innerHTML = '';
+      if (commentCountBadge) commentCountBadge.textContent = comments.length;
+
+      comments.forEach((c, idx) => {
+        const initials = c.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+        const card = document.createElement('div');
+        card.className = 'user-comment-card';
+        card.innerHTML = `
+          <button class="user-comment-delete" data-idx="${idx}" title="Hapus"><i class="fas fa-times"></i></button>
+          <div class="user-comment-header">
+            <div class="user-comment-meta">
+              <div class="user-comment-avatar">${initials}</div>
+              <div>
+                <div class="user-comment-name">${c.name}</div>
+                <div class="user-comment-nim">${c.nim || ''}</div>
+              </div>
+            </div>
+            <div class="user-comment-time">${c.time}</div>
+          </div>
+          <p class="user-comment-text">"${c.text}"</p>
+        `;
+        commentList.appendChild(card);
+      });
+
+      // Delete handler
+      commentList.querySelectorAll('.user-comment-delete').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = parseInt(btn.dataset.idx);
+          const arr = loadComments();
+          arr.splice(i, 1);
+          saveComments(arr);
+          renderComments();
+          showToast('Komentar dihapus');
+        });
+      });
+    }
+
+    // Char counter
+    commentText?.addEventListener('input', () => {
+      const len = commentText.value.length;
+      if (charCount) charCount.textContent = `${len}/300`;
+      if (len > 300) commentText.value = commentText.value.slice(0, 300);
+    });
+
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('commentName')?.value.trim();
+      const nim  = document.getElementById('commentNIM')?.value.trim();
+      const text = commentText?.value.trim();
+
+      if (!name || !text) {
+        showToast('Isi nama dan pesan dulu ya!');
+        return;
+      }
+
+      const now  = new Date();
+      const time = now.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+      const arr  = loadComments();
+      arr.unshift({ name, nim, text, time });
+      saveComments(arr);
+      renderComments();
+      commentForm.reset();
+      if (charCount) charCount.textContent = '0/300';
+      showToast('Pesan kamu berhasil ditambahkan!');
+      document.getElementById('userCommentList')?.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    });
+
+    renderComments();
+  }
+
 });

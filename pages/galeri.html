@@ -9,6 +9,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
+  <script>
+  (function(){
+    var t = localStorage.getItem("rk-theme") || "dark";
+    if(t === "light") document.documentElement.setAttribute("data-theme","light");
+  })();
+</script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
@@ -255,6 +261,7 @@
       <div class="nav-right">
         <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
         <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+        <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
         <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -302,6 +309,7 @@
           <img src="/assets/1.jpeg" alt="Hari Pertama" loading="lazy" data-title="Hari Pertama PTIK A"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Hari Pertama PTIK A<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -311,6 +319,7 @@
           <img src="/assets/1.1.jpeg" alt="Kelas Bersama" loading="lazy" data-title="Kelas Bersama"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/1.1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kelas Bersama<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -320,6 +329,7 @@
           <img src="/assets/1.2.jpeg" alt="Orientasi Kampus" loading="lazy" data-title="Orientasi Kampus"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/1.2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Orientasi Kampus<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -329,6 +339,7 @@
           <img src="/assets/1.3.jpeg" alt="Kebersamaan Kelas" loading="lazy" data-title="Kebersamaan Kelas"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/1.3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kebersamaan Kelas<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -338,6 +349,7 @@
           <img src="/assets/sem1.jpeg" alt="Momen Ospek" loading="lazy" data-title="Momen Ospek"
             data-sem-label="Semester 1 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Momen Ospek<span>Semester 1 · Event</span></div>
           </div>
         </div>
@@ -347,6 +359,7 @@
           <img src="/assets/sem1.1.jpeg" alt="Foto Angkatan" loading="lazy" data-title="Foto Angkatan Ospek"
             data-sem-label="Semester 1 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1.1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Foto Angkatan Ospek<span>Semester 1 · Event</span></div>
           </div>
         </div>
@@ -356,6 +369,7 @@
           <img src="/assets/sem1.3.jpeg" alt="Kegiatan Ospek" loading="lazy" data-title="Kegiatan Ospek"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1.3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kegiatan Ospek<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -365,6 +379,7 @@
           <img src="/assets/sem1.4.jpeg" alt="Sesi Ospek" loading="lazy" data-title="Sesi Ospek"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1.4.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Sesi Ospek<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -374,6 +389,7 @@
           <img src="/assets/sem1.5.jpeg" alt="Ospek Hari Terakhir" loading="lazy" data-title="Ospek Hari Terakhir"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1.5.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Ospek Hari Terakhir<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -383,6 +399,7 @@
           <img src="/assets/sem1.6.jpeg" alt="Selesai Ospek" loading="lazy" data-title="Selesai Ospek"
             data-sem-label="Semester 1 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1.6.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Selesai Ospek<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -392,6 +409,7 @@
           <img src="/assets/sem1,2.jpeg" alt="Kenangan Awal" loading="lazy" data-title="Kenangan Awal Bersama"
             data-sem-label="Semester 1-2 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem1,2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kenangan Awal Bersama<span>Semester 1 · Kelas</span></div>
           </div>
         </div>
@@ -402,6 +420,7 @@
           <img src="/assets/2.jpeg" alt="Diskusi Kelas" loading="lazy" data-title="Diskusi Kelas"
             data-sem-label="Semester 2 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Diskusi Kelas<span>Semester 2 · Kelas</span></div>
           </div>
         </div>
@@ -411,6 +430,7 @@
           <img src="/assets/2.1.jpeg" alt="Suasana Kelas" loading="lazy" data-title="Suasana Kelas Semester 2"
             data-sem-label="Semester 2 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/2.1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Suasana Kelas<span>Semester 2 · Kelas</span></div>
           </div>
         </div>
@@ -420,6 +440,7 @@
           <img src="/assets/sem2.jpeg" alt="Belajar Bersama" loading="lazy" data-title="Belajar Bersama"
             data-sem-label="Semester 2 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Belajar Bersama<span>Semester 2 · Kelas</span></div>
           </div>
         </div>
@@ -429,6 +450,7 @@
           <img src="/assets/sem2.1.jpeg" alt="Kegiatan Kelas" loading="lazy" data-title="Kegiatan Kelas"
             data-sem-label="Semester 2 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem2.1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kegiatan Kelas<span>Semester 2 · Kelas</span></div>
           </div>
         </div>
@@ -438,6 +460,7 @@
           <img src="/assets/sem2.2.jpeg" alt="Event Semester 2" loading="lazy" data-title="Event Semester 2"
             data-sem-label="Semester 2 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem2.2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Event Semester 2<span>Semester 2 · Event</span></div>
           </div>
         </div>
@@ -447,6 +470,7 @@
           <img src="/assets/sem2.3.jpeg" alt="Kebersamaan Sem 2" loading="lazy" data-title="Kebersamaan Semester 2"
             data-sem-label="Semester 2 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem2.3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kebersamaan Semester 2<span>Semester 2 · Event</span></div>
           </div>
         </div>
@@ -457,6 +481,7 @@
           <img src="/assets/3.jpeg" alt="Semester 3" loading="lazy" data-title="Proyek Kelompok"
             data-sem-label="Semester 3 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Proyek Kelompok<span>Semester 3 · Kelas</span></div>
           </div>
         </div>
@@ -466,6 +491,7 @@
           <img src="/assets/sem3.jpeg" alt="Suasana Sem 3" loading="lazy" data-title="Suasana Semester 3"
             data-sem-label="Semester 3 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Suasana Semester 3<span>Semester 3 · Kelas</span></div>
           </div>
         </div>
@@ -475,6 +501,7 @@
           <img src="/assets/sem3.1.jpeg" alt="Kelas Sem 3" loading="lazy" data-title="Presentasi Proyek"
             data-sem-label="Semester 3 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Presentasi Proyek<span>Semester 3 · Kelas</span></div>
           </div>
         </div>
@@ -484,6 +511,7 @@
           <img src="/assets/sem3.2.jpeg" alt="Diskusi Kelompok" loading="lazy" data-title="Diskusi Kelompok"
             data-sem-label="Semester 3 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Diskusi Kelompok<span>Semester 3 · Kelas</span></div>
           </div>
         </div>
@@ -493,6 +521,7 @@
           <img src="/assets/sem3.3.jpeg" alt="Event Sem 3" loading="lazy" data-title="Seminar Teknologi"
             data-sem-label="Semester 3 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Seminar Teknologi<span>Semester 3 · Event</span></div>
           </div>
         </div>
@@ -502,6 +531,7 @@
           <img src="/assets/sem3.4.jpeg" alt="Kegiatan Sem 3" loading="lazy" data-title="Kegiatan Kampus"
             data-sem-label="Semester 3 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.4.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kegiatan Kampus<span>Semester 3 · Event</span></div>
           </div>
         </div>
@@ -511,6 +541,7 @@
           <img src="/assets/sem3.5.jpeg" alt="Momen Sem 3" loading="lazy" data-title="Momen Semester 3"
             data-sem-label="Semester 3 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.5.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Momen Semester 3<span>Semester 3 · Event</span></div>
           </div>
         </div>
@@ -520,6 +551,7 @@
           <img src="/assets/sem3.6.jpeg" alt="Nongkrong Sem 3" loading="lazy" data-title="Nongkrong Bareng"
             data-sem-label="Semester 3 — Nongkrong" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.6.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Nongkrong Bareng<span>Semester 3 · Nongkrong</span></div>
           </div>
         </div>
@@ -529,6 +561,7 @@
           <img src="/assets/sem3.7.jpeg" alt="Santai Bareng" loading="lazy" data-title="Santai Bareng"
             data-sem-label="Semester 3 — Nongkrong" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/sem3.7.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Santai Bareng<span>Semester 3 · Nongkrong</span></div>
           </div>
         </div>
@@ -538,6 +571,7 @@
           <img src="/assets/event.jpeg" alt="Event Angkatan" loading="lazy" data-title="Foto Angkatan"
             data-sem-label="Semester 6 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/event.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Foto Angkatan<span>Semester 6 · Event</span></div>
           </div>
         </div>
@@ -548,6 +582,7 @@
           <img src="/assets/4.jpeg" alt="PKL" loading="lazy" data-title="Praktek Kerja Lapangan"
             data-sem-label="Semester 4 — PKL" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/4.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Praktek Kerja Lapangan<span>Semester 4 · PKL</span></div>
           </div>
         </div>
@@ -557,6 +592,7 @@
           <img src="/assets/4.2.jpeg" alt="Makan Bersama" loading="lazy" data-title="Makan Siang Bersama"
             data-sem-label="Semester 4 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/4.2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Makan Siang Bersama<span>Semester 4 · Kelas</span></div>
           </div>
         </div>
@@ -566,6 +602,7 @@
           <img src="/assets/liburan.jpeg" alt="Liburan Bareng" loading="lazy" data-title="Liburan Bareng"
             data-sem-label="Semester 4 — Nongkrong" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/liburan.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Liburan Bareng<span>Semester 4 · Nongkrong</span></div>
           </div>
         </div>
@@ -576,6 +613,7 @@
           <img src="/assets/5.jpeg" alt="Bimbingan" loading="lazy" data-title="Sesi Bimbingan"
             data-sem-label="Semester 5 — Akademik" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/5.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Sesi Bimbingan<span>Semester 5 · Akademik</span></div>
           </div>
         </div>
@@ -585,6 +623,7 @@
           <img src="/assets/5.2.jpeg" alt="Kegiatan Sem 5" loading="lazy" data-title="Kegiatan Semester 5"
             data-sem-label="Semester 5 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/5.2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Kegiatan Semester 5<span>Semester 5 · Kelas</span></div>
           </div>
         </div>
@@ -594,6 +633,7 @@
           <img src="/assets/5.3.jpeg" alt="Momen Sem 5" loading="lazy" data-title="Momen Semester 5"
             data-sem-label="Semester 5 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/5.3.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Momen Semester 5<span>Semester 5 · Kelas</span></div>
           </div>
         </div>
@@ -603,6 +643,7 @@
           <img src="/assets/ps1.jpeg" alt="Pesta Semester" loading="lazy" data-title="Foto Bersama Sem 6"
             data-sem-label="Semester 6 — Event" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/ps1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Foto Bersama<span>Semester 6 · Event</span></div>
           </div>
         </div>
@@ -613,6 +654,7 @@
           <img src="/assets/6.jpeg" alt="Malam Perpisahan" loading="lazy" data-title="Malam Perpisahan"
             data-sem-label="Semester 6 — Kelas" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/6.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Malam Perpisahan<span>Semester 6 · Kelas</span></div>
           </div>
         </div>
@@ -622,6 +664,7 @@
           <img src="/assets/trl.jpeg" alt="TRL" loading="lazy" data-title="TRL Semester 1"
             data-sem-label="Semester 1 — TRL" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/trl.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">TRL Semester 1<span>Semester 1 · TRL</span></div>
           </div>
         </div>
@@ -631,6 +674,7 @@
           <img src="/assets/trl.1.jpeg" alt="Foto KKN" loading="lazy" data-title="Foto KKN Bersama"
             data-sem-label="Semester 1 — TRL" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/trl.1.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">Foto TRL Bersama<span>Semester 1 · TRL</span></div>
           </div>
         </div>
@@ -640,6 +684,7 @@
           <img src="/assets/trl.2.jpeg" alt="KKN Pengabdian" loading="lazy" data-title="KKN Pengabdian Masyarakat"
             data-sem-label="Semester 1 — TRL" />
           <div class="gallery-overlay">
+            <a href="#" class="gallery-download-btn" data-src="/assets/trl.2.jpeg" title="Unduh Foto" onclick="event.stopPropagation()"><i class="fas fa-download"></i></a>
             <div class="gallery-caption">TRL Pengabdian<span>Semester 1 · TRL</span></div>
           </div>
         </div>

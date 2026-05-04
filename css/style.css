@@ -1932,3 +1932,624 @@ ul  { list-style: none; }
   .footer-brand { grid-column: 1; }
   .hero-actions { flex-direction: column; align-items: flex-start; }
 }
+
+/* ═══════════════════════════════════════════════════
+   FITUR TAMBAHAN — Dark/Light Mode, Download, Cetak
+   ═══════════════════════════════════════════════════ */
+
+/* ─── LIGHT MODE ─── */
+[data-theme="light"] {
+  --bg:           #f4f7f4;
+  --bg-2:         #edf2ed;
+  --bg-3:         #e4ece4;
+  --bg-card:      #ffffff;
+
+  --green:        #1a8a4a;
+  --green-deep:   #0f5c32;
+  --green-soft:   rgba(26, 138, 74, 0.1);
+  --green-glow:   rgba(26, 138, 74, 0.2);
+  --green-mid:    #16753e;
+  --emerald:      #0da060;
+  --sage:         #4a7a58;
+  --mint:         #1a5c38;
+
+  --gold:         #b8860b;
+  --gold-soft:    rgba(184, 134, 11, 0.12);
+
+  --text:         #0d1f10;
+  --text-dim:     rgba(13, 31, 16, 0.62);
+  --text-faint:   rgba(13, 31, 16, 0.38);
+  --white:        #ffffff;
+
+  --border:       rgba(26, 138, 74, 0.15);
+  --border-alt:   rgba(26, 138, 74, 0.25);
+
+  --grad-green:   linear-gradient(135deg, #1a8a4a 0%, #0f5c32 100%);
+  --grad-text:    linear-gradient(135deg, #1a8a4a, #4a7a58, #0da060);
+  --grad-gold:    linear-gradient(135deg, #b8860b, #d4a030, #8a6008);
+
+  --shadow-s:     0 2px 12px rgba(0,0,0,0.1);
+  --shadow-m:     0 8px 32px rgba(0,0,0,0.12);
+  --shadow-l:     0 20px 60px rgba(0,0,0,0.15);
+  --shadow-green: 0 8px 32px rgba(26,138,74,0.2);
+}
+
+[data-theme="light"] body { background: var(--bg); }
+
+[data-theme="light"] .navbar {
+  background: rgba(244, 247, 244, 0.9);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .navbar.scrolled {
+  background: rgba(237, 242, 237, 0.97);
+}
+
+[data-theme="light"] .hero {
+  background: linear-gradient(160deg, #e8f4ea 0%, #f4f7f4 60%);
+}
+
+[data-theme="light"] .hero-bg-overlay {
+  background: radial-gradient(ellipse at 50% 0%, rgba(26,138,74,0.08) 0%, transparent 70%);
+}
+
+[data-theme="light"] .gallery-item img,
+[data-theme="light"] .about-img-main,
+[data-theme="light"] .about-img-accent {
+  filter: none;
+}
+
+[data-theme="light"] .marquee-section {
+  background: var(--bg-3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .search-overlay {
+  background: rgba(228, 236, 228, 0.97);
+}
+
+[data-theme="light"] .video-card {
+  background: var(--bg-card);
+  box-shadow: var(--shadow-s);
+}
+
+[data-theme="light"] .footer {
+  background: #1a2e1e;
+  color: rgba(237,245,238,0.85);
+}
+
+[data-theme="light"] .footer p,
+[data-theme="light"] .footer a,
+[data-theme="light"] .footer li,
+[data-theme="light"] .footer h5 {
+  color: rgba(237,245,238,0.7);
+}
+
+[data-theme="light"] .footer h5 {
+  color: #edf5ee;
+}
+
+[data-theme="light"] .awards {
+  background: var(--bg-3);
+}
+
+/* ─── THEME TOGGLE BUTTON ─── */
+.nav-theme-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-alt);
+  background: var(--green-soft);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.nav-theme-btn:hover {
+  background: var(--green-soft);
+  border-color: var(--green);
+  color: var(--green);
+  transform: rotate(20deg) scale(1.08);
+}
+
+/* ─── DOWNLOAD BUTTON di GALERI ─── */
+.gallery-item .gallery-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.85rem;
+}
+
+.gallery-download-btn {
+  align-self: flex-end;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+  text-decoration: none;
+}
+
+.gallery-download-btn:hover {
+  background: var(--green);
+  border-color: var(--green);
+  transform: scale(1.12);
+  color: #fff;
+}
+
+/* ─── BUKU KENANGAN — Komentar Form ─── */
+.buku-comment-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-alt);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.buku-comment-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad-green);
+}
+
+.buku-comment-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.buku-comment-section p {
+  font-size: 0.83rem;
+  color: var(--text-dim);
+  margin-bottom: 1.6rem;
+}
+
+.comment-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .comment-form-grid { grid-template-columns: 1fr; }
+}
+
+.comment-input, .comment-textarea {
+  width: 100%;
+  background: var(--bg-3);
+  border: 1px solid var(--border-alt);
+  border-radius: var(--radius-m);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: var(--transition);
+  caret-color: var(--green);
+}
+
+.comment-input:focus, .comment-textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(46,204,113,0.1);
+}
+
+.comment-textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.7;
+}
+
+.comment-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.78rem 1.8rem;
+  background: var(--grad-green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-display);
+  box-shadow: var(--shadow-green);
+}
+
+.comment-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(46,204,113,0.35);
+}
+
+.comment-char-count {
+  text-align: right;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+/* ─── USER COMMENTS DISPLAY ─── */
+.user-comments-list {
+  margin-top: 3rem;
+}
+
+.user-comments-list h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.user-comments-list h4 .comment-count-badge {
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-alt);
+}
+
+.user-comment-card {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1rem;
+  position: relative;
+  transition: var(--transition);
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.user-comment-card:hover {
+  border-color: var(--border-alt);
+  background: var(--bg-card);
+}
+
+.user-comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+
+.user-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.user-comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--grad-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.user-comment-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.user-comment-nim {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.user-comment-time {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.user-comment-text {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.78;
+  font-style: italic;
+}
+
+.user-comment-delete {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  transition: var(--transition);
+}
+
+.user-comment-delete:hover {
+  background: rgba(231,76,60,0.1);
+  color: #e74c3c;
+}
+
+/* ─── TOAST NOTIFICATION ─── */
+.toast-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-alt);
+  border-left: 3px solid var(--green);
+  border-radius: var(--radius-m);
+  padding: 1rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: var(--shadow-l);
+  z-index: 9999;
+  transform: translateY(120%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+
+.toast-notification.show {
+  transform: translateY(0);
+}
+
+.toast-notification i {
+  color: var(--green);
+  font-size: 1rem;
+}
+
+/* ─── CETAK PROFIL BUTTON ─── */
+.btn-print-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.6rem;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-display);
+}
+
+.btn-print-profile:hover {
+  color: var(--green);
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+
+/* Print styles */
+@media print {
+  .print-only { display: block !important; }
+  nav, footer, .nav-search-btn, .nav-music-btn, .nav-theme-btn,
+  .hamburger, .btn-profile, .btn-print-profile, .search-overlay,
+  .modal-overlay, .page-header, .search-bar-wrap,
+  .mahasiswa-card:not(.printing) { display: none !important; }
+  
+  .mahasiswa-card.printing {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #1a8a4a;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 320px;
+    margin: 2rem auto;
+    page-break-inside: avoid;
+    background: #fff !important;
+    color: #0d1f10 !important;
+  }
+  
+  .mahasiswa-card.printing .mahasiswa-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #1a8a4a;
+    margin-bottom: 1rem;
+  }
+  
+  .mahasiswa-card.printing h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0d1f10;
+    margin-bottom: 0.3rem;
+  }
+  
+  .mahasiswa-card.printing .nim {
+    color: #1a8a4a;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+  }
+  
+  .print-pesan {
+    font-size: 0.85rem;
+    color: #444;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.7;
+    border-top: 1px solid #ddd;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .print-watermark {
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+}
+
+/* ─── FIX: Tombol cetak mahasiswa ─── */
+.mahasiswa-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.mahasiswa-card .mahasiswa-avatar {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: top center;
+  flex-shrink: 0;
+}
+
+.mahasiswa-card h4,
+.mahasiswa-card .nim,
+.mahasiswa-card .btn-profile,
+.mahasiswa-card .btn-print-profile {
+  position: static !important;
+  display: block;
+  width: auto;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: auto;
+}
+
+.mahasiswa-card h4 {
+  padding: 0.9rem 0.8rem 0.2rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.mahasiswa-card .nim {
+  padding: 0 0.8rem 0.8rem;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.mahasiswa-card .btn-profile,
+.mahasiswa-card .btn-print-profile {
+  margin: 0 0.8rem 0.5rem;
+  width: calc(100% - 1.6rem);
+  text-align: center;
+}
+
+.mahasiswa-card .btn-print-profile {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+/* ─── FIX FINAL: layout kartu mahasiswa ─── */
+.mahasiswa-card {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+}
+
+.mahasiswa-card > img.mahasiswa-avatar {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 3/4 !important;
+  object-fit: cover !important;
+  object-position: top center !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.mahasiswa-card > h4 {
+  padding: 0.85rem 0.8rem 0.15rem !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+.mahasiswa-card > .nim {
+  padding: 0 0.8rem 0.75rem !important;
+  font-size: 0.72rem !important;
+  color: var(--text-faint) !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+.mahasiswa-card > .btn-profile {
+  margin: 0 0.8rem 0.4rem !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+.mahasiswa-card > .btn-print-profile {
+  margin: 0 0.8rem 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+/* ─── FIX: teks Lihat Profil hilang ─── */
+.mahasiswa-card > .btn-profile {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--text-dim) !important;
+  background: transparent !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  font-family: var(--font-display) !important;
+}
+
+.mahasiswa-card > .btn-profile:hover {
+  color: var(--green) !important;
+}

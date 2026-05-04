@@ -9,6 +9,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
+  <script>
+  (function(){
+    var t = localStorage.getItem("rk-theme") || "dark";
+    if(t === "light") document.documentElement.setAttribute("data-theme","light");
+  })();
+</script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
@@ -407,6 +413,7 @@
       <div class="nav-right">
         <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
         <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+        <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
         <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -546,7 +553,7 @@
             onclick="openVideo('/assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
             <video muted loop playsinline preload="metadata"
               style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
-              <source src="/assets/5.mp4" type="video/mp4" />
+              <source src="/assets/v3.mp4" type="video/mp4" />
             </video>
             <button class="video-play-full"><i class="fas fa-play"></i></button>
             <span class="video-sem-badge">Semester 1</span>
@@ -570,7 +577,7 @@
             onclick="openVideo('/assets/v3.mp4','Hari Pertama Ospek','Semester 1 · September 2023')">
             <video muted loop playsinline preload="metadata"
               style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
-              <source src="/assets/3.mp4" type="video/mp4" />
+              <source src="/assets/v3.mp4" type="video/mp4" />
             </video>
             <button class="video-play-full"><i class="fas fa-play"></i></button>
             <span class="video-sem-badge">Semester 1</span>

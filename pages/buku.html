@@ -6,6 +6,12 @@
   <title>Buku Kenangan — Ruang Kenangan PTIK A 2023</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+  (function(){
+    var t = localStorage.getItem("rk-theme") || "dark";
+    if(t === "light") document.documentElement.setAttribute("data-theme","light");
+  })();
+</script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
@@ -266,6 +272,7 @@
     <div class="nav-right">
       <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
       <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
+        <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -421,6 +428,39 @@
       </div>
 
     </div>
+
+    <!-- ═══ KOMENTAR PENGGUNA ═══ -->
+    <div class="buku-comment-section" data-animate="fade-up" style="margin-top:4rem;">
+      <h3>💬 Tambah Komentarmu</h3>
+      <p>Tulis kata-kata terakhirmu untuk angkatan ini. Komentar tersimpan di perangkat kamu.</p>
+
+      <form id="commentForm">
+        <div class="comment-form-grid">
+          <div>
+            <input type="text" class="comment-input" id="commentName" placeholder="Nama kamu" maxlength="60" required />
+          </div>
+          <div>
+            <input type="text" class="comment-input" id="commentNIM" placeholder="NIM (opsional)" maxlength="20" />
+          </div>
+        </div>
+        <textarea class="comment-textarea" id="commentText" placeholder="Tulis pesanmu di sini..." maxlength="300"></textarea>
+        <div class="comment-char-count" id="commentCharCount">0/300</div>
+        <button type="submit" class="comment-submit-btn">
+          <i class="fas fa-paper-plane"></i> Kirim Komentar
+        </button>
+      </form>
+    </div>
+
+    <!-- List Komentar User -->
+    <div class="user-comments-list" data-animate="fade-up">
+      <h4>
+        <i class="fas fa-comments" style="color:var(--green);font-size:0.9rem;"></i>
+        Komentar dari Teman
+        <span class="comment-count-badge" id="commentCountBadge">0</span>
+      </h4>
+      <div id="userCommentList"></div>
+    </div>
+
   </div>
 </section>
 
