@@ -11,56 +11,218 @@
     var t = localStorage.getItem("rk-theme") || "dark";
     if(t === "light") document.documentElement.setAttribute("data-theme","light");
   })();
-</script>
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
     .buku-page { padding: 5rem 0 9rem; }
 
-    /* Tambah Pesan Form */
-    .add-pesan-section {
+    .buku-stats-banner {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+    .buku-stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      padding: 0.55rem 1.3rem;
+      font-size: 0.85rem;
+      font-family: var(--font-display);
+      color: var(--text);
+    }
+    .buku-stat-pill i { color: var(--green); }
+    .buku-stat-pill strong { color: var(--green); }
+
+    .buku-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .buku-section-head h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+    }
+    .buku-sort-tabs { display: flex; gap: 0.4rem; }
+    .buku-sort-btn {
+      padding: 0.32rem 1rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.76rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .buku-sort-btn.active, .buku-sort-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .buku-page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .buku-page-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      padding: 1.7rem;
+      transition: var(--transition);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .buku-page-card:hover {
+      border-color: var(--border-alt);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-green);
+    }
+    .buku-page-card.featured-buku {
+      border-color: rgba(46,204,113,0.3);
+      background: rgba(46,204,113,0.04);
+    }
+    .buku-page-card.featured-buku::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grad-green);
+      border-radius: 2px 2px 0 0;
+    }
+    .buku-quote-icon {
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--green);
+      opacity: 0.2;
+      font-family: Georgia, serif;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .buku-page-card blockquote {
+      font-size: 0.87rem;
+      color: var(--text);
+      line-height: 1.82;
+      font-style: italic;
+      margin-bottom: 1.1rem;
+      opacity: 0.92;
+      padding-left: 0.9rem;
+      border-left: 2px solid var(--green);
+      flex: 1;
+    }
+    .buku-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .buku-author-info {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .buku-author-info img {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border-alt);
+    }
+    .buku-author-info strong {
+      font-size: 0.8rem;
+      font-family: var(--font-display);
+      color: var(--text);
+      display: block;
+    }
+    .buku-author-info span { font-size: 0.68rem; color: var(--green); }
+
+    .buku-reactions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .react-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      font-size: 0.74rem;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-faint);
+      font-family: var(--font-body);
+    }
+    .react-btn:hover { background: var(--bg-3); }
+    .react-btn.reacted { background: var(--green-soft); border-color: rgba(46,204,113,0.4); color: var(--green); }
+
+    .write-form-section {
       background: var(--bg-card);
       border: 1px solid var(--border-alt);
       border-radius: var(--radius-xl);
-      padding: 2.5rem;
+      padding: 2.4rem;
+      margin-top: 4rem;
       margin-bottom: 4rem;
       position: relative;
       overflow: hidden;
     }
-
-    .add-pesan-section::before {
-      content: '';
+    .write-form-section::before {
+      content: "";
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
       background: var(--grad-green);
     }
-
-    .add-pesan-section h3 {
+    .write-form-section h3 {
       font-family: var(--font-display);
       font-size: 1.2rem;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
-
-    .add-pesan-section p {
-      font-size: 0.85rem;
+    .form-subtitle {
+      font-size: 0.84rem;
       color: var(--text-dim);
       margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
     }
-
+    .persistent-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(46,204,113,0.12);
+      border: 1px solid rgba(46,204,113,0.3);
+      border-radius: var(--radius-pill);
+      padding: 0.15rem 0.65rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--green);
+    }
     .form-group { margin-bottom: 1.2rem; }
-
     .form-label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-dim);
       margin-bottom: 0.5rem;
       letter-spacing: 0.04em;
     }
-
     .form-input, .form-textarea {
       width: 100%;
       background: var(--bg-3);
@@ -74,147 +236,203 @@
       transition: var(--transition);
       caret-color: var(--green);
     }
-
     .form-input:focus, .form-textarea:focus {
       border-color: var(--green);
       box-shadow: 0 0 0 3px rgba(46,204,113,0.1);
     }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 130px;
-      line-height: 1.7;
-    }
-
+    .form-textarea { resize: vertical; min-height: 130px; line-height: 1.7; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .char-count { text-align: right; font-size: 0.72rem; color: var(--text-faint); margin-top: 0.3rem; }
 
-    .char-count {
-      text-align: right;
-      font-size: 0.72rem;
+    .komentar-section { margin-top: 2rem; }
+    .komentar-section > h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .komentar-section > p { font-size: 0.84rem; color: var(--text-dim); margin-bottom: 1.5rem; }
+
+    .komentar-toolbar {
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .komentar-search-wrap { flex: 1; min-width: 180px; position: relative; }
+    .komentar-search-wrap i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
       color: var(--text-faint);
-      margin-top: 0.3rem;
+      font-size: 0.82rem;
+      pointer-events: none;
+    }
+    .komentar-search {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      padding: 0.58rem 1rem 0.58rem 2.4rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .komentar-search:focus { border-color: var(--green); }
+    .sort-select {
+      background: var(--bg-3);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      padding: 0.58rem 1rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .komentar-count-chip {
+      background: var(--green-soft);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.9rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--green);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    /* Buku Cards Grid */
-    .buku-page-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.8rem;
-    }
-
-    .buku-page-card {
+    .user-comment-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-l);
-      padding: 2rem;
-      transition: var(--transition);
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1rem;
       position: relative;
+      transition: var(--transition);
     }
-
-    .buku-page-card:hover {
-      border-color: var(--border-alt);
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-green);
+    .user-comment-card:hover { border-color: var(--border-alt); }
+    .user-comment-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
     }
-
-    .buku-page-card.featured-buku {
-      border-color: rgba(46,204,113,0.25);
-      background: rgba(46,204,113,0.04);
-    }
-
-    .buku-page-card.featured-buku::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--grad-green);
-      border-radius: 2px 2px 0 0;
-    }
-
-    .buku-quote-icon {
-      font-size: 2.5rem;
-      line-height: 1;
+    .user-comment-meta { display: flex; align-items: center; gap: 0.65rem; }
+    .user-comment-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      border: 1px solid rgba(46,204,113,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
       color: var(--green);
-      opacity: 0.25;
-      font-family: Georgia, serif;
-      display: block;
-      margin-bottom: 0.5rem;
+      flex-shrink: 0;
     }
-
-    .buku-page-card blockquote {
-      font-size: 0.9rem;
+    .user-comment-name { font-size: 0.86rem; font-weight: 700; color: var(--text); }
+    .user-comment-nim { font-size: 0.7rem; color: var(--green); }
+    .user-comment-time { font-size: 0.7rem; color: var(--text-faint); white-space: nowrap; }
+    .user-comment-text {
+      font-size: 0.87rem;
       color: var(--text);
-      line-height: 1.82;
-      font-style: italic;
-      margin-bottom: 1.5rem;
-      opacity: 0.92;
-      padding-left: 1rem;
+      line-height: 1.75;
+      opacity: 0.9;
+      margin: 0;
+      padding-left: 0.8rem;
       border-left: 2px solid var(--green);
+      font-style: italic;
     }
-
-    .buku-footer {
+    .user-comment-actions {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-top: 0.9rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
-
-    .buku-author-info {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .buku-author-info img {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--border-alt);
-    }
-
-    .buku-author-info strong {
-      font-size: 0.85rem;
-      font-family: var(--font-display);
-      color: var(--text);
-      display: block;
-    }
-
-    .buku-author-info span {
-      font-size: 0.72rem;
-      color: var(--green);
-    }
-
-    .buku-like-btn {
+    .comment-action-btn {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 0.3rem 0.8rem;
+      padding: 0.26rem 0.72rem;
       border: 1px solid var(--border-alt);
       border-radius: var(--radius-pill);
       background: transparent;
       color: var(--text-faint);
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       cursor: pointer;
       transition: var(--transition);
       font-family: var(--font-body);
+      text-decoration: none;
     }
-
-    .buku-like-btn:hover, .buku-like-btn.liked {
-      border-color: #e74c3c;
-      color: #e74c3c;
-      background: rgba(231,76,60,0.07);
+    .comment-action-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+    .comment-action-btn.liked { border-color: #e74c3c; color: #e74c3c; background: rgba(231,76,60,0.07); }
+    .comment-action-btn.wa-btn:hover { border-color: #25D366; color: #25D366; background: rgba(37,211,102,0.07); }
+    .user-comment-delete {
+      position: absolute;
+      top: 0.85rem; right: 1rem;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--border-alt);
+      background: transparent;
+      color: var(--text-faint);
+      font-size: 0.65rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
     }
+    .user-comment-card:hover .user-comment-delete { opacity: 1; }
+    .user-comment-delete:hover { border-color: #e74c3c; color: #e74c3c; }
 
-    /* Toast notification */
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 2rem;
+      border: 1px dashed var(--border-alt);
+      border-radius: var(--radius-xl);
+    }
+    .empty-state-icon {
+      width: 66px; height: 66px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      border: 1px solid rgba(46,204,113,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--green);
+      margin: 0 auto 1.4rem;
+    }
+    .empty-state h4 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .empty-state p { font-size: 0.86rem; color: var(--text-dim); margin: 0; }
+
     .toast-notif {
       position: fixed;
       bottom: 2rem;
       left: 50%;
-      transform: translateX(-50%) translateY(80px);
+      transform: translateX(-50%) translateY(100px);
       background: var(--bg-card);
       border: 1px solid var(--border-alt);
       border-radius: var(--radius-pill);
       padding: 0.85rem 1.8rem;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text);
       display: flex;
@@ -223,30 +441,30 @@
       z-index: 9000;
       box-shadow: var(--shadow-m);
       transition: transform 0.4s ease;
+      pointer-events: none;
     }
-
     .toast-notif.show { transform: translateX(-50%) translateY(0); }
     .toast-notif i { color: var(--green); }
+    .comment-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     @media (max-width: 900px) {
       .buku-page-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid { grid-template-columns: 1fr; }
     }
-
     @media (max-width: 580px) {
       .buku-page-grid { grid-template-columns: 1fr; }
+      .komentar-toolbar { flex-direction: column; align-items: stretch; }
+      .buku-stats-banner { gap: 0.7rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- Toast -->
 <div class="toast-notif" id="toastNotif">
-  <i class="fas fa-check-circle"></i>
-  <span id="toastMsg">Pesan berhasil ditambahkan!</span>
+  <i class="fas fa-check-circle" id="toastIcon"></i>
+  <span id="toastMsg">Berhasil!</span>
 </div>
 
-<!-- Search Overlay -->
 <div class="search-overlay" id="searchOverlay">
   <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
   <div class="search-box">
@@ -254,7 +472,6 @@
   </div>
 </div>
 
-<!-- NAVBAR -->
 <nav class="navbar scrolled" id="navbar">
   <div class="nav-container">
     <a href="/index.html" class="nav-logo">
@@ -267,206 +484,241 @@
       <li><a href="video.html" class="nav-link">Video</a></li>
       <li><a href="mahasiswa.html" class="nav-link">Mahasiswa</a></li>
       <li><a href="timeline.html" class="nav-link">Timeline</a></li>
-      <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
+      <li><a href="buku.html" class="nav-link active-nav">Buku Kenangan</a></li>
       <li><a href="peta.html" class="nav-link">Peta</a></li>
       <li><a href="kuis.html" class="nav-link">Kuis</a></li>
     </ul>
     <div class="nav-right">
       <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
       <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
-        <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
+      <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
   <div class="section-label" style="justify-content:center;">Dari Hati ke Hati</div>
   <h1>Buku <span class="gradient-text">Kenangan Digital</span></h1>
   <p>Pesan dan kesan tulus dari setiap anggota keluarga PTIK A 2023</p>
 </div>
 
-<!-- BUKU PAGE -->
 <section class="buku-page">
   <div class="container">
 
-    <!-- Form Tambah Pesan -->
-    <div class="add-pesan-section" data-animate="fade-up">
-      <h3>✍️ Tinggalkan Pesanmu</h3>
-      <p>Tulis kesan, pesan, atau kenangan indah bersama PTIK A 2023. Pesanmu akan tersimpan selamanya di sini.</p>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Nama Lengkap</label>
-          <input type="text" class="form-input" id="inputNama" placeholder="Nama kamu." maxlength="60" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">NIM</label>
-          <input type="text" class="form-input" id="inputNIM" placeholder="25230xx" maxlength="20" />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Pesan & Kesanmu</label>
-        <textarea class="form-textarea" id="inputPesan" placeholder="Tuliskan kenangan, pesan, atau ungkapan hatimu di sini." maxlength="500" oninput="updateCharCount(this)"></textarea>
-        <div class="char-count"><span id="charCount">0</span>/500</div>
-      </div>
-
-      <button class="btn-primary" onclick="submitPesan()">
-        <i class="fas fa-paper-plane"></i> Kirim Pesan
-      </button>
+    <!-- Stats Banner -->
+    <div class="buku-stats-banner" data-animate="fade-up">
+      <div class="buku-stat-pill"><i class="fas fa-book-open"></i><span><strong>9</strong> Pesan Angkatan</span></div>
+      <div class="buku-stat-pill"><i class="fas fa-heart"></i><span>Total <strong id="totalLikes">409</strong> Reaksi</span></div>
+      <div class="buku-stat-pill"><i class="fas fa-comments"></i><span><strong id="totalKomentar">0</strong> Komentar Publik</span></div>
+      <div class="buku-stat-pill"><i class="fas fa-users"></i><span>PTIK A 2023 · <strong>27</strong> Mahasiswa</span></div>
     </div>
 
-    <!-- Grid Pesan -->
+    <!-- Pesan Angkatan -->
+    <div class="buku-section-head" data-animate="fade-up">
+      <h2>✉️ Pesan dari Angkatan</h2>
+      <div class="buku-sort-tabs">
+        <button class="buku-sort-btn active" onclick="sortBuku('default', this)">Semua</button>
+        <button class="buku-sort-btn" onclick="sortBuku('liked', this)">Paling Disukai</button>
+      </div>
+    </div>
+
     <div class="buku-page-grid" id="bukuGrid" data-animate="fade-up">
 
-      <div class="buku-page-card featured-buku">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Tiga tahun bersama kalian adalah pengalaman terbaik hidupku. Dari yang awalnya tidak kenal satu sama lain, kini sudah seperti keluarga sendiri. Semoga pertemanan ini tidak berakhir di sini dan kita semua sukses di jalan masing-masing. Selalu ingat satu sama lain ya!</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/14.png" alt="" />
-            <div><strong>AbdurRz</strong><span>NIM 2523019</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>42</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Kelas ini mengajarkan ku banyak hal — bukan hanya tentang teknologi, tapi tentang arti persahabatan sejati. Terima kasih untuk semua momen indah yang tidak akan pernah kulupakan!</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/13.png" alt="" />
-            <div><strong>Zura</strong><span>NIM 2523037</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>38</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Inget banget waktu ospek kita semua panik dan nggak tau mau ngapain. Sekarang udah mau lulus. Cepat banget ya waktunya. Semoga rezeki kita semua lancar dan selalu dalam lindungan Allah!</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/26.png" alt="" />
-            <div><strong>Azka</strong><span>NIM 2523010</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>31</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Dari orang asing jadi sahabat sejati. PTIK A 2023 — nama yang akan selalu kuingat sampai tua nanti. Kalian adalah bagian dari hidup yang paling berharga yang pernah kumiliki!</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/25.png" alt="" />
-            <div><strong>Fariz </strong><span>NIM 2523021</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>55</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk seluruh keluarga besar PTIK A 2023. Sampai jumpa di puncak kesuksesan masing-masing!</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/12.png" alt="" />
-            <div><strong>Rani </strong><span>NIM 2523011</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>29</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Yang paling kukangenin adalah ngobrol santai di kantin sambil nunggu kelas dimulai. Obrolan receh yang ternyata bermakna banget. Kapan kita bisa ngulang momen-momen kecil itu lagi?</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/19.png" alt="" />
-            <div><strong>Aan</strong><span>NIM 2523006</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>47</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Terima kasih sudah menjadi teman belajar, teman curhat, dan teman tertawa sekaligus. PTIK A 2023 bukan cuma kelas, tapi rumah kedua yang selalu kurindu setelah ini berakhir.</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/18.png" alt="" />
-            <div><strong>Ahmad Syarif</strong><span>NIM 2312345006</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>62</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
-        <span class="buku-quote-icon">"</span>
-        <blockquote>Senang banget bisa belajar bersama orang-orang luar biasa seperti kalian. Semoga ilmu yang kita dapat selama kuliah bisa bermanfaat untuk banyak orang. Aamiin ya Allah!</blockquote>
-        <div class="buku-footer">
-          <div class="buku-author-info">
-            <img src="/assets/9.png" alt="" />
-            <div><strong>Syarifah </strong><span>NIM 2523007</span></div>
-          </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>34</span></button>
-        </div>
-      </div>
-
-      <div class="buku-page-card">
+      <div class="buku-page-card featured-buku" data-likes="71">
         <span class="buku-quote-icon">"</span>
         <blockquote>Kalau ketemu nanti jangan sok tidak kenal ya! Haha. Kita sudah punya sejarah 6 semester yang tidak akan bisa dihapus. PTIK A 2023 — satu rasa, satu cerita, selamanya!</blockquote>
         <div class="buku-footer">
           <div class="buku-author-info">
-            <img src="/assets/11.png" alt="" />
-            <div><strong>Nur Adilah</strong><span>NIM 2523003</span></div>
+            <img src="/assets/11.png" alt="" /><div><strong>Nur Adilah</strong><span>NIM 2523003</span></div>
           </div>
-          <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>71</span></button>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-0a')" data-key="buku-0a">❤️ <span>71</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-0b')" data-key="buku-0b">🥹 <span>18</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="62">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Terima kasih sudah menjadi teman belajar, teman curhat, dan teman tertawa sekaligus. PTIK A 2023 bukan cuma kelas, tapi rumah kedua yang selalu kurindu setelah ini berakhir.</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/18.png" alt="" /><div><strong>Ahmad Syarif</strong><span>NIM 2523012</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-1a')" data-key="buku-1a">❤️ <span>62</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-1b')" data-key="buku-1b">🙏 <span>11</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="55">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Dari orang asing jadi sahabat sejati. PTIK A 2023 — nama yang akan selalu kuingat sampai tua nanti. Kalian adalah bagian dari hidup yang paling berharga yang pernah kumiliki!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/25.png" alt="" /><div><strong>Fariz</strong><span>NIM 2523021</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-2a')" data-key="buku-2a">❤️ <span>55</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-2b')" data-key="buku-2b">🙏 <span>22</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="47">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Yang paling kukangenin adalah ngobrol santai di kantin sambil nunggu kelas dimulai. Obrolan receh yang ternyata bermakna banget. Kapan kita bisa ngulang momen-momen kecil itu lagi?</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/19.png" alt="" /><div><strong>Aan</strong><span>NIM 2523006</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-3a')" data-key="buku-3a">❤️ <span>47</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-3b')" data-key="buku-3b">🥹 <span>31</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="42">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Tiga tahun bersama kalian adalah pengalaman terbaik hidupku. Dari yang awalnya tidak kenal satu sama lain, kini sudah seperti keluarga sendiri. Semoga pertemanan ini tidak berakhir di sini!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/14.png" alt="" /><div><strong>AbdurRz</strong><span>NIM 2523019</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-4a')" data-key="buku-4a">❤️ <span>42</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-4b')" data-key="buku-4b">😂 <span>7</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="38">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Kelas ini mengajarkan banyak hal — bukan hanya tentang teknologi, tapi tentang arti persahabatan sejati. Terima kasih untuk semua momen indah yang tidak akan pernah kulupakan!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/13.png" alt="" /><div><strong>Zura</strong><span>NIM 2523037</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-5a')" data-key="buku-5a">❤️ <span>38</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-5b')" data-key="buku-5b">🙏 <span>16</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="34">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Senang banget bisa belajar bersama orang-orang luar biasa seperti kalian. Semoga ilmu yang kita dapat selama kuliah bisa bermanfaat untuk banyak orang. Aamiin ya Allah!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/9.png" alt="" /><div><strong>Syarifah</strong><span>NIM 2523007</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-6a')" data-key="buku-6a">❤️ <span>34</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-6b')" data-key="buku-6b">🙏 <span>27</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="31">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Inget banget waktu ospek kita semua panik dan nggak tau mau ngapain. Sekarang udah mau lulus. Cepat banget ya waktunya. Semoga rezeki kita semua lancar dan selalu dalam lindungan Allah!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/26.png" alt="" /><div><strong>Azka</strong><span>NIM 2523010</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-7a')" data-key="buku-7a">❤️ <span>31</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-7b')" data-key="buku-7b">🥹 <span>42</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buku-page-card" data-likes="29">
+        <span class="buku-quote-icon">"</span>
+        <blockquote>Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk seluruh keluarga besar PTIK A 2023. Sampai jumpa di puncak kesuksesan masing-masing!</blockquote>
+        <div class="buku-footer">
+          <div class="buku-author-info">
+            <img src="/assets/12.png" alt="" /><div><strong>Rani</strong><span>NIM 2523011</span></div>
+          </div>
+          <div class="buku-reactions">
+            <button class="react-btn" onclick="toggleReact(this,'buku-8a')" data-key="buku-8a">❤️ <span>29</span></button>
+            <button class="react-btn" onclick="toggleReact(this,'buku-8b')" data-key="buku-8b">🙏 <span>19</span></button>
+          </div>
         </div>
       </div>
 
     </div>
 
-    <!-- ═══ KOMENTAR PENGGUNA ═══ -->
-    <div class="buku-comment-section" data-animate="fade-up" style="margin-top:4rem;">
-      <h3>💬 Tambah Komentarmu</h3>
-      <p>Tulis kata-kata terakhirmu untuk angkatan ini. Komentar tersimpan di perangkat kamu.</p>
-
-      <form id="commentForm">
-        <div class="comment-form-grid">
-          <div>
-            <input type="text" class="comment-input" id="commentName" placeholder="Nama kamu" maxlength="60" required />
+    <!-- ═══ TULIS PESANMU ═══ -->
+    <div class="write-form-section" data-animate="fade-up">
+      <h3>✍️ Tulis Pesanmu</h3>
+      <div class="form-subtitle">
+        Pesanmu akan tersimpan dan bisa dibaca semua orang — selamanya.
+        <span class="persistent-badge"><i class="fas fa-cloud"></i> Tersimpan Permanen</span>
+      </div>
+      <form id="commentForm" autocomplete="off">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap *</label>
+            <input type="text" class="form-input" id="commentName" placeholder="Nama kamu" maxlength="60" required />
           </div>
-          <div>
-            <input type="text" class="comment-input" id="commentNIM" placeholder="NIM (opsional)" maxlength="20" />
+          <div class="form-group">
+            <label class="form-label">NIM <span style="font-weight:400;color:var(--text-faint);">(opsional)</span></label>
+            <input type="text" class="form-input" id="commentNIM" placeholder="25230xx" maxlength="20" />
           </div>
         </div>
-        <textarea class="comment-textarea" id="commentText" placeholder="Tulis pesanmu di sini..." maxlength="300"></textarea>
-        <div class="comment-char-count" id="commentCharCount">0/300</div>
-        <button type="submit" class="comment-submit-btn">
-          <i class="fas fa-paper-plane"></i> Kirim Komentar
+        <div class="form-group">
+          <label class="form-label">Pesan & Kesanmu *</label>
+          <textarea class="form-textarea" id="commentText" placeholder="Tuliskan kenangan, pesan, atau ungkapan hatimu di sini..." maxlength="300"></textarea>
+          <div class="char-count"><span id="commentCharCount">0</span>/300</div>
+        </div>
+        <button type="submit" class="btn-primary comment-submit-btn" id="submitBtn">
+          <i class="fas fa-paper-plane"></i> Kirim Pesan
         </button>
       </form>
     </div>
 
-    <!-- List Komentar User -->
-    <div class="user-comments-list" data-animate="fade-up">
-      <h4>
-        <i class="fas fa-comments" style="color:var(--green);font-size:0.9rem;"></i>
-        Komentar dari Teman
-        <span class="comment-count-badge" id="commentCountBadge">0</span>
-      </h4>
+    <!-- ═══ KOMENTAR PUBLIK ═══ -->
+    <div class="komentar-section" data-animate="fade-up">
+      <h3>💬 Pesan dari Teman-Teman</h3>
+      <p>Pesan dari semua orang yang pernah singgah di sini — tersimpan di cloud dan bisa dibaca semua orang.</p>
+
+      <div class="komentar-toolbar">
+        <div class="komentar-search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" class="komentar-search" id="komentarSearch" placeholder="Cari nama atau isi pesan..." />
+        </div>
+        <select class="sort-select" id="sortSelect">
+          <option value="newest">Terbaru</option>
+          <option value="oldest">Terlama</option>
+        </select>
+        <div class="komentar-count-chip">
+          <i class="fas fa-comments"></i>
+          <span id="commentCountBadge">0</span> pesan
+        </div>
+      </div>
+
       <div id="userCommentList"></div>
+
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-state-icon"><i class="fas fa-feather"></i></div>
+        <h4>Belum ada pesan</h4>
+        <p>Jadilah yang pertama meninggalkan kenangan di sini!</p>
+      </div>
+      <div class="empty-state" id="noSearchResult" style="display:none;">
+        <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+        <h4>Tidak ditemukan</h4>
+        <p>Coba kata kunci lain.</p>
+      </div>
     </div>
 
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
@@ -482,72 +734,93 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/main.js"></script>
 <script>
-  function updateCharCount(el) {
-    document.getElementById('charCount').textContent = el.value.length;
+  function showToast(msg, iconClass) {
+    const t = document.getElementById("toastNotif");
+    document.getElementById("toastIcon").className = "fas " + (iconClass || "fa-check-circle");
+    document.getElementById("toastMsg").textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
   }
 
-  function showToast(msg) {
-    const t = document.getElementById('toastNotif');
-    document.getElementById('toastMsg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  function submitPesan() {
-    const nama = document.getElementById('inputNama').value.trim();
-    const nim = document.getElementById('inputNIM').value.trim();
-    const pesan = document.getElementById('inputPesan').value.trim();
-
-    if (!nama || !pesan) {
-      showToast('⚠️ Mohon isi nama dan pesan terlebih dahulu!');
-      return;
+  function toggleReact(btn, key) {
+    const reacted = localStorage.getItem("react-" + key) === "1";
+    const span = btn.querySelector("span");
+    const count = parseInt(span.textContent) || 0;
+    if (reacted) {
+      span.textContent = count - 1;
+      btn.classList.remove("reacted");
+      localStorage.removeItem("react-" + key);
+    } else {
+      span.textContent = count + 1;
+      btn.classList.add("reacted");
+      localStorage.setItem("react-" + key, "1");
+      showToast("Reaksi ditambahkan!");
     }
-
-    // Build new card
-    const grid = document.getElementById('bukuGrid');
-    const card = document.createElement('div');
-    card.className = 'buku-page-card';
-    card.innerHTML = `
-      <span class="buku-quote-icon">"</span>
-      <blockquote>${pesan}</blockquote>
-      <div class="buku-footer">
-        <div class="buku-author-info">
-          <div style="width:40px;height:40px;border-radius:50%;background:var(--green-soft);border:2px solid var(--border-alt);display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:700;font-size:1rem;">${nama.charAt(0).toUpperCase()}</div>
-          <div><strong>${nama}</strong><span>${nim || 'PTIK A 2023'}</span></div>
-        </div>
-        <button class="buku-like-btn" onclick="toggleBukuLike(this)"><i class="fas fa-heart"></i> <span>0</span></button>
-      </div>
-    `;
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    grid.prepend(card);
-
-    requestAnimationFrame(() => {
-      card.style.transition = 'all 0.5s ease';
-      card.style.opacity = '1';
-      card.style.transform = 'translateY(0)';
-    });
-
-    // Reset form
-    document.getElementById('inputNama').value = '';
-    document.getElementById('inputNIM').value = '';
-    document.getElementById('inputPesan').value = '';
-    document.getElementById('charCount').textContent = '0';
-
-    showToast('✅ Pesanmu berhasil ditambahkan!');
+    updateTotalLikes();
   }
 
-  function toggleBukuLike(btn) {
-    const sp = btn.querySelector('span');
-    const liked = btn.classList.toggle('liked');
-    sp.textContent = liked ? parseInt(sp.textContent) + 1 : parseInt(sp.textContent) - 1;
+  function toggleCommentLike(btn) {
+    const card = btn.closest(".user-comment-card");
+    const delBtn = card?.querySelector(".user-comment-delete");
+    const id = delBtn?.dataset.id || btn.dataset.cid || "";
+    const key = "clike-" + id;
+    const liked = localStorage.getItem(key) === "1";
+    const span = btn.querySelector("span");
+    if (liked) {
+      btn.classList.remove("liked");
+      span.textContent = "Suka";
+      localStorage.removeItem(key);
+    } else {
+      btn.classList.add("liked");
+      span.textContent = "Disukai ❤️";
+      localStorage.setItem(key, "1");
+    }
   }
+
+  document.querySelectorAll(".react-btn").forEach(btn => {
+    const key = btn.dataset.key;
+    if (key && localStorage.getItem("react-" + key) === "1") btn.classList.add("reacted");
+  });
+
+  function updateTotalLikes() {
+    let t = 0;
+    document.querySelectorAll(".react-btn span").forEach(s => { t += parseInt(s.textContent) || 0; });
+    const el = document.getElementById("totalLikes");
+    if (el) el.textContent = t;
+  }
+  updateTotalLikes();
+
+  let defaultOrder = [];
+  document.addEventListener("DOMContentLoaded", () => {
+    defaultOrder = [...document.querySelectorAll("#bukuGrid .buku-page-card")];
+  });
+
+  function sortBuku(mode, btn) {
+    document.querySelectorAll(".buku-sort-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const grid = document.getElementById("bukuGrid");
+    const cards = [...grid.querySelectorAll(".buku-page-card")];
+    if (mode === "liked") {
+      cards.sort((a, b) => parseInt(b.dataset.likes || 0) - parseInt(a.dataset.likes || 0));
+      cards.forEach(c => grid.appendChild(c));
+    } else {
+      defaultOrder.forEach(c => grid.appendChild(c));
+    }
+  }
+
+  document.getElementById("commentText")?.addEventListener("input", function() {
+    const len = this.value.length;
+    document.getElementById("commentCharCount").textContent = len;
+    if (len > 300) this.value = this.value.slice(0, 300);
+  });
 </script>
 
-<!-- Firebase Firestore Integration -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getFirestore, collection, addDoc, onSnapshot,
+    deleteDoc, doc, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDDY-R2C_Ks-45vp2Q1bxKz87yT0_8OY5k",
@@ -566,96 +839,120 @@
   const commentList       = document.getElementById("userCommentList");
   const commentCountBadge = document.getElementById("commentCountBadge");
   const commentText       = document.getElementById("commentText");
-  const charCount         = document.getElementById("commentCharCount");
+  const totalKomentarEl   = document.getElementById("totalKomentar");
+  const emptyState        = document.getElementById("emptyState");
+  const noSearchResult    = document.getElementById("noSearchResult");
+  const searchInput       = document.getElementById("komentarSearch");
+  const sortSelect        = document.getElementById("sortSelect");
 
-  // Realtime listener — semua orang lihat komentar yang sama
-  const q = query(col);
-  onSnapshot(q, (snapshot) => {
+  let allComments = [];
+
+  function renderComments(list) {
     commentList.innerHTML = "";
-    if (commentCountBadge) commentCountBadge.textContent = snapshot.size;
+    emptyState.style.display  = allComments.length === 0 ? "block" : "none";
+    noSearchResult.style.display = (allComments.length > 0 && list.length === 0) ? "block" : "none";
 
-    snapshot.forEach((docSnap) => {
-      const c = docSnap.data();
+    list.forEach(({ id, data: c }) => {
       const initials = (c.name || "?").split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
       const time = c.createdAt?.toDate
         ? c.createdAt.toDate().toLocaleDateString("id-ID", { day:"numeric", month:"short", year:"numeric" })
         : "Baru saja";
+      const waText = encodeURIComponent('"' + c.text + '" — ' + c.name + ' (PTIK A 2023)');
+      const waUrl  = "https://wa.me/?text=" + waText;
 
       const card = document.createElement("div");
       card.className = "user-comment-card";
-      card.innerHTML = `
-        <button class="user-comment-delete" data-id="${docSnap.id}" title="Hapus"><i class="fas fa-times"></i></button>
+      card.innerHTML = \`
+        <button class="user-comment-delete" data-id="\${id}" aria-label="Hapus"><i class="fas fa-times"></i></button>
         <div class="user-comment-header">
           <div class="user-comment-meta">
-            <div class="user-comment-avatar">${initials}</div>
+            <div class="user-comment-avatar">\${initials}</div>
             <div>
-              <div class="user-comment-name">${c.name}</div>
-              <div class="user-comment-nim">${c.nim || ""}</div>
+              <div class="user-comment-name">\${c.name}</div>
+              <div class="user-comment-nim">\${c.nim || "PTIK A 2023"}</div>
             </div>
           </div>
-          <div class="user-comment-time">${time}</div>
+          <div class="user-comment-time">\${time}</div>
         </div>
-        <p class="user-comment-text">"${c.text}"</p>
-      `;
+        <p class="user-comment-text">\${c.text}</p>
+        <div class="user-comment-actions">
+          <div style="display:flex;gap:0.4rem;">
+            <button class="comment-action-btn" onclick="toggleCommentLike(this)">
+              <i class="fas fa-heart"></i> <span>Suka</span>
+            </button>
+            <a class="comment-action-btn wa-btn" href="\${waUrl}" target="_blank" rel="noopener">
+              <i class="fab fa-whatsapp"></i> Share WA
+            </a>
+          </div>
+          <span style="font-size:0.7rem;color:var(--text-faint);">Tersimpan di cloud ☁️</span>
+        </div>
+      \`;
       commentList.appendChild(card);
     });
 
     commentList.querySelectorAll(".user-comment-delete").forEach(btn => {
       btn.addEventListener("click", async () => {
         if (confirm("Hapus komentar ini?")) {
-          await deleteDoc(doc(db, "komentar", btn.dataset.id));
-          showToastFb("Komentar dihapus");
+          try {
+            await deleteDoc(doc(db, "komentar", btn.dataset.id));
+            showToast("Komentar dihapus", "fa-trash");
+          } catch { showToast("Gagal menghapus.", "fa-exclamation-circle"); }
         }
       });
     });
+  }
+
+  function filterAndRender() {
+    const q = searchInput.value.toLowerCase().trim();
+    let list = allComments;
+    if (q) list = allComments.filter(({ data }) =>
+      data.name?.toLowerCase().includes(q) ||
+      data.text?.toLowerCase().includes(q) ||
+      (data.nim || "").toLowerCase().includes(q)
+    );
+    if (sortSelect.value === "oldest") list = [...list].reverse();
+    renderComments(list);
+  }
+
+  const fbQuery = query(col, orderBy("createdAt", "desc"));
+  onSnapshot(fbQuery, snapshot => {
+    allComments = snapshot.docs.map(d => ({ id: d.id, data: d.data() }));
+    const count = snapshot.size;
+    if (commentCountBadge) commentCountBadge.textContent = count;
+    if (totalKomentarEl)   totalKomentarEl.textContent = count;
+    filterAndRender();
+  }, err => {
+    console.warn("Firebase error:", err);
+    emptyState.style.display = "block";
   });
 
-  // Submit ke Firestore
-  commentForm?.addEventListener("submit", async (e) => {
+  searchInput?.addEventListener("input", filterAndRender);
+  sortSelect?.addEventListener("change", filterAndRender);
+
+  commentForm?.addEventListener("submit", async e => {
     e.preventDefault();
     const name = document.getElementById("commentName")?.value.trim();
     const nim  = document.getElementById("commentNIM")?.value.trim();
     const text = commentText?.value.trim();
+    if (!name || !text) { showToast("Isi nama dan pesan dulu ya!", "fa-exclamation-circle"); return; }
 
-    if (!name || !text) { showToastFb("Isi nama dan pesan dulu ya!"); return; }
-
-    const btn = commentForm.querySelector(".comment-submit-btn");
+    const btn = document.getElementById("submitBtn");
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
-
     try {
       await addDoc(col, { name, nim: nim || "", text, createdAt: serverTimestamp() });
       commentForm.reset();
-      if (charCount) charCount.textContent = "0/300";
-      showToastFb("Pesan berhasil dikirim dan tersimpan!");
+      document.getElementById("commentCharCount").textContent = "0";
+      showToast("Pesanmu berhasil dikirim dan tersimpan!");
+      document.getElementById("userCommentList").scrollIntoView({ behavior:"smooth", block:"start" });
     } catch (err) {
       console.error(err);
-      showToastFb("Gagal mengirim, coba lagi.");
+      showToast("Gagal mengirim, coba lagi.", "fa-exclamation-circle");
     } finally {
       btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Komentar';
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Pesan';
     }
   });
-
-  commentText?.addEventListener("input", () => {
-    const len = commentText.value.length;
-    if (charCount) charCount.textContent = `${len}/300`;
-    if (len > 300) commentText.value = commentText.value.slice(0, 300);
-  });
-
-  function showToastFb(msg) {
-    let toast = document.getElementById("rkToast");
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.id = "rkToast";
-      toast.className = "toast-notification";
-      toast.innerHTML = '<i class="fas fa-check-circle"></i><span></span>';
-      document.body.appendChild(toast);
-    }
-    toast.querySelector("span").textContent = msg;
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2800);
-  }
 </script>
 
 </body>
