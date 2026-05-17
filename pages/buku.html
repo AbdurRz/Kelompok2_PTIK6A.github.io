@@ -862,31 +862,31 @@
 
       const card = document.createElement("div");
       card.className = "user-comment-card";
-      card.innerHTML = \`
-        <button class="user-comment-delete" data-id="\${id}" aria-label="Hapus"><i class="fas fa-times"></i></button>
+      card.innerHTML = `
+        <button class="user-comment-delete" data-id="${id}" aria-label="Hapus"><i class="fas fa-times"></i></button>
         <div class="user-comment-header">
           <div class="user-comment-meta">
-            <div class="user-comment-avatar">\${initials}</div>
+            <div class="user-comment-avatar">${initials}</div>
             <div>
-              <div class="user-comment-name">\${c.name}</div>
-              <div class="user-comment-nim">\${c.nim || "PTIK A 2023"}</div>
+              <div class="user-comment-name">${c.name}</div>
+              <div class="user-comment-nim">${c.nim || "PTIK A 2023"}</div>
             </div>
           </div>
-          <div class="user-comment-time">\${time}</div>
+          <div class="user-comment-time">${time}</div>
         </div>
-        <p class="user-comment-text">\${c.text}</p>
+        <p class="user-comment-text">${c.text}</p>
         <div class="user-comment-actions">
           <div style="display:flex;gap:0.4rem;">
             <button class="comment-action-btn" onclick="toggleCommentLike(this)">
               <i class="fas fa-heart"></i> <span>Suka</span>
             </button>
-            <a class="comment-action-btn wa-btn" href="\${waUrl}" target="_blank" rel="noopener">
+            <a class="comment-action-btn wa-btn" href="${waUrl}" target="_blank" rel="noopener">
               <i class="fab fa-whatsapp"></i> Share WA
             </a>
           </div>
           <span style="font-size:0.7rem;color:var(--text-faint);">Tersimpan di cloud ☁️</span>
         </div>
-      \`;
+      `;
       commentList.appendChild(card);
     });
 
