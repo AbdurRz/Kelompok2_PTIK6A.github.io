@@ -2050,8 +2050,8 @@ ul  { list-style: none; }
   background: transparent !important;
 }
 
-[data-theme="light"] @media (max-width: 768px) {
-  .nav-links {
+@media (max-width: 768px) {
+  [data-theme="light"] .nav-links {
     background: rgba(237,242,237,0.97) !important;
   }
 }

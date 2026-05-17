@@ -113,15 +113,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ─── MUSIC TOGGLE ─── */
   const musicBtn = document.getElementById('musicBtn');
+
+  // Buat audio element dengan musik lofi bebas royalti
+  const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+  bgMusic.loop = true;
+  bgMusic.volume = 0.25;
   let musicPlaying = false;
 
   musicBtn?.addEventListener('click', () => {
     musicPlaying = !musicPlaying;
     if (musicPlaying) {
+      bgMusic.play().catch(() => {
+        // Fallback jika autoplay diblokir browser
+        musicPlaying = false;
+        musicBtn.classList.remove('playing');
+        musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+        musicBtn.title = 'Putar Musik';
+      });
       musicBtn.classList.add('playing');
       musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
       musicBtn.title = 'Matikan Musik';
     } else {
+      bgMusic.pause();
       musicBtn.classList.remove('playing');
       musicBtn.innerHTML = '<i class="fas fa-music"></i>';
       musicBtn.title = 'Putar Musik';
@@ -185,17 +198,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const memories = [
     'assets/1.jpeg',
+    'assets/1.1.jpeg',
+    'assets/1.2.jpeg',
+    'assets/1.3.jpeg',
     'assets/2.jpeg',
+    'assets/2.1.jpeg',
     'assets/3.jpeg',
     'assets/4.jpeg',
+    'assets/4.2.jpeg',
     'assets/5.jpeg',
+    'assets/5.2.jpeg',
+    'assets/5.3.jpeg',
     'assets/6.jpeg',
+    'assets/event.jpeg',
+    'assets/liburan.jpeg',
+    'assets/sem1.jpeg',
+    'assets/sem2.jpeg',
+    'assets/sem3.jpeg',
+    'assets/ps1.jpeg',
   ];
 
   function showRandom() {
     const idx = Math.floor(Math.random() * memories.length);
     if (randomImg) randomImg.src = memories[idx];
     if (randomFrame) {
+      randomFrame.style.display = '';
       randomFrame.classList.add('show');
       randomFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
