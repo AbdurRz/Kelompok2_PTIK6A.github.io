@@ -11,54 +11,303 @@
     var t = localStorage.getItem("rk-theme") || "dark";
     if(t === "light") document.documentElement.setAttribute("data-theme","light");
   })();
-</script>
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ── Filter Bar ── */
+    .mhs-toolbar {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .mhs-search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .mhs-search-wrap .fa-search {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+    .mhs-search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      padding: 0.65rem 1rem 0.65rem 2.6rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .mhs-search-input:focus { border-color: var(--green); }
+
+    .prov-filter-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .prov-tab {
+      padding: 0.32rem 0.85rem;
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.74rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .prov-tab:hover, .prov-tab.active { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+
+    /* ── Stats chips ── */
+    .mhs-stats-row {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .mhs-stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 1rem;
+      font-size: 0.76rem;
+      color: var(--text-dim);
+    }
+    .mhs-stat-chip strong { color: var(--green); }
+
+    /* ── Card julukan badge ── */
+    .julukan-badge {
+      display: inline-block;
+      margin-top: 0.3rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      background: rgba(46,204,113,0.13);
+      border: 1px solid rgba(46,204,113,0.25);
+      color: var(--green);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Improved Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7,13,8,0.85);
+      z-index: 4000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-alt);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border-alt);
+      background: transparent;
+      color: var(--text-faint);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+      font-size: 0.85rem;
+    }
+    .modal-close:hover { border-color: #e74c3c; color: #e74c3c; }
+
+    .modal-avatar {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      border: 3px solid var(--green);
+      display: block;
+      margin: 0 auto 1.1rem;
+    }
+    .modal-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 0.2rem;
+    }
+    .modal-nim {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--green);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+    .modal-julukan-wrap {
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+    .modal-julukan {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(46,204,113,0.12);
+      border: 1px solid rgba(46,204,113,0.3);
+      color: var(--green);
+    }
+
+    .modal-info-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      background: var(--bg-3);
+      border-radius: var(--radius-m);
+      border: 1px solid var(--border);
+      margin-bottom: 0.5rem;
+    }
+    .modal-info-row i { color: var(--green); width: 16px; text-align: center; flex-shrink: 0; }
+    .modal-info-row .info-label {
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.1rem;
+    }
+    .modal-info-row .info-val { font-size: 0.86rem; font-weight: 600; color: var(--text); }
+
+    .modal-pesan-box {
+      background: var(--bg-3);
+      border-radius: var(--radius-m);
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      margin: 1rem 0 1.2rem;
+    }
+    .modal-pesan-label {
+      font-size: 0.65rem;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
+    .modal-pesan {
+      margin: 0;
+      font-style: italic;
+      font-size: 0.87rem;
+      line-height: 1.78;
+      color: var(--text);
+      opacity: 0.92;
+    }
+
+    .modal-social {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      padding-top: 0.5rem;
+    }
+    .modal-social .social-link {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border-alt);
+      background: transparent;
+      color: var(--text-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .modal-social .social-link:hover { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+    .modal-social .social-link.wa:hover  { border-color: #25D366; color: #25D366; background: rgba(37,211,102,0.08); }
+    .modal-social .social-link.ig:hover  { border-color: #E1306C; color: #E1306C; background: rgba(225,48,108,0.08); }
+    .modal-social .social-link.eml:hover { border-color: #378ADD; color: #378ADD; background: rgba(55,138,221,0.08); }
+    .modal-social .social-link[href="#"] { opacity: 0.35; pointer-events: none; }
+
+    /* Card result count */
+    .result-count {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      margin-bottom: 1.5rem;
+    }
+    .result-count strong { color: var(--green); }
+
+    @media (max-width: 600px) {
+      .mhs-toolbar { flex-direction: column; align-items: stretch; }
+      .modal-box { padding: 2rem 1.4rem 1.6rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Profile Modal -->
+<!-- ═══ MODAL PROFIL ═══ -->
 <div class="modal-overlay" id="profileModal">
-  <div class="modal-box" style="max-width:520px;">
-    <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Tutup"><i class="fas fa-times"></i></button>
+
     <img src="" alt="" class="modal-avatar" id="modalAvatar" />
-    <h3 id="modalName">Nama Mahasiswa</h3>
-    <div class="modal-nim" id="modalNIM">NIM</div>
-
-    <!-- Info biodata -->
-    <div style="display:flex;flex-direction:column;gap:0.5rem;margin:1.2rem 0;text-align:left;">
-      <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:var(--bg-3);border-radius:var(--radius-m);border:1px solid var(--border);">
-        <i class="fas fa-map-marker-alt" style="color:var(--green);width:16px;text-align:center;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.1rem;">Asal Daerah</div>
-          <div style="font-size:0.88rem;font-weight:600;color:var(--text);" id="modalAsal">-</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:var(--bg-3);border-radius:var(--radius-m);border:1px solid var(--border);">
-        <i class="fas fa-graduation-cap" style="color:var(--green);width:16px;text-align:center;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.1rem;">Program Studi</div>
-          <div style="font-size:0.88rem;font-weight:600;color:var(--text);">PTIK A — UIN Bukittinggi</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:var(--bg-3);border-radius:var(--radius-m);border:1px solid var(--border);">
-        <i class="fas fa-calendar" style="color:var(--green);width:16px;text-align:center;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.1rem;">Angkatan</div>
-          <div style="font-size:0.88rem;font-weight:600;color:var(--text);">2023</div>
-        </div>
-      </div>
+    <h3 id="modalName"></h3>
+    <div class="modal-nim" id="modalNIM"></div>
+    <div class="modal-julukan-wrap" id="modalJulukanWrap" style="display:none;">
+      <span class="modal-julukan" id="modalJulukan"></span>
     </div>
 
-    <div style="background:var(--bg-3);border-radius:var(--radius-m);padding:1rem 1.2rem;border:1px solid var(--border);border-left:3px solid var(--green);margin-bottom:1.2rem;">
-      <div style="font-size:0.7rem;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem;font-weight:700;">Pesan Kenangan</div>
-      <p class="modal-pesan" id="modalPesan" style="margin:0;font-style:italic;font-size:0.88rem;line-height:1.75;">Pesan kenangan...</p>
+    <div class="modal-info-row">
+      <i class="fas fa-map-marker-alt"></i>
+      <div><div class="info-label">Asal Daerah</div><div class="info-val" id="modalAsal">—</div></div>
+    </div>
+    <div class="modal-info-row">
+      <i class="fas fa-graduation-cap"></i>
+      <div><div class="info-label">Program Studi</div><div class="info-val">PTIK A — UIN Bukittinggi</div></div>
+    </div>
+    <div class="modal-info-row">
+      <i class="fas fa-layer-group"></i>
+      <div><div class="info-label">Provinsi</div><div class="info-val" id="modalProv">—</div></div>
+    </div>
+    <div class="modal-info-row">
+      <i class="fas fa-calendar-alt"></i>
+      <div><div class="info-label">Angkatan</div><div class="info-val">2023</div></div>
     </div>
 
-    <div class="modal-social">
-      <a href="#" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-      <a href="#" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+    <div class="modal-pesan-box">
+      <div class="modal-pesan-label"><i class="fas fa-feather"></i> Pesan Kenangan</div>
+      <p class="modal-pesan" id="modalPesan"></p>
+    </div>
+
+    <div class="modal-social" id="modalSocial">
+      <a href="#" class="social-link ig" id="modalIG"  title="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-link wa" id="modalWA"  title="WhatsApp"  target="_blank"><i class="fab fa-whatsapp"></i></a>
+      <a href="#" class="social-link eml" id="modalEmail" title="Email" target="_blank"><i class="fas fa-envelope"></i></a>
     </div>
   </div>
 </div>
@@ -79,19 +328,19 @@
       <span>Ruang Kenangan</span>
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="../index.html" class="nav-link">Home</a></li>
-      <li><a href="galeri.html" class="nav-link">Galeri</a></li>
-      <li><a href="video.html" class="nav-link">Video</a></li>
+      <li><a href="../index.html"  class="nav-link">Home</a></li>
+      <li><a href="galeri.html"   class="nav-link">Galeri</a></li>
+      <li><a href="video.html"    class="nav-link">Video</a></li>
       <li><a href="mahasiswa.html" class="nav-link active-nav">Mahasiswa</a></li>
-      <li><a href="timeline.html" class="nav-link">Timeline</a></li>
-      <li><a href="buku.html" class="nav-link">Buku Kenangan</a></li>
-      <li><a href="peta.html" class="nav-link">Peta</a></li>
-      <li><a href="kuis.html" class="nav-link">Kuis</a></li>
+      <li><a href="timeline.html"  class="nav-link">Timeline</a></li>
+      <li><a href="buku.html"      class="nav-link">Buku Kenangan</a></li>
+      <li><a href="peta.html"      class="nav-link">Peta</a></li>
+      <li><a href="kuis.html"      class="nav-link">Kuis</a></li>
     </ul>
     <div class="nav-right">
       <button class="nav-search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
-      <button class="nav-music-btn" id="musicBtn"><i class="fas fa-music"></i></button>
-        <button class="nav-theme-btn" id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
+      <button class="nav-music-btn"  id="musicBtn"><i class="fas fa-music"></i></button>
+      <button class="nav-theme-btn"  id="themeBtn" title="Mode Terang"><i class="fas fa-sun"></i></button>
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -105,224 +354,369 @@
 </div>
 
 <!-- MAHASISWA SECTION -->
-<section class="mahasiswa" style="padding:5rem 0 8rem;">
+<section class="mahasiswa" style="padding:4rem 0 8rem;">
   <div class="container">
 
-    <div class="search-bar-wrap" data-animate="fade-up">
-      <i class="fas fa-search"></i>
-      <input type="text" id="studentSearch" placeholder="Cari Nama atau NIM..." />
+    <!-- Stats -->
+    <div class="mhs-stats-row" data-animate="fade-up">
+      <div class="mhs-stat-chip"><i class="fas fa-users" style="color:var(--green)"></i> <strong>27</strong> Mahasiswa</div>
+      <div class="mhs-stat-chip"><i class="fas fa-mountain" style="color:var(--green)"></i> <strong>12</strong> dari Sumatera Barat</div>
+      <div class="mhs-stat-chip"><i class="fas fa-mosque" style="color:var(--green)"></i> <strong>9</strong> dari Sumatera Utara</div>
+      <div class="mhs-stat-chip"><i class="fas fa-water" style="color:var(--green)"></i> <strong>5</strong> dari Riau</div>
+      <div class="mhs-stat-chip"><i class="fas fa-tree" style="color:var(--green)"></i> <strong>1</strong> dari Jambi</div>
     </div>
 
+    <!-- Toolbar: Search + Filter -->
+    <div class="mhs-toolbar" data-animate="fade-up">
+      <div class="mhs-search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="studentSearch" class="mhs-search-input" placeholder="Cari nama atau NIM..." />
+      </div>
+      <div class="prov-filter-tabs">
+        <button class="prov-tab active" data-prov="all">Semua</button>
+        <button class="prov-tab" data-prov="Sumatera Barat">Sumbar</button>
+        <button class="prov-tab" data-prov="Sumatera Utara">Sumut</button>
+        <button class="prov-tab" data-prov="Riau">Riau</button>
+        <button class="prov-tab" data-prov="Jambi">Jambi</button>
+      </div>
+    </div>
+
+    <div class="result-count" id="resultCount"><strong>27</strong> mahasiswa ditampilkan</div>
+
+    <!-- Grid 27 Mahasiswa dengan data lengkap -->
     <div class="mahasiswa-grid" id="mahasiswaGrid" data-animate="fade-up">
 
-      <!-- 27 Mahasiswa Dummy Data -->
-      <div class="mahasiswa-card" data-asal="Padangsidempuan, Sumut" data-pesan="Tiga tahun bersama kalian adalah pengalaman terbaik hidup saya. Semoga kita selalu dalam lindungan Allah. Sukses dunia akhirat!">
-        <img src="/assets/4.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Padangsidempuan, Sumut"
+        data-julukan=""
+        data-pesan="Tiga tahun bersama kalian adalah pengalaman terbaik hidup saya. Semoga kita selalu dalam lindungan Allah dan sukses di jalan masing-masing!">
+        <img src="/assets/4.png" alt="Nur Aisah Siregar" class="mahasiswa-avatar" />
         <h4>Nur Aisah Siregar</h4>
         <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523001</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Kelas ini mengajarkan ku banyak hal tentang arti persahabatan sejati. Terima kasih untuk semua momen indah!">
-        <img src="/assets/20.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Nias, Sumut"
+        data-julukan="Raja Rosting"
+        data-pesan="Dari Nias jauh-jauh ke Bukittinggi demi ilmu — dan yang kudapat jauh lebih berharga dari sekadar gelar. Persahabatan ini akan kubawa seumur hidup. Terima kasih PTIK A!">
+        <img src="/assets/20.png" alt="Ilham Ginting" class="mahasiswa-avatar" />
         <h4>Ilham Ginting</h4>
         <span class="nim" data-asal="Nias, Sumut">NIM 2523002</span>
+        <span class="julukan-badge">👑 Raja Rosting</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Inget banget waktu ospek kita semua panik. Sekarang udah mau lulus. Cepet banget! Semoga rezeki kita lancar ya!">
-        <img src="/assets/11.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Padangsidempuan, Sumut"
+        data-julukan="Si Paling Galak"
+        data-pesan="Kalau aku kelihatan galak, itu karena aku peduli! Hehe. Yang paling aku rindukan adalah ribut-ributan kecil yang ternyata justru jadi kenangan paling lucu.">
+        <img src="/assets/11.png" alt="Nur Adilah" class="mahasiswa-avatar" />
         <h4>Nur Adilah</h4>
         <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523003</span>
+        <span class="julukan-badge">🔥 Si Paling Galak</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Dari orang asing jadi sahabat sejati. PTIK A 2023 akan selalu di hati. Sukses selalu untuk kita semua!">
-        <img src="/assets/6.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Riau"
+        data-asal="Pekanbaru, Riau"
+        data-julukan="Putri Wibu"
+        data-pesan="Anime dan pertemanan — dua hal yang selalu bikin hidupku berwarna di PTIK A! Semoga kalian semua sukses dan jangan lupa nonton anime ya~">
+        <img src="/assets/6.png" alt="Dhina Mardiani Syahputri" class="mahasiswa-avatar" />
         <h4>Dhina Mardiani Syahputri</h4>
         <span class="nim" data-asal="Pekanbaru, Riau">NIM 2523004</span>
+        <span class="julukan-badge">🌸 Putri Wibu</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk semua!">
-        <img src="/assets/10.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Matur, Agam, Sumbar"
+        data-julukan=""
+        data-pesan="Walaupun jauh nanti, semoga tali silaturahmi kita tetap terjaga. Sukses dunia akhirat untuk seluruh keluarga besar PTIK A 2023!">
+        <img src="/assets/10.png" alt="Fauziah" class="mahasiswa-avatar" />
         <h4>Fauziah</h4>
         <span class="nim" data-asal="Matur, Agam, Sumbar">NIM 2523005</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Terima kasih PTIK A 2023 sudah menjadi bagian dari perjalanan hidupku yang paling berharga!">
-        <img src="/assets/19.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Mandailing Natal, Sumut"
+        data-julukan=""
+        data-pesan="Terima kasih PTIK A 2023 sudah menjadi bagian dari perjalanan hidupku yang paling berharga. Semoga kita bertemu lagi di puncak kesuksesan masing-masing!">
+        <img src="/assets/19.png" alt="Ahmad Ali Ramlan" class="mahasiswa-avatar" />
         <h4>Ahmad Ali Ramlan</h4>
         <span class="nim" data-asal="Mandailing Natal, Sumut">NIM 2523006</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Kenangan bersama kalian tidak akan pernah bisa tergantikan. Semoga kita dipertemukan kembali dalam keadaan yang lebih baik!">
-        <img src="/assets/9.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Riau"
+        data-asal="Duri, Riau"
+        data-julukan=""
+        data-pesan="Kenangan bersama kalian tidak akan pernah bisa tergantikan. Semoga kita dipertemukan kembali dalam keadaan yang lebih baik dan lebih sukses!">
+        <img src="/assets/9.png" alt="Syarifah Hayati" class="mahasiswa-avatar" />
         <h4>Syarifah Hayati</h4>
         <span class="nim" data-asal="Duri, Riau">NIM 2523007</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Selalu ketawa kalau inget momen-momen konyol di kelas. Haha! Semoga sukses semua!">
-        <img src="/assets/24.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Jambi"
+        data-asal="Muara Bungo, Jambi"
+        data-julukan=""
+        data-pesan="Selalu ketawa kalau inget momen-momen konyol di kelas bersama kalian. Dari Muara Bungo jauh-jauh ke Bukittinggi — dan itu adalah keputusan terbaik yang pernah kubuat!">
+        <img src="/assets/24.png" alt="Arifin Heldian Putra" class="mahasiswa-avatar" />
         <h4>Arifin Heldian Putra</h4>
         <span class="nim" data-asal="Muara Bungo, Jambi">NIM 2523008</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Perjalanan 6 semester penuh suka duka, tapi semuanya indah karena ada kalian. Terima kasih!">
-        <img src="/assets/22.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Matur, Agam, Sumbar"
+        data-julukan=""
+        data-pesan="Perjalanan 6 semester penuh suka duka, tapi semuanya indah karena ada kalian. Satu kelas, satu keluarga, satu cerita yang tidak akan pernah terlupakan!">
+        <img src="/assets/22.png" alt="Thoriq Aziz El Gifran" class="mahasiswa-avatar" />
         <h4>Thoriq Aziz El Gifran</h4>
         <span class="nim" data-asal="Matur, Agam, Sumbar">NIM 2523009</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="PTIK A 2023 — nama yang akan selalu aku sebut dengan bangga. Terima kasih sudah menjadi keluargaku!">
-        <img src="/assets/26.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Bukittinggi, Sumbar"
+        data-julukan=""
+        data-pesan="Sebagai orang Bukittinggi, aku bangga sekali bisa satu kelas dengan teman-teman hebat dari berbagai penjuru Sumatera. PTIK A 2023 — nama yang akan selalu kuingat dengan bangga!">
+        <img src="/assets/26.png" alt="Azka Khalillah Umah" class="mahasiswa-avatar" />
         <h4>Azka Khalillah Umah</h4>
         <span class="nim" data-asal="Bukittinggi, Sumbar">NIM 2523010</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Senang bisa belajar bersama orang-orang hebat seperti kalian. Semoga ilmu kita bermanfaat untuk umat!">
-        <img src="/assets/rani.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Pasaman Barat, Sumbar"
+        data-julukan=""
+        data-pesan="Senang bisa belajar bersama orang-orang hebat seperti kalian. Semoga ilmu yang kita dapat selama kuliah bisa bermanfaat untuk umat. Sukses selalu PTIK A 2023!">
+        <img src="/assets/rani.png" alt="Rani Harianti" class="mahasiswa-avatar" />
         <h4>Rani Harianti</h4>
         <span class="nim" data-asal="Pasaman Barat, Sumbar">NIM 2523011</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/1.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Kisaran, Sumut"
+        data-julukan=""
+        data-pesan="Pertemuan singkat ini meninggalkan kenangan panjang. Dari Kisaran ke Bukittinggi — jauh di jarak, dekat di hati. Terima kasih atas 6 semester yang luar biasa!">
+        <img src="/assets/1.png" alt="Vinny Ananda Ankasha Manurung" class="mahasiswa-avatar" />
         <h4>Vinny Ananda Ankasha Manurung</h4>
-        <span class="nim" data-asal="Mandoge, Sumut">NIM 2523012</span>
+        <span class="nim" data-asal="Kisaran, Sumut">NIM 2523012</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/23.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Padang Pariaman, Sumbar"
+        data-julukan=""
+        data-pesan="Banyak cerita yang kita ukir bersama — dari tugas yang bikin pusing sampai tawa yang bikin lupa lelah. Semoga semua itu jadi bekal kita menuju kesuksesan!">
+        <img src="/assets/23.png" alt="Asnuldi Zaitul Muftahul Fikri" class="mahasiswa-avatar" />
         <h4>Asnuldi Zaitul Muftahul Fikri</h4>
         <span class="nim" data-asal="Padang Pariaman, Sumbar">NIM 2523015</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/15.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Padangsidempuan, Sumut"
+        data-julukan=""
+        data-pesan="Kalian bukan hanya teman sekelas, tapi juga sumber semangat di hari-hari yang berat. Terima kasih sudah menjadi bagian dari perjalanan indah ini!">
+        <img src="/assets/15.png" alt="Muhammad Aji Samsudin" class="mahasiswa-avatar" />
         <h4>Muhammad Aji Samsudin</h4>
         <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523017</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/8.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Padang Pariaman, Sumbar"
+        data-julukan=""
+        data-pesan="Hal yang paling aku syukuri adalah bisa kenal kalian semua. 6 semester terasa singkat tapi meninggalkan kenangan yang akan bertahan selamanya!">
+        <img src="/assets/8.png" alt="Suci Ananda Putri" class="mahasiswa-avatar" />
         <h4>Suci Ananda Putri</h4>
         <span class="nim" data-asal="Padang Pariaman, Sumbar">NIM 2523018</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/14.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Pematangsiantar, Sumut"
+        data-julukan=""
+        data-pesan="Dari Pematangsiantar ke Bukittinggi, jaraknya jauh tapi tidak terasa karena ada kalian. Tiga tahun bersama kalian adalah pengalaman terbaik hidupku. Selalu ingat satu sama lain ya!">
+        <img src="/assets/14.png" alt="Muhammad Abdur Rozaq Damanik" class="mahasiswa-avatar" />
         <h4>Muhammad Abdur Rozaq Damanik</h4>
         <span class="nim" data-asal="Pematangsiantar, Sumut">NIM 2523019</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/16.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Kisaran, Sumut"
+        data-julukan=""
+        data-pesan="Ilmu yang kita pelajari bersama bukan hanya soal teknologi, tapi juga soal kerja sama, kejujuran, dan keberanian. Terima kasih sudah mengajarkan itu semua!">
+        <img src="/assets/16.png" alt="Muhammad Chairul Faiz" class="mahasiswa-avatar" />
         <h4>Muhammad Chairul Faiz</h4>
         <span class="nim" data-asal="Kisaran, Sumut">NIM 2523020</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/25.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Bukittinggi, Sumbar"
+        data-julukan=""
+        data-pesan="Dari orang asing jadi sahabat sejati — itulah PTIK A 2023. Kalian adalah bagian dari hidup yang paling berharga yang pernah kumiliki. Sampai jumpa di puncak!">
+        <img src="/assets/25.png" alt="Muhammad Alfarizi" class="mahasiswa-avatar" />
         <h4>Muhammad Alfarizi</h4>
         <span class="nim" data-asal="Bukittinggi, Sumbar">NIM 2523021</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/18.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Pasaman Barat, Sumbar"
+        data-julukan=""
+        data-pesan="Terima kasih sudah menjadi teman belajar, teman curhat, dan teman tertawa sekaligus. PTIK A 2023 bukan cuma kelas, tapi rumah kedua yang selalu kurindu!">
+        <img src="/assets/18.png" alt="Ahmad Syarif" class="mahasiswa-avatar" />
         <h4>Ahmad Syarif</h4>
         <span class="nim" data-asal="Pasaman Barat, Sumbar">NIM 2523022</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/7.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Agam, Sumbar"
+        data-julukan=""
+        data-pesan="Setiap hari di kelas ini selalu ada hal baru yang membuat senyum. Terima kasih sudah mewarnai perjalanan kuliahku dengan tawa dan semangat yang tak pernah padam!">
+        <img src="/assets/7.png" alt="Dini Indah Permatasari" class="mahasiswa-avatar" />
         <h4>Dini Indah Permatasari</h4>
         <span class="nim" data-asal="Agam, Sumbar">NIM 2523025</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/dini.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Riau"
+        data-asal="Duri, Riau"
+        data-julukan=""
+        data-pesan="Jauh dari Duri tapi dekat di hati. Kebersamaan kita di PTIK A 2023 adalah kenangan yang tidak akan pernah pudar — semoga kita semua sukses dan bahagia selalu!">
+        <img src="/assets/dini.png" alt="Nur Rahma Dhini" class="mahasiswa-avatar" />
         <h4>Nur Rahma Dhini</h4>
         <span class="nim" data-asal="Duri, Riau">NIM 2523026</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/3.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Utara"
+        data-asal="Padangsidempuan, Sumut"
+        data-julukan=""
+        data-pesan="Susah senang kita rasakan bersama selama 6 semester. Semoga persahabatan ini tidak berakhir di sini dan kita selalu bisa saling mendukung ke depannya!">
+        <img src="/assets/3.png" alt="Nurul Maymunisyah Harahap" class="mahasiswa-avatar" />
         <h4>Nurul Maymunisyah Harahap</h4>
         <span class="nim" data-asal="Padangsidempuan, Sumut">NIM 2523027</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/5.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Pasaman Timur, Sumbar"
+        data-julukan=""
+        data-pesan="Yang paling aku rindukan adalah sesi diskusi kelompok yang akhirnya berubah jadi sesi cerita dan tawa. Momen kecil itu justru yang paling berharga!">
+        <img src="/assets/5.png" alt="Tantri Latifah Hanum" class="mahasiswa-avatar" />
         <h4>Tantri Latifah Hanum</h4>
         <span class="nim" data-asal="Pasaman Timur, Sumbar">NIM 2523029</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/17.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Bukittinggi, Sumbar"
+        data-julukan=""
+        data-pesan="Kuliah di kota sendiri tapi rasanya semakin berarti karena punya teman-teman seperti kalian. PTIK A 2023 selalu di hati, selamanya!">
+        <img src="/assets/17.png" alt="Rezky Richardo Fernando" class="mahasiswa-avatar" />
         <h4>Rezky Richardo Fernando</h4>
         <span class="nim" data-asal="Bukittinggi, Sumbar">NIM 2523032</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/27.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Riau"
+        data-asal="Tembilahan, Riau"
+        data-julukan=""
+        data-pesan="Dari Tembilahan yang jauh, datang ke Bukittinggi membawa mimpi besar. Dan di sini aku menemukan bukan hanya ilmu, tapi juga keluarga. Terima kasih PTIK A!">
+        <img src="/assets/27.png" alt="Muhammad Arbinnahar Fikli" class="mahasiswa-avatar" />
         <h4>Muhammad Arbinnahar Fikli</h4>
         <span class="nim" data-asal="Tembilahan, Riau">NIM 2523034</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/21.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Sumatera Barat"
+        data-asal="Payakumbuh, Sumbar"
+        data-julukan=""
+        data-pesan="Setiap kenangan bersama kalian adalah hadiah yang tidak ternilai. Semoga jalan yang kita tempuh ke depan selalu dipenuhi kemudahan dan keberkahan!">
+        <img src="/assets/21.png" alt="Ahmed Alfarazi" class="mahasiswa-avatar" />
         <h4>Ahmed Alfarazi</h4>
         <span class="nim" data-asal="Payakumbuh, Sumbar">NIM 2523035</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
-      <div class="mahasiswa-card" data-pesan="Yang paling aku kangenin adalah ngobrol santai di kantin sambil nunggu kelas. Seru banget itu!">
-        <img src="/assets/13.png" alt="Mahasiswa" class="mahasiswa-avatar" />
+
+      <div class="mahasiswa-card"
+        data-prov="Riau"
+        data-asal="Kampar, Riau"
+        data-julukan=""
+        data-pesan="Dari Kampar ke Bukittinggi, aku membawa pulang lebih dari sekadar ijazah — aku membawa kenangan indah dan persahabatan yang semoga bertahan seumur hidup!">
+        <img src="/assets/13.png" alt="Salsabila Nazura" class="mahasiswa-avatar" />
         <h4>Salsabila Nazura</h4>
         <span class="nim" data-asal="Kampar, Riau">NIM 2523037</span>
         <button class="btn-profile">Lihat Profil</button>
         <button class="btn-print-profile"><i class="fas fa-print"></i> Cetak</button>
       </div>
 
-    </div>
-
+    </div><!-- /mahasiswaGrid -->
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
@@ -337,5 +731,105 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/main.js"></script>
+<script>
+/* ═══ MODAL PROFIL — override dari main.js ═══ */
+(function() {
+  var modal     = document.getElementById("profileModal");
+  var modalClose = document.getElementById("modalClose");
+
+  function openModal(card) {
+    var nim     = card.querySelector(".nim");
+    var avatar  = card.querySelector(".mahasiswa-avatar");
+    var julukan = card.dataset.julukan || "";
+
+    document.getElementById("modalAvatar").src  = avatar ? avatar.src : "";
+    document.getElementById("modalName").textContent = card.querySelector("h4")?.textContent || "";
+    document.getElementById("modalNIM").textContent  = nim ? nim.textContent : "";
+    document.getElementById("modalAsal").textContent = (nim && nim.dataset.asal) ? nim.dataset.asal : "—";
+    document.getElementById("modalProv").textContent = card.dataset.prov || "—";
+    document.getElementById("modalPesan").textContent = card.dataset.pesan || "Terima kasih atas semua kenangan indah bersama PTIK A 2023!";
+
+    var julukanWrap = document.getElementById("modalJulukanWrap");
+    var julukanEl   = document.getElementById("modalJulukan");
+    if (julukan) {
+      julukanEl.textContent = julukan;
+      julukanWrap.style.display = "block";
+    } else {
+      julukanWrap.style.display = "none";
+    }
+
+    /* Social links — sembunyikan yang tidak ada data */
+    document.getElementById("modalIG").setAttribute("href", "#");
+    document.getElementById("modalWA").setAttribute("href", "#");
+    document.getElementById("modalEmail").setAttribute("href", "#");
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll(".btn-profile").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      openModal(btn.closest(".mahasiswa-card"));
+    });
+  });
+
+  modalClose.addEventListener("click", closeModal);
+  modal.addEventListener("click", function(e) { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", function(e) { if (e.key === "Escape") closeModal(); });
+
+/* ═══ SEARCH ═══ */
+  var searchInput  = document.getElementById("studentSearch");
+  var cards        = document.querySelectorAll(".mahasiswa-card");
+  var resultCount  = document.getElementById("resultCount");
+  var activeProv   = "all";
+
+  function filterCards() {
+    var q = (searchInput.value || "").toLowerCase().trim();
+    var count = 0;
+    cards.forEach(function(card) {
+      var name  = (card.querySelector("h4")?.textContent || "").toLowerCase();
+      var nim   = (card.querySelector(".nim")?.textContent || "").toLowerCase();
+      var prov  = card.dataset.prov || "";
+      var matchQ    = !q || name.includes(q) || nim.includes(q);
+      var matchProv = activeProv === "all" || prov === activeProv;
+      var show = matchQ && matchProv;
+      card.style.display = show ? "" : "none";
+      if (show) count++;
+    });
+    resultCount.innerHTML = "<strong>" + count + "</strong> mahasiswa ditampilkan";
+  }
+
+  searchInput.addEventListener("input", filterCards);
+
+/* ═══ FILTER PROVINSI ═══ */
+  document.querySelectorAll(".prov-tab").forEach(function(tab) {
+    tab.addEventListener("click", function() {
+      document.querySelectorAll(".prov-tab").forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      activeProv = tab.dataset.prov;
+      filterCards();
+    });
+  });
+
+/* ═══ SCROLL ANIMATE ═══ */
+  var animEls = document.querySelectorAll("[data-animate]");
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        var d = parseInt(e.target.dataset.delay || 0);
+        setTimeout(function(){ e.target.classList.add("visible"); }, d);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  animEls.forEach(function(el){ obs.observe(el); });
+
+})();
+</script>
 </body>
 </html>
